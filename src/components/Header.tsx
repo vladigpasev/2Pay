@@ -1,21 +1,34 @@
 "use client";
 import { atom, useAtom } from "jotai";
+import { ChangeEvent, useState } from "react";
+import Image from "next/image";
 
-export const themeAtom = atom("cupcake");
+export let themeAtom = atom("forest");
 
 const LightDarkThemeSwitch = () => {
-  const [checked, setChecked] = useAtom(themeAtom);
+  const [theme, settheme] = useAtom(themeAtom);
+
+  const toggleTheme = (e: ChangeEvent<HTMLInputElement>) => {
+    localStorage.setItem("theme", e.target.checked ? "cupcake" : "forest");
+    settheme(e.target.checked ? "cupcake" : "forest");
+  };
+
+  useState(() => {
+    if (typeof window !== "undefined") {
+      settheme(localStorage.getItem("theme") || "cupcake");
+    }
+  }, []);
 
   return (
     <label className="swap swap-rotate">
       <input
         type="checkbox"
-        onChange={(e) => setChecked(e.target.checked ? "cupcake" : "forest")}
-        checked={checked === "cupcake"}
+        onChange={toggleTheme}
+        checked={theme === "cupcake"}
       />
 
       <svg
-        className="swap-on fill-current w-8 h-8"
+        className="swap-on fill-current w-6 h-6 max-sm:w-5 max-sm:h-5"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
       >
@@ -23,7 +36,7 @@ const LightDarkThemeSwitch = () => {
       </svg>
 
       <svg
-        className="swap-off fill-current w-8 h-8"
+        className="swap-off fill-current w-6 h-6 max-sm:w-5 max-sm:h-5"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
       >
@@ -35,7 +48,7 @@ const LightDarkThemeSwitch = () => {
 
 export const Header = () => {
   return (
-    <div className="navbar bg-base-100">
+    <div className="navbar top-0 sticky bg-[hsl(var(--b1)/0.65)] backdrop-blur-md z-50">
       <div className="navbar-start">
         <div className="dropdown">
           <label tabIndex={0} className="btn btn-ghost lg:hidden">
@@ -77,7 +90,14 @@ export const Header = () => {
             </li>
           </ul>
         </div>
-        <a className="btn btn-ghost normal-case text-xl">daisyUI</a>
+        <a className="btn btn-ghost normal-case text-xl text-secondary max-sm:-ml-5">
+          <img
+            className="h-7 sm:h-9"
+            src="/images/branding/icon.png"
+            alt="DoNuts"
+          />
+          Do<strong className="text-primary p-0 -ml-1.5">Nuts</strong>
+        </a>
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
@@ -102,9 +122,10 @@ export const Header = () => {
           </li>
         </ul>
       </div>
-      <div className="navbar-end flex align-middle gap-2">
+      <div className="navbar-end flex align-middle gap-1">
         <LightDarkThemeSwitch />
-        <a className="btn">Button</a>
+        <a className="btn btn-ghost ml-1 max-sm:ml-0 max-sm:p-1">Sign In</a>
+        <a className="btn btn-secondary max-sm:p-2">Register</a>
       </div>
     </div>
   );

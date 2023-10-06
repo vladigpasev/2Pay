@@ -3,6 +3,8 @@
 import { useAtom } from "jotai";
 import { Footer } from "./Footer";
 import { Header, themeAtom } from "./Header";
+import { Suspense } from "react";
+import PageLoading from "@/app/loading";
 
 export const Wrapper = ({ children }: { children: React.ReactNode }) => {
   const [theme] = useAtom(themeAtom);
@@ -12,7 +14,9 @@ export const Wrapper = ({ children }: { children: React.ReactNode }) => {
       data-theme={theme}
     >
       <Header />
-      <div className="h-fit min-h-[calc(100vh-65px)]">{children}</div>
+      <div className="relative h-fit min-h-[calc(100vh-65px)]">
+        <Suspense fallback={<PageLoading />}>{children}</Suspense>
+      </div>
       <Footer />
     </div>
   );
