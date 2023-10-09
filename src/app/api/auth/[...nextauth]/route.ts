@@ -11,7 +11,6 @@ export const authOptions = {
     strategy: "jwt" as any,
   },
   pages: {
-    signIn: "/auth/sign-in", // Displays signin buttons
     newUser: "/auth/new-user", // New users will be directed here on first sign in (leave the property out if not of interest)
   },
   theme: {
