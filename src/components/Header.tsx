@@ -2,20 +2,26 @@
 import { atom, useAtom } from "jotai";
 import { ChangeEvent, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
-export let themeAtom = atom("forest");
+export const themeAtom = atom("forest");
 
 const LightDarkThemeSwitch = () => {
   const [theme, settheme] = useAtom(themeAtom);
 
   const toggleTheme = (e: ChangeEvent<HTMLInputElement>) => {
-    localStorage.setItem("theme", e.target.checked ? "cupcake" : "forest");
-    settheme(e.target.checked ? "cupcake" : "forest");
+    localStorage.setItem("theme", e.target.checked ? "garden" : "forest");
+    settheme(e.target.checked ? "garden" : "forest");
   };
 
-  useState(() => {
+  (useState as any)(() => {
     if (typeof window !== "undefined") {
-      settheme(localStorage.getItem("theme") || "cupcake");
+      if (!localStorage.getItem("theme"))
+        window.matchMedia &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? localStorage.setItem("theme", "forest")
+          : localStorage.setItem("theme", "garden");
+      settheme(localStorage.getItem("theme") || "forest");
     }
   }, []);
 
@@ -24,7 +30,7 @@ const LightDarkThemeSwitch = () => {
       <input
         type="checkbox"
         onChange={toggleTheme}
-        checked={theme === "cupcake"}
+        checked={theme === "garden"}
       />
 
       <svg
@@ -48,7 +54,7 @@ const LightDarkThemeSwitch = () => {
 
 export const Header = () => {
   return (
-    <div className="navbar top-0 sticky bg-[hsl(var(--b1)/0.65)] backdrop-blur-md z-50">
+    <div className="navbar text-neutral-content top-0 sticky bg-[hsl(var(--nf)/0.65)] shadow-md shadow-[hsl(var(--b2)/0.25)] backdrop-blur-md z-50">
       <div className="navbar-start">
         <div className="dropdown">
           <label tabIndex={0} className="btn btn-ghost lg:hidden">
@@ -90,14 +96,17 @@ export const Header = () => {
             </li>
           </ul>
         </div>
-        <a className="btn btn-ghost normal-case text-xl text-secondary max-sm:-ml-5">
+        <Link
+          href="/"
+          className="btn btn-ghost normal-case text-xl text-secondary max-sm:-ml-5"
+        >
           <img
             className="h-7 sm:h-9"
             src="/images/branding/icon.png"
             alt="DoNuts"
           />
           Do<strong className="text-primary p-0 -ml-1.5">Nuts</strong>
-        </a>
+        </Link>
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
@@ -124,8 +133,15 @@ export const Header = () => {
       </div>
       <div className="navbar-end flex align-middle gap-1">
         <LightDarkThemeSwitch />
-        <a className="btn btn-ghost ml-1 max-sm:ml-0 max-sm:p-1">Sign In</a>
-        <a className="btn btn-secondary max-sm:p-2">Register</a>
+        <Link
+          href="/auth/signin"
+          className="btn btn-ghost ml-1 max-sm:ml-0 max-sm:p-1"
+        >
+          Sign In
+        </Link>
+        <Link href="/auth/register" className="btn btn-secondary max-sm:p-2">
+          Register
+        </Link>
       </div>
     </div>
   );

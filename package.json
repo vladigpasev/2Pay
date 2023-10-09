@@ -6,12 +6,19 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "db:push": "drizzle-kit push:mysql --config=drizzle.config.ts"
   },
   "dependencies": {
+    "@auth/drizzle-adapter": "^0.3.3",
+    "@planetscale/database": "^1.11.0",
+    "dotenv": "^16.3.1",
+    "drizzle-orm": "^0.28.6",
     "framer-motion": "^10.16.4",
     "jotai": "^2.4.3",
     "next": "13.5.4",
+    "next-auth": "^4.23.2",
+    "nodemailer": "^6.9.5",
     "react": "^18",
     "react-dom": "^18"
   },
@@ -21,6 +28,7 @@
     "@types/react-dom": "^18",
     "autoprefixer": "^10",
     "daisyui": "^3.9.2",
+    "drizzle-kit": "^0.19.13",
     "eslint": "^8",
     "eslint-config-next": "13.5.4",
     "postcss": "^8",

@@ -16,7 +16,31 @@ const config: Config = {
     },
   },
   daisyui: {
-    themes: ["forest", "cupcake"],
+    themes: [
+      "forest",
+      "garden",
+      {
+        snowy: {
+          primary: "#1eb854",
+
+          secondary: "#1db990",
+
+          accent: "#1db9ac",
+
+          neutral: "#291334",
+
+          "base-100": "#faf7f5",
+
+          info: "#3abff8",
+
+          success: "#36d399",
+
+          warning: "#fbbd23",
+
+          error: "#f87272",
+        },
+      },
+    ],
   },
   plugins: [require("daisyui")],
 };
