@@ -28,10 +28,24 @@ export const RegisterForm = () => {
       if (res.ok) {
         signIn();
       } else {
-        // setNotifications((await res.json()).error);
+        dispatchNotifications({
+          type: "insert",
+          value: {
+            message: (await res.json()).error,
+            type: "error",
+            key: "la key",
+          },
+        });
       }
     } catch (error: any) {
-      // setNotifications(error?.message);
+      dispatchNotifications({
+        type: "insert",
+        value: {
+          message: error?.message,
+          type: "error",
+          key: "la key",
+        },
+      });
     }
   };
 
@@ -66,20 +80,7 @@ export const RegisterForm = () => {
         />
       </div>
       <div className="w-full">
-        <button
-          type="button"
-          onClick={() => {
-            dispatchNotifications({
-              type: "insert",
-              value: {
-                message: "Registered successfully",
-                type: "error",
-                key: "la key",
-              },
-            });
-          }}
-          className="w-full bg-primary rounded p-2 text-primary-content transition-all hover:brightness-125"
-        >
+        <button className="w-full bg-primary rounded p-2 text-primary-content transition-all hover:brightness-125">
           Register
         </button>
       </div>
