@@ -134,12 +134,12 @@ export const Header = () => {
       <div className="navbar-end flex align-middle gap-1">
         <LightDarkThemeSwitch />
         <Link
-          href="/api/auth/signin"
+          href="/auth/signin"
           className="btn btn-ghost ml-1 max-sm:ml-0 max-sm:p-1"
         >
           Sign In
         </Link>
-        <Link href="/api/auth/signin" className="btn btn-secondary max-sm:p-2">
+        <Link href="/auth/register" className="btn btn-secondary max-sm:p-2">
           Register
         </Link>
       </div>
