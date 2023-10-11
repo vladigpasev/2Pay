@@ -71,7 +71,7 @@ export default function Notifyers() {
   if (notifyes.length > 0)
     setTimeout(() => {
       dispatchNotifications({ type: "remove", atom: notifyes[0] });
-    }, 7500);
+    }, 8500);
 
   useEffect(() => {
     dispatchNotifications({ type: "remove", atom: notifyes[0] });

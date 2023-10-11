@@ -3,20 +3,25 @@
 import { notifications } from "@/components/Notifyers";
 import { useAtom } from "jotai";
 import { signIn } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { faGoogle, faFacebook } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export const RegisterForm = ({ params }: any) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { error } = params;
+
+  const { callbackUrl } = params;
 
   const [notifyies, dispatchNotifications] = useAtom(notifications);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    signIn("email", {
+      callbackUrl: callbackUrl,
+      email: email,
+    });
+    return;
     try {
       const res = await fetch("/api/register", {
         method: "POST",
@@ -98,7 +103,7 @@ export const RegisterForm = ({ params }: any) => {
           placeholder="you@example.com"
         />
       </div>
-      <div className="grid w-full items-center gap-1">
+      {/* <div className="grid w-full items-center gap-1">
         <label htmlFor="password" className="mb-0 pb-0 leading-4 font-bold">
           Password:
         </label>
@@ -111,7 +116,7 @@ export const RegisterForm = ({ params }: any) => {
           type="password"
           placeholder="Password_123"
         />
-      </div>
+      </div> */}
       <div className="flex flex-col w-full border-opacity-50">
         <button className="w-full bg-primary rounded p-2 text-primary-content transition-all hover:brightness-125">
           Hop In
