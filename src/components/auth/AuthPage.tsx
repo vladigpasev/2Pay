@@ -1,11 +1,10 @@
 'use client';
 
-import { RegisterForm } from './form';
-import { useAtom } from 'jotai';
 import { notifications } from '@/components/Notifyers';
 import { useEffect } from 'react';
+import { useAtom } from 'jotai';
 
-export default function RegisterPage({ searchParams }: any) {
+export default function AuthPage({ searchParams }: any) {
   const { error } = searchParams;
 
   const [notifyies, dispatchNotifications] = useAtom(notifications);
@@ -17,14 +16,14 @@ export default function RegisterPage({ searchParams }: any) {
   // useEffect(() => {
   //   if (error)
   //     dispatchNotifications({
-  //       type: "insert",
+  //       type: 'insert',
   //       value: {
   //         key: error,
-  //         type: "error",
+  //         type: 'error',
   //         message: errorToMessageMapper.has(error)
   //           ? errorToMessageMapper.get(error)!
-  //           : `Something went wrong! (${error})`,
-  //       },
+  //           : `Something went wrong! (${error})`
+  //       }
   //     });
   // }, []);
 
@@ -34,13 +33,7 @@ export default function RegisterPage({ searchParams }: any) {
         <h1 className='font-semibold text-3xl text-center'>
           <strong>Sign</strong> in Account
         </h1>
-        <RegisterForm />
-        {/* <p className="text-center">
-          Have an account?{" "}
-          <Link className="text-accent hover:underline" href="/auth/signin">
-            Sign in
-          </Link>{" "}
-        </p> */}
+        {/* <RegisterForm params={searchParams} /> */}
       </div>
     </div>
   );

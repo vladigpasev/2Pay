@@ -1,5 +1,4 @@
-import { notifications as notificationsAtom } from '@/components/Notifyers';
-import { useAtom } from 'jotai';
+import { NotificationType, useDispatchNotification } from '@/components/Notifyers';
 import React, { FormEvent, useCallback, useEffect, useRef } from 'react';
 
 export interface Field<T> {
@@ -39,8 +38,8 @@ function getFormData(fields: Field<any>[], rawFormData: Record<string, string>) 
 }
 
 export function CustomForm({ buttonText, fields, onSubmit, children }: Props) {
-  const [_, dispatchNotifications] = useAtom(notificationsAtom);
   const rawFormData = useRef({} as Record<string, string>);
+  const dispatchNotification = useDispatchNotification();
 
   useEffect(() => {
     for (const field of fields) rawFormData.current[field.id] = '';
@@ -52,26 +51,23 @@ export function CustomForm({ buttonText, fields, onSubmit, children }: Props) {
 
       const [error, formData] = getFormData(fields, rawFormData.current);
       if (error != null) {
-        dispatchNotifications({
-          type: 'insert',
-          value: {
-            type: 'error',
-            key: Math.random().toString(16).slice(2),
-            message: error
-          }
+        dispatchNotification({
+          type: NotificationType.Error,
+          message: error
         });
+
         return;
       }
 
       onSubmit(formData);
     },
-    [onSubmit, dispatchNotifications]
+    [onSubmit, dispatchNotification]
   );
 
   return (
     <form className='space-y-5 w-full sm:w-[400px]' onSubmit={submitCallback}>
       {fields.map(field => (
-        <div className='grid w-full items-center gap-1'>
+        <div className='grid w-full items-center gap-1' key={field.id}>
           <label htmlFor={field.id} className='mb-0 pb-0 leading-4 font-bold'>
             {field.name}:
           </label>

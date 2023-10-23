@@ -3,35 +3,53 @@
 import { splitAtom } from 'jotai/utils';
 import { PrimitiveAtom, atom, useAtom } from 'jotai';
 import { motion } from 'framer-motion';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconDefinition, faCancel } from '@fortawesome/free-solid-svg-icons';
 import { faBomb } from '@fortawesome/free-solid-svg-icons/faBomb';
 import { faBullhorn } from '@fortawesome/free-solid-svg-icons/faBullhorn';
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons/faCircleCheck';
+import { Optional } from '@/utils/Optional';
+import { id } from '@/utils/id';
 
-export const notificationAtom = atom([
-  {
-    type: 'success',
-    key: 'idk',
-    message: 'Something went wright!'
-  }
-]);
+export enum NotificationType {
+  Success = 'Success',
+  Error = 'error',
+  Alert = 'alert'
+}
+
+export interface Notification {
+  type: NotificationType;
+  key: string;
+  message: string;
+}
+
+export const notificationAtom = atom([] as Notification[]);
 export const notifications = splitAtom(notificationAtom);
 
-function Notifye({
-  notificationAtom
-}: {
-  notificationAtom: PrimitiveAtom<{
-    type: string;
-    key: string;
-    message: string;
-  }>;
-}) {
+export function useDispatchNotification() {
+  const [_, dispatchNotification] = useAtom(notifications);
+
+  return useCallback(
+    (notification: Optional<Notification, 'key'>) => {
+      if (!notification.key) notification.key = id();
+
+      dispatchNotification({
+        type: 'insert',
+        value: notification as Notification
+      });
+
+      return notification.key;
+    },
+    [dispatchNotification]
+  );
+}
+
+function Notifye({ notificationAtom }: { notificationAtom: PrimitiveAtom<Notification> }) {
   const typeColourMapper = new Map([
-    ['success', ['green', faCircleCheck]],
-    ['error', ['red', faBomb]],
-    ['alert', ['auto', faBullhorn]]
+    [NotificationType.Success, ['green', faCircleCheck]],
+    [NotificationType.Error, ['red', faBomb]],
+    [NotificationType.Alert, ['auto', faBullhorn]]
   ]);
 
   const [notification] = useAtom(notificationAtom);
