@@ -1,39 +1,23 @@
 'use client';
 
-import { notifications } from '@/components/Notifyers';
-import { useEffect } from 'react';
-import { useAtom } from 'jotai';
+import { OAuthButtons } from './oauthButtons/OAuthButtons';
+import { CustomForm, Field } from '../Form';
 
-export default function AuthPage({ searchParams }: any) {
-  const { error } = searchParams;
+interface Props {
+  titleHtml: string;
+  fields: Field<any>[];
+  buttonText: string;
+  onSubmit: (formData: any) => void;
+}
 
-  const [notifyies, dispatchNotifications] = useAtom(notifications);
-
-  const errorToMessageMapper = new Map([
-    ['OAuthCallback', 'This E-Mail is already in use by another provider! Try logging in with it.']
-  ]);
-
-  // useEffect(() => {
-  //   if (error)
-  //     dispatchNotifications({
-  //       type: 'insert',
-  //       value: {
-  //         key: error,
-  //         type: 'error',
-  //         message: errorToMessageMapper.has(error)
-  //           ? errorToMessageMapper.get(error)!
-  //           : `Something went wrong! (${error})`
-  //       }
-  //     });
-  // }, []);
-
+export default function AuthPage({ titleHtml, fields, buttonText, onSubmit }: Props) {
   return (
     <div className='h-[calc(100vh-90px)] w-full flex justify-center items-center'>
       <div className='sm:shadow-xl px-8 pb-8 pt-12 sm:bg-base-200 rounded-xl space-y-12'>
-        <h1 className='font-semibold text-3xl text-center'>
-          <strong>Sign</strong> in Account
-        </h1>
-        {/* <RegisterForm params={searchParams} /> */}
+        <h1 className='font-semibold text-3xl text-center' dangerouslySetInnerHTML={{ __html: titleHtml }}></h1>
+        <CustomForm buttonText={buttonText} fields={fields} onSubmit={onSubmit}>
+          <OAuthButtons />
+        </CustomForm>
       </div>
     </div>
   );
