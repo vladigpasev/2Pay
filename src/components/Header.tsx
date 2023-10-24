@@ -1,40 +1,43 @@
 "use client";
 import { atom, useAtom } from "jotai";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-export const themeAtom = atom("forest");
+export const lightTheme = "garden";
+export const darkTheme = "forest";
+
+export const themeAtom = atom(darkTheme);
 
 const LightDarkThemeSwitch = () => {
   const [theme, settheme] = useAtom(themeAtom);
 
   const toggleTheme = (e: ChangeEvent<HTMLInputElement>) => {
-    localStorage.setItem("theme", e.target.checked ? "garden" : "forest");
-    settheme(e.target.checked ? "garden" : "forest");
+    localStorage.setItem("theme", e.target.checked ? darkTheme : lightTheme);
+    settheme(e.target.checked ? darkTheme : lightTheme);
   };
 
-  (useState as any)(() => {
+  useEffect(() => {
     if (typeof window !== "undefined") {
       if (!localStorage.getItem("theme"))
         window.matchMedia &&
         window.matchMedia("(prefers-color-scheme: dark)").matches
-          ? localStorage.setItem("theme", "forest")
-          : localStorage.setItem("theme", "garden");
-      settheme(localStorage.getItem("theme") || "forest");
+          ? localStorage.setItem("theme", darkTheme)
+          : localStorage.setItem("theme", lightTheme);
+      settheme(localStorage.getItem("theme") || "lightTheme");
     }
   }, []);
 
   return (
-    <label className="swap swap-rotate">
+    <label className="swap swap-rotate border rounded-full p-1">
       <input
         type="checkbox"
         onChange={toggleTheme}
-        checked={theme === "garden"}
+        checked={theme === darkTheme}
       />
 
       <svg
-        className="swap-on fill-current w-6 h-6 max-sm:w-5 max-sm:h-5"
+        className="swap-on fill-current w-8 h-8 max-sm:w-7 max-sm:h-7"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
       >
@@ -42,7 +45,7 @@ const LightDarkThemeSwitch = () => {
       </svg>
 
       <svg
-        className="swap-off fill-current w-6 h-6 max-sm:w-5 max-sm:h-5"
+        className="swap-off fill-current w-8 h-8 max-sm:w-7 max-sm:h-7"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
       >
