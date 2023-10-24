@@ -3,11 +3,18 @@
 import { useRedirectPath } from '@/hooks/useRedirectPath';
 import AuthPage from '@/components/auth/AuthPage';
 import { AuthProvider } from '@/auth/provider';
+import { useRegister } from '@/auth/register';
 import { Field } from '@/components/Form';
-import { useLogin } from '@/auth/login';
 import { useCallback } from 'react';
 
-const LOGIN_FIELDS: Field<string>[] = [
+const REGISTER_FIELDS: Field<string>[] = [
+  {
+    id: 'username',
+    name: 'Username',
+    type: 'text',
+    placeholder: 'Username',
+    validate: value => (value.trim().length > 5 ? null : 'Username is too short!')
+  },
   {
     id: 'email',
     name: 'Email',
@@ -24,17 +31,18 @@ const LOGIN_FIELDS: Field<string>[] = [
   }
 ];
 
-interface LoginFormData {
+interface RegisterFormData {
+  username: string;
   email: string;
   password: string;
 }
 
-export default function LoginPage() {
+export default function RegisterPage() {
   const redirectUrl = useRedirectPath() ?? '/';
-  const login = useLogin();
+  const register = useRegister();
 
-  const onLogin = useCallback((formData: LoginFormData) => {
-    login(
+  const onRegister = useCallback((formData: RegisterFormData) => {
+    register(
       {
         provider: AuthProvider.Email,
         data: formData
@@ -45,10 +53,10 @@ export default function LoginPage() {
 
   return (
     <AuthPage
-      titleHtml='<strong>Sign In</strong> to Account'
-      fields={LOGIN_FIELDS}
-      buttonText='Sign In'
-      onSubmit={onLogin}
+      titleHtml='<strong>Create</strong> an Account'
+      fields={REGISTER_FIELDS}
+      buttonText='Sign Up'
+      onSubmit={onRegister}
     />
   );
 }

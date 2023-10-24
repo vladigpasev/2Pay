@@ -142,7 +142,7 @@ export const Header = () => {
         >
           Sign In
         </Link>
-        <Link href="/auth/register" className="btn btn-secondary max-sm:p-2">
+        <Link href="/auth/signup" className="btn btn-secondary max-sm:p-2">
           Register
         </Link>
       </div>
