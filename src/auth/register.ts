@@ -1,5 +1,5 @@
-import { AuthProvider } from './provider';
-import { useCallback } from 'react';
+import { AuthProvider } from "./provider";
+import { useCallback } from "react";
 
 interface OAuthProviderRegisterOptions {
   provider: AuthProvider.Google | AuthProvider.Facebook;
@@ -14,10 +14,15 @@ interface EmailProviderRegisterOptions {
   };
 }
 
-type ProviderRegisterOptions = OAuthProviderRegisterOptions | EmailProviderRegisterOptions;
+type ProviderRegisterOptions =
+  | OAuthProviderRegisterOptions
+  | EmailProviderRegisterOptions;
 
 export function useRegister() {
-  return useCallback((registerOptions: ProviderRegisterOptions, redirectUrl: string) => {
-    console.log(registerOptions, redirectUrl);
-  }, []);
+  return useCallback(
+    (registerOptions: ProviderRegisterOptions, redirectUrl: string) => {
+      console.log(registerOptions, redirectUrl);
+    },
+    []
+  );
 }
