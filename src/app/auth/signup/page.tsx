@@ -6,7 +6,6 @@ import { AuthProvider } from "@/auth/provider";
 import { useRegister } from "@/auth/register";
 import { Field } from "@/components/Form";
 import { useCallback } from "react";
-import { trpc } from "@/trpc/client";
 
 const REGISTER_FIELDS: Field<string>[] = [
   {
@@ -46,14 +45,13 @@ export default function RegisterPage() {
   const register = useRegister();
 
   const onRegister = useCallback((formData: RegisterFormData) => {
-    // register(
-    //   {
-    //     provider: AuthProvider.Email,
-    //     data: formData
-    //   },
-    //   redirectUrl
-    // );
-    console.log(formData);
+    register(
+      {
+        provider: AuthProvider.Email,
+        data: formData,
+      },
+      redirectUrl
+    );
   }, []);
 
   return (

@@ -2,7 +2,6 @@ import {
   NotificationType,
   useDispatchNotification,
 } from "@/components/Notifyers";
-import { trpc } from "@/trpc/client";
 import React, { FormEvent, useCallback, useEffect, useRef } from "react";
 
 export interface Field<T> {
@@ -71,8 +70,6 @@ export function CustomForm({ buttonText, fields, onSubmit, children }: Props) {
     [onSubmit, dispatchNotification]
   );
 
-  const registerMutation = trpc.authentication.registerUser.useMutation();
-
   return (
     <form className="space-y-5 w-full sm:w-[400px]" onSubmit={submitCallback}>
       {fields.map((field) => (
@@ -92,18 +89,7 @@ export function CustomForm({ buttonText, fields, onSubmit, children }: Props) {
         </div>
       ))}
       <div className="flex flex-col w-full border-opacity-50">
-        <button
-          type="button"
-          onClick={() =>
-            registerMutation.mutate({
-              authProvider: "email",
-              email: "andr.nikola.08@gmail.com",
-              password: "123123123",
-              username: "GoshkuPompata",
-            })
-          }
-          className="w-full bg-primary rounded p-2 text-primary-content transition-all hover:brightness-125"
-        >
+        <button className="w-full bg-primary rounded p-2 text-primary-content transition-all hover:brightness-125">
           {buttonText}
         </button>
         {children}

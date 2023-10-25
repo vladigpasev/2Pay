@@ -20,7 +20,12 @@ export default function AlertDialog() {
         className="modal fixed flex text-neutral-content modal-bottom sm:modal-middle w-[99vw] backdrop-blur-sm backdrop-contrast-50"
       >
         <div className="modal-box left-1/2 relative -translate-x-1/2 p-3 pt-0">
-          <div className="modal-action">{alert.content}</div>
+          <form
+            onSubmit={() => setAlert({ opened: false, content: alert.content })}
+            className="modal-action"
+          >
+            {alert.content}
+          </form>
           <button
             className="btn top-0 right-0 absolute rounded-tl-none rounded-br-none rounded-bl-xl"
             type="button"

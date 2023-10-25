@@ -6,10 +6,14 @@ import { eq } from "drizzle-orm";
 import { AuthProviders, BareboneUser, User } from "@/types/user";
 import { sendMail } from "./lib/sendMail";
 
+const bcrypt = require("bcrypt");
+
 import * as dotenv from "dotenv";
 import { TRPCError } from "@trpc/server";
 import { id } from "@/utils/id";
 dotenv.config();
+
+const SALT_ROUNDS = 5;
 
 class AuthProvider {
   protected userData: BareboneUser | User | undefined;
@@ -18,6 +22,10 @@ class AuthProvider {
     this.userData = userData;
     this.userData.verified =
       this.userData.authProvider === "email" ? false : true;
+  }
+
+  protected HashPassword(plaintextPass: string) {
+    return bcrypt.hashSync(plaintextPass, SALT_ROUNDS);
   }
 
   protected async SaveData(newRecord: boolean) {
@@ -44,6 +52,8 @@ abstract class UserMethods {
 class EmailProvider extends AuthProvider implements UserMethods {
   public async Register() {
     try {
+      this.userData!.password = this.HashPassword(this.userData!.password);
+
       await this.SaveData(true);
       const data = db
         .select()
