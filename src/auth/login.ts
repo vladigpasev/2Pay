@@ -16,7 +16,8 @@ interface EmailProviderLoginOptions {
 type ProviderLoginOptions = OAuthProviderLoginOptions | EmailProviderLoginOptions;
 
 export function useLogin() {
-  return useCallback((loginOptions: ProviderLoginOptions, redirectUrl: string) => {
+  return useCallback(async (loginOptions: ProviderLoginOptions, redirectUrl: string) => {
     console.log(loginOptions, redirectUrl);
+    return null;
   }, []);
 }

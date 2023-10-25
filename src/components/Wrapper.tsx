@@ -5,9 +5,9 @@ import { Footer } from './Footer';
 import { Header, themeAtom } from './Header';
 import { Suspense } from 'react';
 import PageLoading from '@/app/loading';
-import AlertDialog from './Alert';
+import AlertDialog from './utils/Modal';
 // import dynamic from "next/dynamic";
-import Notifyers from './Notifyers';
+import Notifyers from './utils/Notifyers';
 
 // const NotifyersWithNoSSR = dynamic(() => import("./Notifyers"), {
 //   ssr: false,
