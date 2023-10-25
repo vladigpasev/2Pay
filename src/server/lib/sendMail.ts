@@ -1,9 +1,6 @@
-const nodemailer = require('nodemailer');
+import nodemailer from 'nodemailer';
 
-import * as dotenv from 'dotenv';
-dotenv.config();
-
-var transporter = nodemailer.createTransport({
+const GLOBAL_TRANSPORTER = nodemailer.createTransport({
   service: process.env.EMAIL_SERVICE,
   auth: {
     user: process.env.EMAIL_SERVER_USER,
@@ -19,13 +16,5 @@ export const sendMail = ({ to, body, subject }: { to: string; body: string; subj
     html: body
   };
 
-  transporter.sendMail(mailOptions, function (error: string, info: any) {
-    if (error) {
-      console.error('Custom Mail Send Error: ' + error);
-      throw new Error(error);
-    } else {
-      console.log(`A mail has been sent to: ${to}`);
-      return true;
-    }
-  });
+  return new Promise(resolve => GLOBAL_TRANSPORTER.sendMail(mailOptions, error => resolve(error)));
 };

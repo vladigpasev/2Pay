@@ -1,19 +1,12 @@
-import db from '@/drizzle';
-import { faWpexplorer } from '@fortawesome/free-brands-svg-icons';
 import { faBomb, faClipboardCheck, faEnvelope, faHome, faMailReply, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faWpexplorer } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { users } from '../../../../../db/schema';
-import { eq } from 'drizzle-orm';
+import { verifyUser } from '@/server/service/auth/verification';
 import Link from 'next/link';
 
-async function isKeyValid(token: string) {
-  return await db.update(users).set({ verified: true }).where(eq(users.verificationToken, token));
-}
-
 export default async function VerifyAccount({ params }: { params: { key: string } }) {
-  let verified = false;
-  const updated = await isKeyValid(params.key);
-  if (updated.rowsAffected > 0) verified = true;
+  const verified = await verifyUser(params.key);
+
   return (
     <main className='w-full h-screen flex justify-center'>
       <div className='flex gap-5 flex-row max-md:flex-col my-auto'>

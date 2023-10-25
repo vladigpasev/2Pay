@@ -1,81 +1,50 @@
-// import { db } from "@/app/_db/prisma";
-// import {
-//   SignedInAuthObject,
-//   SignedOutAuthObject,
-//   getAuth,
-// } from "@clerk/nextjs/server";
-import nodemailer from 'nodemailer';
 import { TRPCError, inferAsyncReturnType, initTRPC } from '@trpc/server';
+import * as trpcNext from '@trpc/server/adapters/next';
+import jsonwebtoken from 'jsonwebtoken';
 
-export const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: 'camavanphoto@gmail.com',
-    pass: process.env.MAIL_PASSWORD
-  }
-});
-
-interface AuthContext {
-  auth: any;
+interface TokenData {
+  uuid: string;
+  email: string;
+  password: string;
 }
 
-export const createInnerTRPCContext = ({ auth }: AuthContext) => {
+interface Context {
+  rawToken: string | null;
+  tokenData: TokenData | null;
+}
+
+export const createContext = async ({ req }: any): Promise<Context> => {
+  const cookies = req.cookies._parsed;
   return {
-    auth
+    rawToken: cookies.has('token') ? cookies.get('token').value : null,
+    tokenData: null
   };
 };
 
-export const createContext = async ({ req, res }: any) => {
-  // const { auth } = createInnerTRPCContext({ auth: getAuth(req) });
-  const auth = null;
-  if (!auth) return { auth: null };
-  return {
-    auth
-  };
-};
-
-type Context = inferAsyncReturnType<typeof createContext>;
 export const t = initTRPC.context<Context>().create();
 
-// const isAuthed = t.middleware(({ ctx, next }) => {
-//   if (!ctx.auth) {
-//     throw new TRPCError({ code: "UNAUTHORIZED" });
-//   }
-//   return next({
-//     ctx: {
-//       auth: ctx.auth,
-//     },
-//   });
-// });
+const createVerifyTokenMiddleware =
+  (options: jsonwebtoken.VerifyOptions) =>
+  ({ ctx, next }: any) => {
+    if (!ctx.rawToken) throw new TRPCError({ code: 'UNAUTHORIZED' });
 
-// const getUserData = isAuthed.unstable_pipe(async ({ ctx, next }) => {
-//   return next({
-//     ctx: {
-//       auth: ctx.auth,
-//       user: await db.user.findUnique({
-//         where: {
-//           id: ctx.auth!.userId!,
-//         },
-//       }),
-//     },
-//   });
-// });
+    try {
+      const data = jsonwebtoken.verify(ctx.rawToken, process.env.JWT_SECRET as string, options) as TokenData;
+      return next({
+        ctx: {
+          rawToken: ctx.rawToken,
+          tokenData: data
+        }
+      });
+    } catch (error) {
+      throw new TRPCError({ code: 'UNAUTHORIZED' });
+    }
+  };
 
-// const isAdmin = getUserData.unstable_pipe(async ({ ctx, next }) => {
-//   if (ctx.user?.hasRole !== "ADMIN") {
-//     throw new TRPCError({ code: "UNAUTHORIZED" });
-//   }
-
-//   return next({
-//     ctx: {
-//       auth: ctx.auth,
-//       user: ctx.user,
-//     },
-//   });
-// });
+export const verifyToken = t.middleware(createVerifyTokenMiddleware({}));
+export const verifyTokenIgnoreExpired = t.middleware(createVerifyTokenMiddleware({ ignoreExpiration: true }));
 
 export const router = t.router;
 export const publicProcedure = t.procedure;
-// export const protectedProcedure = t.procedure.use(isAuthed);
-// export const authenticatedProcedure = t.procedure.use(getUserData);
-// export const adminProcedure = t.procedure.use(isAdmin);
+export const protectedProcedure = t.procedure.use(verifyToken);
+export const protectedProcedureIgnoreExpired = t.procedure.use(verifyTokenIgnoreExpired);

@@ -49,13 +49,10 @@ export default function RegisterPage() {
 
   const onRegister = useCallback(
     async (formData: RegisterFormData) => {
-      const error = await register(
-        {
-          provider: AuthProvider.Email,
-          data: formData
-        },
-        redirectUrl
-      );
+      const error = await register({
+        provider: AuthProvider.Email,
+        data: formData
+      });
 
       if (error != null) return error;
 
