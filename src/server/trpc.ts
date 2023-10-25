@@ -4,15 +4,15 @@
 //   SignedOutAuthObject,
 //   getAuth,
 // } from "@clerk/nextjs/server";
-import nodemailer from "nodemailer";
-import { TRPCError, inferAsyncReturnType, initTRPC } from "@trpc/server";
+import nodemailer from 'nodemailer';
+import { TRPCError, inferAsyncReturnType, initTRPC } from '@trpc/server';
 
 export const transporter = nodemailer.createTransport({
-  service: "gmail",
+  service: 'gmail',
   auth: {
-    user: "camavanphoto@gmail.com",
-    pass: process.env.MAIL_PASSWORD,
-  },
+    user: 'camavanphoto@gmail.com',
+    pass: process.env.MAIL_PASSWORD
+  }
 });
 
 interface AuthContext {
@@ -21,7 +21,7 @@ interface AuthContext {
 
 export const createInnerTRPCContext = ({ auth }: AuthContext) => {
   return {
-    auth,
+    auth
   };
 };
 
@@ -30,7 +30,7 @@ export const createContext = async ({ req, res }: any) => {
   const auth = null;
   if (!auth) return { auth: null };
   return {
-    auth,
+    auth
   };
 };
 

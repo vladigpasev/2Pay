@@ -1,4 +1,4 @@
-export type AuthProviders = "google" | "facebook" | "email";
+export type AuthProviders = 'google' | 'facebook' | 'email';
 
 export interface BareboneUser {
   authProvider: AuthProviders;
