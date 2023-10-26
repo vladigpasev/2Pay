@@ -6,6 +6,7 @@ interface TokenData {
   uuid: string;
   email: string;
   username: string;
+  profilePictureURL: string;
 }
 
 interface Context {
