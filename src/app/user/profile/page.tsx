@@ -13,6 +13,7 @@ import { motion } from 'framer-motion';
 import { trpc } from '@/trpc/client';
 import { NotificationType } from '@/components/utils/Notifyers';
 import { useSetTokens } from '@/auth/token';
+import { useAuthenticatedMutation } from '@/hooks/useAuthenticatedMutation';
 
 export default function UserProfile() {
   const user = useUser();
@@ -24,7 +25,7 @@ export default function UserProfile() {
         name: 'Username',
         type: 'text',
         placeholder: 'Username',
-        value: user.username,
+        defaultValue: user.username,
         validate: value => (value.trim().length >= 5 ? null : 'Username is too short!')
       },
       {
@@ -32,7 +33,7 @@ export default function UserProfile() {
         name: 'Email',
         type: 'email',
         placeholder: 'you@email.com',
-        value: user.email,
+        defaultValue: user.email,
         validate: value => (isValidEmail(value) ? null : 'Email is invalid!')
       }
     ],
@@ -49,12 +50,12 @@ export default function UserProfile() {
 
   const [error, setError] = useState(null as string | null);
 
-  const updateMutation = trpc.user.updateUserProfile.useMutation();
+  const [updateMutation, updateUserAsyncMutation] = useAuthenticatedMutation(trpc.user.updateUserProfile);
   const setTokens = useSetTokens();
 
   const onSubmit = useCallback(async (formData: IUpdateUser) => {
     try {
-      const res = await updateMutation.mutateAsync(formData);
+      const res = await updateUserAsyncMutation(formData);
       setTokens(res);
     } catch (error) {
       dispatchNotification({
