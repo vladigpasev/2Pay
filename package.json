@@ -35,6 +35,7 @@
     "mysql2": "^3.6.2",
     "next": "13.5.4",
     "next-auth": "^4.23.2",
+    "next-client-cookies": "^1.0.5",
     "nodemailer": "^6.9.7",
     "react": "^18",
     "react-dom": "^18",

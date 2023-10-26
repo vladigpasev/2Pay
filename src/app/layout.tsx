@@ -3,6 +3,8 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { Wrapper } from '@/components/Wrapper';
 import ReactQueryProvider from '@/trpc/Provider';
+import { cookies } from 'next/headers';
+import { ClientCookiesProvider } from '@/components/CookiesProvider';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -16,7 +18,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang='en'>
       <body className={inter.className}>
         <ReactQueryProvider>
-          <Wrapper>{children}</Wrapper>
+          <ClientCookiesProvider value={cookies().getAll()}>
+            <Wrapper cookies={new Map(cookies())}>{children}</Wrapper>
+          </ClientCookiesProvider>
         </ReactQueryProvider>
       </body>
     </html>
