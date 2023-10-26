@@ -7,6 +7,7 @@ interface TokenData {
   email: string;
   username: string;
   profilePictureURL: string;
+  authProvider: string;
 }
 
 interface Context {

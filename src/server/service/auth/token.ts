@@ -19,7 +19,7 @@ type User = InferSelectModel<typeof users>;
 
 const generateRefreshToken = () => crypto.randomBytes(128).toString('hex');
 
-const signToken = (data: any) =>
+const signToken = (data: IUser) =>
   jsonwebtoken.sign(data, process.env.JWT_SECRET as string, {
     expiresIn: TOKEN_EXPIRATION_TIME
   });
@@ -29,7 +29,8 @@ async function createTokenForUser(user: IUser): Promise<Tokens> {
     uuid: user.uuid,
     email: user.email,
     username: user.username,
-    profilePictureURL: user.profilePictureURL
+    profilePictureURL: user.profilePictureURL,
+    authProvider: user.authProvider
   });
   const refreshToken = generateRefreshToken();
 
@@ -79,7 +80,8 @@ async function refreshToken(userData: IUser, oldRefreshToken: string, updateUser
     uuid: userData.uuid,
     email: userData.email,
     username: userData.username,
-    profilePictureURL: userData.profilePictureURL
+    profilePictureURL: userData.profilePictureURL,
+    authProvider: userData.authProvider
   });
   const refreshToken = generateRefreshToken();
 

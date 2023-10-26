@@ -3,4 +3,5 @@ export default interface IUser {
   username: string;
   email: string;
   profilePictureURL: string | undefined;
+  authProvider: string;
 }
