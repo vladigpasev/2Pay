@@ -1,4 +1,6 @@
 import { NotificationType, useDispatchNotification } from '@/components/utils/Notifyers';
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { FormEvent, useCallback, useEffect, useRef, useState } from 'react';
 
 export interface Field<T> {
@@ -6,6 +8,7 @@ export interface Field<T> {
   name: string;
   type: string;
   placeholder?: string;
+  value?: string;
   transform?: (input: string) => T;
   validate?: (value: T) => string | null;
 }
@@ -18,6 +21,7 @@ type Props = React.PropsWithChildren<{
   canSubmit: boolean;
   error: string | null;
   onSubmit: OnFormSubmit;
+  icon?: IconDefinition;
 }>;
 
 function getFormData(fields: Field<any>[], rawFormData: Record<string, string>): [Record<string, string>, any] {
@@ -39,7 +43,7 @@ function getFormData(fields: Field<any>[], rawFormData: Record<string, string>):
   return [errors, formData];
 }
 
-export function CustomForm({ buttonText, fields, canSubmit, error, onSubmit, children }: Props) {
+export function CustomForm({ buttonText, fields, canSubmit, error, onSubmit, children, icon }: Props) {
   const [errors, setErrors] = useState({} as Record<string, string>);
   const rawFormData = useRef({} as Record<string, string>);
   const dispatchNotification = useDispatchNotification();
@@ -83,11 +87,12 @@ export function CustomForm({ buttonText, fields, canSubmit, error, onSubmit, chi
       {error && <p className='text-rose-600 text-lg text-center'>{error}</p>}
       <div className='flex flex-col w-full border-opacity-50'>
         <button
-          className={`w-full bg-primary rounded p-2 text-primary-content transition-all ${
+          className={`w-full bg-primary rounded flex p-2 text-primary-content transition-all ${
             canSubmit ? 'hover:brightness-125' : 'cursor-default opacity-50'
           }`}
         >
-          {buttonText}
+          {icon && <FontAwesomeIcon className='my-auto' icon={icon!} />}
+          <span className='flex flex-grow justify-center'>{buttonText}</span>
         </button>
         {children}
       </div>

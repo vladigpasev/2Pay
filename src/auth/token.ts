@@ -2,15 +2,12 @@ import jsonwebtoken from 'jsonwebtoken';
 import { atom, useAtom } from 'jotai';
 import { useCallback, useEffect } from 'react';
 import { useCookies } from 'next-client-cookies';
+import IUser from '@/types/User';
 
 interface Token {
   refreshToken: string;
   token: string;
-  tokenData: {
-    uuid: string;
-    username: string;
-    email: string;
-  };
+  tokenData: IUser;
 }
 
 export const tokenAtom = atom(null as Token | null);

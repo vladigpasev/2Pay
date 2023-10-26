@@ -13,7 +13,8 @@ export const users = mysqlTable('users', {
   email: varchar('email', { length: 70 }).notNull().unique(),
   password: varchar('password', { length: 256 }),
   verified: boolean('verified').default(false).notNull(),
-  verificationToken: varchar('verificationToken', { length: 12 }).unique()
+  verificationToken: varchar('verificationToken', { length: 12 }).unique(),
+  profilePictureURL: varchar('profilePicture', { length: 256 })
 });
 
 export const tokens = mysqlTable('tokens', {

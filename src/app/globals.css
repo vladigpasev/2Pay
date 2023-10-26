@@ -6,3 +6,7 @@
   --primary-hex: #759e80;
   --primary-content-hex: #d1e0d5;
 }
+
+html, body {
+  overflow-x: hidden;
+}
