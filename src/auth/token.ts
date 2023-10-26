@@ -16,6 +16,7 @@ export const tokenAtom = atom(null as Token | null);
 
 export function useLoadTokens() {
   const [_, setToken] = useAtom(tokenAtom);
+  const refreshTokens = useRefreshTokens();
   const cookies = useCookies();
   const router = useRouter();
 
@@ -27,6 +28,8 @@ export function useLoadTokens() {
       refreshToken = search.get('refreshToken');
       localStorage.setItem('refreshToken', refreshToken!);
       router.push(window.location.pathname);
+
+      setTimeout(() => refreshTokens(false, refreshToken!), 0);
     }
 
     const token = cookies.get('token');
@@ -79,14 +82,17 @@ export function useClearTokens() {
 
 export function useRefreshTokens() {
   const refreshTokenReq = trpc.authentication.refreshToken.useMutation();
+  const [token] = useAtom(tokenAtom);
   const setTokens = useSetTokens();
-  const token = useToken();
 
   return useCallback(
-    async (updateUserData: boolean = false) => {
-      if (token?.refreshToken == null) throw new Error('Not logged in!');
+    async (updateUserData: boolean = false, refreshToken?: string) => {
+      if (refreshToken == null && token?.refreshToken == null) throw new Error('Not logged in!');
 
-      const tokens = await refreshTokenReq.mutateAsync({ refreshToken: token.refreshToken, updateUserData });
+      const tokens = await refreshTokenReq.mutateAsync({
+        refreshToken: refreshToken ?? token!.refreshToken,
+        updateUserData
+      });
       setTokens(tokens);
     },
     [refreshTokenReq, setTokens, token]
