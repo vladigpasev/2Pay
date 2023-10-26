@@ -4,9 +4,10 @@ import db from '@/drizzle';
 import { users } from '../../../db/schema';
 import { eq } from 'drizzle-orm';
 import { createTokenForUser } from '../service/auth/token';
-import { verifyPassword } from '../service/auth/emailAuthentication';
+import { template_VerificationEmailBody, verifyPassword } from '../service/auth/emailAuthentication';
 import { TRPCError } from '@trpc/server';
 import { id } from '@/utils/id';
+import { sendMail } from '../lib/sendMail';
 
 export const userRouter = t.router({
   updateUserProfile: protectedProcedure
@@ -18,23 +19,33 @@ export const userRouter = t.router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      if (ctx.tokenData!.provider == 'email' && !verifyPassword(ctx.tokenData!.uuid, input.password))
+      if (ctx.tokenData!.authProvider == 'email' && !verifyPassword(ctx.tokenData!.uuid, input.password))
         throw new TRPCError({
           code: 'NOT_FOUND',
           message: 'Invalid Password! Try again!'
         });
+      const verificationToken = id();
       await db
         .update(users)
         .set(
-          ctx.tokenData!.provider == 'email' && ctx.tokenData?.email !== input.email
+          ctx.tokenData!.authProvider == 'email' && ctx.tokenData?.email !== input.email
             ? {
-                ...input,
+                email: input.email,
+                username: input.username,
                 verified: false,
-                verificationToken: id()
+                verificationToken: verificationToken
               }
-            : input
+            : {
+                email: input.email,
+                username: input.username
+              }
         )
         .where(eq(users.uuid, ctx.tokenData!.uuid!));
+      sendMail({
+        subject: 'Verify your N2D2T account',
+        body: template_VerificationEmailBody({ username: input.username, verificationToken: verificationToken }),
+        to: input.email
+      });
       return createTokenForUser({ ...ctx.tokenData!, ...input });
     })
 });

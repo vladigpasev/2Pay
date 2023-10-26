@@ -36,7 +36,7 @@ export default function UserProfile() {
         type: 'email',
         placeholder: 'you@email.com',
         defaultValue: user.email,
-        isDisabled: user.provider !== 'email',
+        isDisabled: user.authProvider !== 'email',
         validate: value => (isValidEmail(value) ? null : 'Email is invalid!')
       }
     ],
@@ -87,7 +87,7 @@ export default function UserProfile() {
   const onFormSubmit = useCallback((formData: any) => {
     setError(null);
 
-    if (user.provider === 'email')
+    if (user.authProvider === 'email')
       openModal(<PasswordAskingModal onSubmit={onPasswordInputSend(formData)} />, () => {});
     else onPasswordInputSend(formData)('not_important');
   }, []);

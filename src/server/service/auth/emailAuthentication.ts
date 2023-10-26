@@ -22,7 +22,7 @@ interface LoginData {
   password: string;
 }
 
-const template_VerificationEmailBody = ({
+export const template_VerificationEmailBody = ({
   username,
   verificationToken
 }: {
