@@ -2,6 +2,7 @@ import jsonwebtoken from 'jsonwebtoken';
 import { atom, useAtom } from 'jotai';
 import { useCallback, useEffect } from 'react';
 import { getCookie } from '@/utils/getCookie';
+import { useCookies } from 'next-client-cookies';
 
 interface Token {
   refreshToken: string;
@@ -37,11 +38,12 @@ export function useLoadTokens() {
 
 export function useSetTokens() {
   const [_, setToken] = useAtom(tokenAtom);
-
+  const cookies = useCookies();
   return useCallback(
     (tokens: { token: string; refreshToken: string }) => {
       localStorage.setItem('refreshToken', tokens.refreshToken);
-      document.cookie = `token=${tokens.token}`;
+
+      cookies.set('token', tokens.token);
 
       setToken({
         refreshToken: tokens.refreshToken,
