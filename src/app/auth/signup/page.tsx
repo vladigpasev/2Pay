@@ -10,6 +10,9 @@ import { useRouter } from 'next/navigation';
 import { useOpenModal } from '@/components/utils/Modal';
 import EmailVerificationModal from '@/components/modals/EmailVerificationModal';
 import { AuthProvider } from '@/auth/provider';
+import { useAtom } from 'jotai';
+import { NotificationType, notifications } from '@/components/utils/Notifyers';
+import { id } from '@/utils/id';
 
 const REGISTER_FIELDS: Field<string>[] = [
   {
@@ -46,6 +49,7 @@ export default function RegisterPage() {
   const openModal = useOpenModal();
   const register = useRegister();
   const router = useRouter();
+  const [notifyes, dispatchNotifications] = useAtom(notifications);
 
   const onRegister = useCallback(
     async (formData: RegisterFormData) => {
@@ -54,7 +58,10 @@ export default function RegisterPage() {
         data: formData
       });
 
-      if (error != null) return error;
+      if (error != null) {
+        dispatchNotifications({ type: 'insert', value: { type: NotificationType.Error, message: error, key: id() } });
+        return '';
+      }
 
       openModal(<EmailVerificationModal email={formData.email} />, () => router.push(redirectUrl));
 
