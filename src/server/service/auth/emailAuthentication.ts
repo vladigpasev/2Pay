@@ -56,7 +56,8 @@ async function registerUserByEmail(data: RegisterData): Promise<Value<Tokens>> {
     uuid: user.uuid,
     username: user.username,
     email: user.email,
-    profilePictureURL: user.profilePictureURL!
+    profilePictureURL: user.profilePictureURL!,
+    authProvider: user.authProvider
   });
 
   sendMail({
@@ -87,7 +88,8 @@ async function loginUserByEmail(data: LoginData): Promise<Value<Tokens>> {
     uuid: user.uuid,
     username: user.username,
     email: user.email,
-    profilePictureURL: user.profilePictureURL!
+    profilePictureURL: user.profilePictureURL!,
+    authProvider: user.authProvider
   });
 
   return value.value(tokens);
