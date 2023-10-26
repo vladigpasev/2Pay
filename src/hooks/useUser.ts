@@ -6,6 +6,7 @@ import { useCookies } from 'next-client-cookies';
 
 export function useUser() {
   const token = useAtom(tokenAtom)[0];
+  console.log(token);
   return token?.tokenData || serverUser();
 }
 
