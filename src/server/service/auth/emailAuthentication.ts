@@ -93,4 +93,10 @@ async function loginUserByEmail(data: LoginData): Promise<Value<Tokens>> {
   return value.value(tokens);
 }
 
-export { registerUserByEmail, loginUserByEmail };
+async function verifyPassword(uuid: string, pass: string) {
+  const [user] = await db.select().from(users).where(eq(users.uuid, uuid)).limit(1);
+  const isPasswordValid = await bcrypt.compare(pass, user.password!);
+  return isPasswordValid;
+}
+
+export { registerUserByEmail, loginUserByEmail, verifyPassword };

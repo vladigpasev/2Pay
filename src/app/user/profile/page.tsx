@@ -11,9 +11,11 @@ import loading from '@/app/loading';
 import error from 'next/error';
 import { motion } from 'framer-motion';
 import { trpc } from '@/trpc/client';
-import { NotificationType } from '@/components/utils/Notifyers';
+import { NotificationType, useDispatchNotification } from '@/components/utils/Notifyers';
 import { useSetTokens } from '@/auth/token';
 import { useAuthenticatedMutation } from '@/hooks/useAuthenticatedMutation';
+import { useOpenModal } from '@/components/utils/Modal';
+import PasswordAskingModal from '@/components/modals/PasswordAskingModal';
 
 export default function UserProfile() {
   const user = useUser();
@@ -34,6 +36,7 @@ export default function UserProfile() {
         type: 'email',
         placeholder: 'you@email.com',
         defaultValue: user.email,
+        isDisabled: user.provider !== 'email',
         validate: value => (isValidEmail(value) ? null : 'Email is invalid!')
       }
     ],
@@ -47,32 +50,46 @@ export default function UserProfile() {
   }
 
   const [isEditingUser, setIsEditingUser] = useState(false);
+  const openModal = useOpenModal();
+
+  const dispatchNotification = useDispatchNotification();
 
   const [error, setError] = useState(null as string | null);
 
   const [updateMutation, updateUserAsyncMutation] = useAuthenticatedMutation(trpc.user.updateUserProfile);
   const setTokens = useSetTokens();
 
-  const onSubmit = useCallback(async (formData: IUpdateUser) => {
+  const onSubmit = useCallback(async (formData: IUpdateUser, password: string) => {
     try {
-      const res = await updateUserAsyncMutation(formData);
+      const res = await updateUserAsyncMutation({ ...formData, password });
       setTokens(res);
-    } catch (error) {
+      setIsEditingUser(false);
+    } catch (error: any) {
       dispatchNotification({
         type: NotificationType.Error,
-        message: error
+        message: error.message
       });
 
       return null;
     }
   }, []);
 
+  const onPasswordInputSend = (formData: any) => {
+    return async (password: string) => {
+      try {
+        const ret = await onSubmit(formData, password);
+      } catch (error: any) {
+        setError(error.message ?? 'Something went wrong!');
+      }
+    };
+  };
+
   const onFormSubmit = useCallback((formData: any) => {
     setError(null);
 
-    onSubmit(formData)
-      .then(() => console.log('User profile updated'))
-      .catch(error => setError(error.message ?? 'Something went wrong!'));
+    if (user.provider === 'email')
+      openModal(<PasswordAskingModal onSubmit={onPasswordInputSend(formData)} />, () => {});
+    else onPasswordInputSend(formData)('not_important');
   }, []);
 
   return (
@@ -131,7 +148,4 @@ export default function UserProfile() {
       </div>
     </main>
   );
-}
-function dispatchNotification(arg0: { type: any; message: unknown }) {
-  throw new Error('Function not implemented.');
 }

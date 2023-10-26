@@ -22,6 +22,7 @@ type Props = React.PropsWithChildren<{
   error: string | null;
   onSubmit: OnFormSubmit;
   icon?: IconDefinition;
+  isDisabled?: boolean;
 }>;
 
 function getFormData(fields: Field<any>[], rawFormData: Record<string, string>): [Record<string, string>, any] {
@@ -43,7 +44,7 @@ function getFormData(fields: Field<any>[], rawFormData: Record<string, string>):
   return [errors, formData];
 }
 
-export function CustomForm({ buttonText, fields, canSubmit, error, onSubmit, children, icon }: Props) {
+export function CustomForm({ buttonText, fields, canSubmit, error, onSubmit, children, icon, isDisabled }: Props) {
   const [rawFormData, setRawFormData] = useState<Record<string, string>>(() =>
     Object.fromEntries(fields.map(field => [field.id, field.defaultValue ?? '']))
   );
@@ -79,6 +80,7 @@ export function CustomForm({ buttonText, fields, canSubmit, error, onSubmit, chi
             type={field.type}
             placeholder={field.placeholder}
             value={rawFormData[field.id]}
+            disabled={isDisabled}
           />
           {errors[field.id] && <p className='text-rose-600 text-sm'>{errors[field.id]}</p>}
         </div>

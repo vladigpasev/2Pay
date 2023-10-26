@@ -1,17 +1,11 @@
 import { TRPCError, initTRPC } from '@trpc/server';
 import { NextRequest } from 'next/server';
 import jsonwebtoken from 'jsonwebtoken';
-
-interface TokenData {
-  uuid: string;
-  email: string;
-  username: string;
-  profilePictureURL: string;
-}
+import IUser from '@/types/User';
 
 interface Context {
   rawToken: string | null;
-  tokenData: TokenData | null;
+  tokenData: IUser | null;
 }
 
 export const createContext = async ({ req }: { req: NextRequest }): Promise<Context> => {
@@ -29,7 +23,7 @@ const createVerifyTokenMiddleware =
     if (!ctx.rawToken) throw new TRPCError({ code: 'UNAUTHORIZED' });
 
     try {
-      const data = jsonwebtoken.verify(ctx.rawToken, process.env.JWT_SECRET as string, options) as TokenData;
+      const data = jsonwebtoken.verify(ctx.rawToken, process.env.JWT_SECRET as string, options) as IUser;
       return next({
         ctx: {
           rawToken: ctx.rawToken,
