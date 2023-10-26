@@ -6,7 +6,10 @@ function getGoogleOAuthURL(redirectPath: string) {
   const query = new URLSearchParams();
 
   query.set('client_id', process.env.NEXT_PUBLIC_GOOGLE_ID as string);
-  query.set('redirect_uri', `${process.env.NEXT_PUBLIC_APP_URL}`);
+  query.set('redirect_uri', `${process.env.NEXT_PUBLIC_APP_URL}auth/oauth`);
+  query.set('response_type', 'code');
+  query.append('scope', 'email profile');
+  query.set('state', redirectPath);
 
   return `https://accounts.google.com/o/oauth2/v2/auth?${query.toString()}`;
 }
