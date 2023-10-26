@@ -1,9 +1,10 @@
-import { InferSelectModel, and, eq } from 'drizzle-orm';
+import { InferSelectModel, IsAny, and, eq } from 'drizzle-orm';
 import { tokens, users } from '../../../../db/schema';
 import { value, Value } from '@/utils/value';
 import jsonwebtoken from 'jsonwebtoken';
 import * as crypto from 'crypto';
 import db from '@/drizzle';
+import IUser from '@/types/User';
 
 export interface Tokens {
   refreshToken: string;
@@ -24,7 +25,12 @@ const signToken = (data: any) =>
   });
 
 async function createTokenForUser(user: User): Promise<Tokens> {
-  const token = signToken({ uuid: user.uuid, email: user.email, username: user.username });
+  const token = signToken({
+    uuid: user.uuid,
+    email: user.email,
+    username: user.username,
+    profilePictureURL: user.profilePictureURL
+  });
   const refreshToken = generateRefreshToken();
 
   await deleteToken(user.uuid);
@@ -39,11 +45,7 @@ async function createTokenForUser(user: User): Promise<Tokens> {
   return { token, refreshToken };
 }
 
-async function refreshToken(
-  userData: { uuid: string; email: string; username: string },
-  oldRefreshToken: string,
-  updateUserData: boolean
-): Promise<Value<Tokens>> {
+async function refreshToken(userData: IUser, oldRefreshToken: string, updateUserData: boolean): Promise<Value<Tokens>> {
   const tokenRecords = await db
     .select()
     .from(tokens)
@@ -65,14 +67,20 @@ async function refreshToken(
         .select({
           uuid: users.uuid,
           email: users.email,
-          username: users.username
+          username: users.username,
+          profilePictureURL: users.profilePictureURL
         })
         .from(users)
         .where(eq(users.uuid, userData.uuid))
         .limit(1)
-    )[0];
+    )[0] as IUser;
 
-  const token = signToken({ uuid: userData.uuid, email: userData.email, username: userData.username });
+  const token = signToken({
+    uuid: userData.uuid,
+    email: userData.email,
+    username: userData.username,
+    profilePictureURL: userData.profilePictureURL
+  });
   const refreshToken = generateRefreshToken();
 
   await db.insert(tokens).values({

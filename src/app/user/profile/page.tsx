@@ -80,7 +80,7 @@ export default function UserProfile() {
       <div className='flex flex-col my-auto rounded-xl border border-neutral bg-neutral py-10 gap-10 px-8 w-fit min-w-[450px] max-md:min-w-min max-w-full max-sm:w-full max-sm:min-h-screen max-sm:rounded-none max-sm:py-16'>
         <h1 className='text-2xl text-center font-bold'>Your Profile:</h1>
         <div className='flex flex-col'>
-          <Image
+          <img
             src={user.profilePictureURL || '/images/pngs/user-profile.png'}
             width={350}
             height={350}

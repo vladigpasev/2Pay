@@ -42,7 +42,8 @@ async function registerUserByEmail(data: RegisterData): Promise<Value<Tokens>> {
     email: data.email,
     password: await bcrypt.hash(data.password, SALT_ROUNDS),
     verified: false,
-    verificationToken: id()
+    verificationToken: id(),
+    profilePictureURL: `https://api.dicebear.com/7.x/bottts/svg?seed=${id()}`
   };
 
   try {
