@@ -58,7 +58,7 @@ function Notifye({ notificationAtom }: { notificationAtom: PrimitiveAtom<Notific
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
-      className='alert text-white shadow-md shadow-accent border-base-content border'
+      className='alert text-white shadow-md shadow-accent border-base-content border max-w-[95vw] overflow-auto'
       style={{
         backgroundColor: typeColourMapper.has(notification.type)
           ? (typeColourMapper.get(notification.type)![0] as string)
