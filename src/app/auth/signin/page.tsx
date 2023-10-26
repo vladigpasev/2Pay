@@ -51,7 +51,7 @@ export default function LoginPage() {
       titleHtml='<strong>Sign In</strong> to Account'
       fields={LOGIN_FIELDS}
       buttonText='Sign In'
-      redirect={{ text: "Don't have an account?", location: '/auth/signup' }}
+      redirect={{ text: "Don't have an account?", location: `/auth/signup?redirectPath=${useRedirectPath()}` }}
       onSubmit={onLogin}
     />
   );

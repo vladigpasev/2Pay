@@ -75,7 +75,7 @@ export default function RegisterPage() {
       titleHtml='<strong>Create</strong> an Account'
       fields={REGISTER_FIELDS}
       buttonText='Sign Up'
-      redirect={{ text: 'Already have an account?', location: '/auth/signin' }}
+      redirect={{ text: 'Already have an account?', location: `/auth/signin?redirectPath=${useRedirectPath()}` }}
       onSubmit={onRegister}
     />
   );

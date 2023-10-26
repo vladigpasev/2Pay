@@ -25,27 +25,27 @@ export default async function VerifyAccount({ params }: { params: { key: string 
           <div className='flex gap-3 flex-row max-sm:flex-col'>
             {verified ? (
               <>
-                <button className='btn flex-grow btn-primary flex w-1/2 max-sm:w-full'>
+                <Link href='/' className='btn flex-grow btn-primary flex w-1/2 max-sm:w-full'>
                   <FontAwesomeIcon icon={faWpexplorer} className='max-w-full h-9 -ml-2' />
                   <p className='text-center flex-grow flex text-xl max-sm:text-lg'>
                     <span className='mx-auto'>Explore</span>
                   </p>
-                </button>
-                <button className='btn flex-grow w-1/2 max-sm:w-full btn-secondary flex'>
+                </Link>
+                <Link href='/user/profile' className='btn flex-grow w-1/2 max-sm:w-full btn-secondary flex'>
                   <p className='text-center flex-grow flex text-xl max-sm:text-lg'>
                     <span className='mx-auto'>Profile Settings</span>
                   </p>
                   <FontAwesomeIcon icon={faUser} className='max-w-full h-9 -ml-2' />
-                </button>
+                </Link>
               </>
             ) : (
               <>
-                <button className='btn flex-grow btn-primary flex w-1/2 max-sm:w-full'>
+                <Link href='/' className='btn flex-grow btn-primary flex w-1/2 max-sm:w-full'>
                   <FontAwesomeIcon icon={faHome} className='max-w-full h-9 -ml-2' />
                   <p className='text-center flex-grow flex text-xl max-sm:text-lg'>
                     <span className='mx-auto'>Back To Home</span>
                   </p>
-                </button>
+                </Link>
                 <Link href='/auth/verify/sent' className='btn flex-grow w-1/2 max-sm:w-full btn-secondary flex'>
                   <p className='text-center flex-grow flex text-xl max-sm:text-lg'>
                     <span className='mx-auto'>Resend Varification</span>
