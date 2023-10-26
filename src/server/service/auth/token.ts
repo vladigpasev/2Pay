@@ -24,7 +24,7 @@ const signToken = (data: any) =>
     expiresIn: TOKEN_EXPIRATION_TIME
   });
 
-async function createTokenForUser(user: User): Promise<Tokens> {
+async function createTokenForUser(user: IUser): Promise<Tokens> {
   const token = signToken({
     uuid: user.uuid,
     email: user.email,

@@ -15,7 +15,6 @@ export const userRouter = t.router({
     )
     .mutation(async ({ ctx, input }) => {
       await db.update(users).set(input).where(eq(users.uuid, ctx.tokenData!.uuid!));
-      const user = await db.select().from(users).where(eq(users.uuid, ctx.tokenData!.uuid!));
-      return createTokenForUser(user![0]);
+      return createTokenForUser({ ...ctx.tokenData!, ...input });
     })
 });

@@ -52,7 +52,12 @@ async function registerUserByEmail(data: RegisterData): Promise<Value<Tokens>> {
     return value.error(error.message.includes('AlreadyExists') ? 'This user already exists!' : 'Something went wrong!');
   }
 
-  const tokens = await createTokenForUser(user);
+  const tokens = await createTokenForUser({
+    uuid: user.uuid,
+    username: user.username,
+    email: user.email,
+    profilePictureURL: user.profilePictureURL!
+  });
 
   sendMail({
     subject: 'Verify your N2D2T account',
@@ -78,7 +83,12 @@ async function loginUserByEmail(data: LoginData): Promise<Value<Tokens>> {
 
   if (!isPasswordValid) return value.error('Email or password is incorrect!');
 
-  const tokens = await createTokenForUser(user);
+  const tokens = await createTokenForUser({
+    uuid: user.uuid,
+    username: user.username,
+    email: user.email,
+    profilePictureURL: user.profilePictureURL!
+  });
 
   return value.value(tokens);
 }
