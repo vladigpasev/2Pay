@@ -41,7 +41,8 @@ async function createTokenForUser(user: User): Promise<Tokens> {
 
 async function refreshToken(
   userData: { uuid: string; email: string; username: string },
-  oldRefreshToken: string
+  oldRefreshToken: string,
+  updateUserData: boolean
 ): Promise<Value<Tokens>> {
   const tokenRecords = await db
     .select()
@@ -57,6 +58,19 @@ async function refreshToken(
 
   if (Date.now() > tokenRecord.dateOfDeath.getTime() || Date.now() > tokenRecord.refreshTokenExpiration.getTime())
     return value.error('Token expired!');
+
+  if (updateUserData)
+    userData = (
+      await db
+        .select({
+          uuid: users.uuid,
+          email: users.email,
+          username: users.username
+        })
+        .from(users)
+        .where(eq(users.uuid, userData.uuid))
+        .limit(1)
+    )[0];
 
   const token = signToken({ uuid: userData.uuid, email: userData.email, username: userData.email });
   const refreshToken = generateRefreshToken();

@@ -47,9 +47,9 @@ export const authenticationRouter = t.router({
     await deleteToken(ctx.tokenData!.uuid);
   }),
   refreshToken: protectedProcedureIgnoreExpired
-    .input(z.object({ refreshToken: z.string().length(256) }))
+    .input(z.object({ refreshToken: z.string().length(256), updateUserData: z.boolean() }))
     .mutation(async ({ input, ctx }) => {
-      const tokens = await refreshToken(ctx.tokenData!, input.refreshToken);
+      const tokens = await refreshToken(ctx.tokenData!, input.refreshToken, input.updateUserData);
 
       if (tokens.error != null)
         throw new TRPCError({

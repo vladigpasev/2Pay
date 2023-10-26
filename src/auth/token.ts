@@ -72,10 +72,13 @@ export function useRefreshTokens() {
   const setTokens = useSetTokens();
   const token = useToken();
 
-  return useCallback(async () => {
-    if (token?.refreshToken == null) throw new Error('Not logged in!');
+  return useCallback(
+    async (updateUserData: boolean = false) => {
+      if (token?.refreshToken == null) throw new Error('Not logged in!');
 
-    const tokens = await refreshTokenReq.mutateAsync({ refreshToken: token.refreshToken });
-    setTokens(tokens);
-  }, [refreshTokenReq, setTokens, token]);
+      const tokens = await refreshTokenReq.mutateAsync({ refreshToken: token.refreshToken, updateUserData });
+      setTokens(tokens);
+    },
+    [refreshTokenReq, setTokens, token]
+  );
 }
