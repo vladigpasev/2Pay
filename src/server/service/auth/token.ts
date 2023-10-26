@@ -24,7 +24,7 @@ const signToken = (data: any) =>
   });
 
 async function createTokenForUser(user: User): Promise<Tokens> {
-  const token = signToken({ uuid: user.uuid, email: user.email, username: user.email });
+  const token = signToken({ uuid: user.uuid, email: user.email, username: user.username });
   const refreshToken = generateRefreshToken();
 
   await deleteToken(user.uuid);
@@ -72,7 +72,7 @@ async function refreshToken(
         .limit(1)
     )[0];
 
-  const token = signToken({ uuid: userData.uuid, email: userData.email, username: userData.email });
+  const token = signToken({ uuid: userData.uuid, email: userData.email, username: userData.username });
   const refreshToken = generateRefreshToken();
 
   await db.insert(tokens).values({

@@ -4,7 +4,7 @@ import { trpc } from '@/trpc/client';
 import { useCallback } from 'react';
 
 export function useLogout() {
-  const sendLogout = useAuthenticatedMutation(trpc.authentication.logout);
+  const [_, sendLogout] = useAuthenticatedMutation(trpc.authentication.logout);
   const clearTokens = useClearTokens();
 
   return useCallback(async () => {

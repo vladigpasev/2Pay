@@ -8,17 +8,20 @@ export function useAuthenticatedMutation<TData, TError, TVariables, TContext>(mu
   const mutationReq = mutation.useMutation();
   const refreshTokens = useRefreshTokens();
 
-  return useCallback(
-    async (input: TVariables) => {
-      try {
-        return await mutationReq.mutateAsync(input);
-      } catch (error: any) {
-        if (error.message !== 'UNAUTHORIZED') throw error;
+  return [
+    mutationReq,
+    useCallback(
+      async (input: TVariables) => {
+        try {
+          return await mutationReq.mutateAsync(input);
+        } catch (error: any) {
+          if (error.message !== 'UNAUTHORIZED') throw error;
 
-        await refreshTokens();
-        return await mutationReq.mutateAsync(input);
-      }
-    },
-    [refreshTokens]
-  );
+          await refreshTokens();
+          return await mutationReq.mutateAsync(input);
+        }
+      },
+      [refreshTokens]
+    )
+  ] as const;
 }

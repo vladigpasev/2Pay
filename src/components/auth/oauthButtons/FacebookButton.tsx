@@ -10,7 +10,7 @@ export function FacebookButton() {
   const login = useLogin();
 
   const loginCallback = useCallback(() => {
-    login({ provider: AuthProvider.Facebook }, redirectUrl);
+    login({ provider: AuthProvider.Facebook });
   }, [login, redirectUrl]);
 
   return (
