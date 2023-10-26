@@ -10,7 +10,7 @@ export function GoogleButton() {
   const login = useLogin();
 
   const loginCallback = useCallback(() => {
-    login({ provider: AuthProvider.Google }, redirectUrl);
+    login({ provider: AuthProvider.Google });
   }, [login, redirectUrl]);
 
   return (

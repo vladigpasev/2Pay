@@ -6,7 +6,7 @@ export function OAuthButtons() {
     <>
       <div className='divider'>OR</div>
       <GoogleButton />
-      <FacebookButton />
+      {/* <FacebookButton /> */}
     </>
   );
 }

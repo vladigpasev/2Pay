@@ -2,6 +2,7 @@ import { trpc } from '@/trpc/client';
 import { AuthProvider } from './provider';
 import { useCallback } from 'react';
 import { useSetTokens } from './token';
+import { useOAuth } from './oauth';
 
 interface OAuthProviderLoginOptions {
   provider: AuthProvider.Google | AuthProvider.Facebook;
@@ -20,9 +21,13 @@ type ProviderLoginOptions = OAuthProviderLoginOptions | EmailProviderLoginOption
 export function useLogin() {
   const loginByEmailReq = trpc.authentication.loginByEmail.useMutation();
   const setTokens = useSetTokens();
+  const invokeOAuth = useOAuth();
 
   return useCallback(async (options: ProviderLoginOptions): Promise<string | null> => {
-    if (options.provider !== AuthProvider.Email) return 'Not supported yet!';
+    if (options.provider !== AuthProvider.Email) {
+      invokeOAuth(options.provider);
+      return null;
+    }
 
     try {
       const tokens = await loginByEmailReq.mutateAsync(options.data);
