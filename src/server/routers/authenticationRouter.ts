@@ -17,7 +17,7 @@ export const authenticationRouter = t.router({
     .mutation(async ({ input }) => {
       const tokens = await registerUserByEmail(input);
 
-      if (tokens.error)
+      if (tokens.error != null)
         throw new TRPCError({
           code: 'BAD_REQUEST',
           message: tokens.error
@@ -35,7 +35,7 @@ export const authenticationRouter = t.router({
     .mutation(async ({ input }) => {
       const tokens = await loginUserByEmail(input);
 
-      if (tokens.error)
+      if (tokens.error != null)
         throw new TRPCError({
           code: 'BAD_REQUEST',
           message: tokens.error
@@ -51,7 +51,7 @@ export const authenticationRouter = t.router({
     .mutation(async ({ input, ctx }) => {
       const tokens = await refreshToken(ctx.tokenData!, input.refreshToken);
 
-      if (tokens.error)
+      if (tokens.error != null)
         throw new TRPCError({
           code: 'BAD_REQUEST',
           message: tokens.error

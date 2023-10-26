@@ -3,6 +3,7 @@ import { atom, useAtom } from 'jotai';
 import { useCallback, useEffect } from 'react';
 import { useCookies } from 'next-client-cookies';
 import IUser from '@/types/User';
+import { trpc } from '@/trpc/client';
 
 interface Token {
   refreshToken: string;
@@ -54,3 +55,27 @@ export function useSetTokens() {
 }
 
 export const useToken = () => useAtom(tokenAtom)[0];
+
+export function useClearTokens() {
+  const [_, setToken] = useAtom(tokenAtom);
+  const cookies = useCookies();
+
+  return useCallback(() => {
+    localStorage.removeItem('refreshToken');
+    cookies.remove('token');
+    setToken(null);
+  }, [setToken]);
+}
+
+export function useRefreshTokens() {
+  const refreshTokenReq = trpc.authentication.refreshToken.useMutation();
+  const setTokens = useSetTokens();
+  const token = useToken();
+
+  return useCallback(async () => {
+    if (token?.refreshToken == null) throw new Error('Not logged in!');
+
+    const tokens = await refreshTokenReq.mutateAsync({ refreshToken: token.refreshToken });
+    setTokens(tokens);
+  }, [refreshTokenReq, setTokens, token]);
+}

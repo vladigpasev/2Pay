@@ -2,6 +2,7 @@ import { atom } from 'jotai';
 import Link from 'next/link';
 import { useHydrateAtoms } from 'jotai/utils';
 import ThemeToggler from './ThemeToggler';
+import { useLogout } from '@/auth/logout';
 
 export const lightTheme = 'garden';
 export const darkTheme = 'forest';
