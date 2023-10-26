@@ -1,14 +1,14 @@
 import { NotificationType, useDispatchNotification } from '@/components/utils/Notifyers';
+import React, { FormEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { FormEvent, useCallback, useEffect, useRef, useState } from 'react';
 
 export interface Field<T> {
   id: string;
   name: string;
   type: string;
   placeholder?: string;
-  value?: string;
+  defaultValue?: string;
   transform?: (input: string) => T;
   validate?: (value: T) => string | null;
 }
@@ -44,25 +44,23 @@ function getFormData(fields: Field<any>[], rawFormData: Record<string, string>):
 }
 
 export function CustomForm({ buttonText, fields, canSubmit, error, onSubmit, children, icon }: Props) {
+  const [rawFormData, setRawFormData] = useState<Record<string, string>>(() =>
+    Object.fromEntries(fields.map(field => [field.id, field.defaultValue ?? '']))
+  );
   const [errors, setErrors] = useState({} as Record<string, string>);
-  const rawFormData = useRef({} as Record<string, string>);
   const dispatchNotification = useDispatchNotification();
-
-  useEffect(() => {
-    for (const field of fields) rawFormData.current[field.id] = '';
-  }, []);
 
   const submitCallback = useCallback(
     (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       if (!canSubmit) return;
 
-      const [errors, formData] = getFormData(fields, rawFormData.current);
+      const [errors, formData] = getFormData(fields, rawFormData);
       setErrors(errors);
 
       if (Object.keys(errors).length === 0) onSubmit(formData);
     },
-    [canSubmit, setErrors, onSubmit, dispatchNotification]
+    [rawFormData, canSubmit, setErrors, onSubmit, dispatchNotification]
   );
 
   return (
@@ -76,10 +74,11 @@ export function CustomForm({ buttonText, fields, canSubmit, error, onSubmit, chi
             className={`w-full rounded-lg bg-base-100 border border-base-content p-2 ${
               errors[field.id] ? 'border-rose-600' : ''
             }`}
-            onInput={e => (rawFormData.current[field.id] = (e.target as any).value)}
+            onInput={e => setRawFormData({ ...rawFormData, [field.id]: (e.target as any).value })}
             id={field.id}
             type={field.type}
             placeholder={field.placeholder}
+            value={rawFormData[field.id]}
           />
           {errors[field.id] && <p className='text-rose-600 text-sm'>{errors[field.id]}</p>}
         </div>
