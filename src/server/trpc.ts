@@ -1,11 +1,11 @@
-import { TRPCError, inferAsyncReturnType, initTRPC } from '@trpc/server';
-import * as trpcNext from '@trpc/server/adapters/next';
+import { TRPCError, initTRPC } from '@trpc/server';
+import { NextRequest } from 'next/server';
 import jsonwebtoken from 'jsonwebtoken';
 
 interface TokenData {
   uuid: string;
   email: string;
-  password: string;
+  username: string;
 }
 
 interface Context {
@@ -13,10 +13,9 @@ interface Context {
   tokenData: TokenData | null;
 }
 
-export const createContext = async ({ req }: any): Promise<Context> => {
-  const cookies = req.cookies._parsed;
+export const createContext = async ({ req }: { req: NextRequest }): Promise<Context> => {
   return {
-    rawToken: cookies.has('token') ? cookies.get('token').value : null,
+    rawToken: req.cookies.has('token') ? req.cookies.get('token')!.value : null,
     tokenData: null
   };
 };

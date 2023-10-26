@@ -2,15 +2,7 @@
 
 import { trpc } from '@/trpc/client';
 import { AuthProvider } from './provider';
-import { useCallback, useState } from 'react';
-import { useAtom } from 'jotai';
-import { useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronRight, faEnvelope } from '@fortawesome/free-solid-svg-icons';
-import Link from 'next/link';
-import { NotificationType, notifications } from '@/components/utils/Notifyers';
-import { id } from '@/utils/id';
-import { useRouter } from 'next/navigation';
+import { useCallback } from 'react';
 import { useSetTokens } from './token';
 
 interface OAuthProviderRegisterOptions {

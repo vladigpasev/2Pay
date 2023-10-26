@@ -11,7 +11,7 @@ import { useOpenModal } from '@/components/utils/Modal';
 import EmailVerificationModal from '@/components/modals/EmailVerificationModal';
 import { AuthProvider } from '@/auth/provider';
 import { useAtom } from 'jotai';
-import { NotificationType, notifications } from '@/components/utils/Notifyers';
+import { NotificationType, notifications, useDispatchNotification } from '@/components/utils/Notifyers';
 import { id } from '@/utils/id';
 
 const REGISTER_FIELDS: Field<string>[] = [
@@ -45,11 +45,11 @@ interface RegisterFormData {
 }
 
 export default function RegisterPage() {
+  const dispatchNotification = useDispatchNotification();
   const redirectUrl = useRedirectPath() ?? '/';
   const openModal = useOpenModal();
   const register = useRegister();
   const router = useRouter();
-  const [notifyes, dispatchNotifications] = useAtom(notifications);
 
   const onRegister = useCallback(
     async (formData: RegisterFormData) => {
@@ -59,15 +59,19 @@ export default function RegisterPage() {
       });
 
       if (error != null) {
-        dispatchNotifications({ type: 'insert', value: { type: NotificationType.Error, message: error, key: id() } });
-        return '';
+        dispatchNotification({
+          type: NotificationType.Error,
+          message: error
+        });
+
+        return null;
       }
 
       openModal(<EmailVerificationModal email={formData.email} />, () => router.push(redirectUrl));
 
       return null;
     },
-    [redirectUrl, openModal, register, router]
+    [redirectUrl, dispatchNotification, openModal, register, router]
   );
 
   return (
@@ -75,7 +79,7 @@ export default function RegisterPage() {
       titleHtml='<strong>Create</strong> an Account'
       fields={REGISTER_FIELDS}
       buttonText='Sign Up'
-      redirect={{ text: 'Already have an account?', location: `/auth/signin?redirectPath=${useRedirectPath()}` }}
+      redirect={{ text: 'Already have an account?', location: `/auth/signin?redirectPath=${redirectUrl}` }}
       onSubmit={onRegister}
     />
   );

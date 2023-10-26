@@ -1,10 +1,12 @@
 'use client';
 
+import { NotificationType, useDispatchNotification } from '@/components/utils/Notifyers';
 import { useRedirectPath } from '@/hooks/useRedirectPath';
 import { isValidEmail } from '@/utils/isValidEmail';
 import AuthPage from '@/components/auth/AuthPage';
-import { AuthProvider } from '@/auth/provider';
 import { Field } from '@/components/utils/Form';
+import { AuthProvider } from '@/auth/provider';
+import { useRouter } from 'next/navigation';
 import { useLogin } from '@/auth/login';
 import { useCallback } from 'react';
 
@@ -31,27 +33,36 @@ interface LoginFormData {
 }
 
 export default function LoginPage() {
+  const dispatchNotification = useDispatchNotification();
   const redirectUrl = useRedirectPath() ?? '/';
+  const router = useRouter();
   const login = useLogin();
 
-  const onLogin = useCallback(
-    (formData: LoginFormData) =>
-      login(
-        {
-          provider: AuthProvider.Email,
-          data: formData
-        },
-        redirectUrl
-      ),
-    []
-  );
+  const onLogin = useCallback(async (formData: LoginFormData) => {
+    const error = await login({
+      provider: AuthProvider.Email,
+      data: formData
+    });
+
+    if (error != null) {
+      dispatchNotification({
+        type: NotificationType.Error,
+        message: error
+      });
+
+      return null;
+    }
+
+    router.push(redirectUrl);
+    return null;
+  }, []);
 
   return (
     <AuthPage
       titleHtml='<strong>Sign In</strong> to Account'
       fields={LOGIN_FIELDS}
       buttonText='Sign In'
-      redirect={{ text: "Don't have an account?", location: `/auth/signup?redirectPath=${useRedirectPath()}` }}
+      redirect={{ text: "Don't have an account?", location: `/auth/signup?redirectPath=${redirectUrl}` }}
       onSubmit={onLogin}
     />
   );
