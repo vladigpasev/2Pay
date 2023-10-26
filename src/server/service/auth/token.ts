@@ -12,7 +12,7 @@ export interface Tokens {
 
 const REFRESH_TOKEN_EXPIRATION_TIME = 1000 * 60 * 60 * 24; // 1 day
 const REFRESH_TOKEN_DEATH_TIME = 1000 * 60 * 60 * 24 * 5; // 5 days
-const TOKEN_EXPIRATION_TIME = '10m'; // TODO: Shorten
+const TOKEN_EXPIRATION_TIME = '10s'; // TODO: Shorten
 
 type User = InferSelectModel<typeof users>;
 

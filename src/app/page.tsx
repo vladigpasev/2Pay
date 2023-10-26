@@ -1,3 +1,4 @@
+import { useLogout } from '@/auth/logout';
 import Image from 'next/image';
 
 export default function Home() {
