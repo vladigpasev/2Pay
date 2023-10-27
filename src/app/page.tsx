@@ -37,7 +37,7 @@ export default function Home() {
             <section className='text-center flex flex-col justify-center items-center text-primary'>
               <Image src={feature2} alt='' className='w-32 text-primary'></Image>
               <p className='text-4xl'>Productivity</p>
-              <p className='text-xl w-80 pt-5 font-light'>All payments are way faster with 2Pay! This makes your e-commerce way more effective and productive for your business!</p>
+              <p className='text-xl w-80 pt-5 font-light'>All payments are way faster with 2Pay! This makes your e-commerce way more effective and productive for your business and users!</p>
             </section>
             <section className='text-center flex flex-col justify-center items-center text-primary'>
               <Image src={feature3} alt='' className='w-32 text-primary'></Image>
