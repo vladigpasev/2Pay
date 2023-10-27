@@ -1,7 +1,16 @@
 'use client';
 
 import { useUser } from '@/hooks/useUser';
-import { faBan, faCamera, faCancel, faEdit, faFloppyDisk, faKey, faLock } from '@fortawesome/free-solid-svg-icons';
+import {
+  faBan,
+  faCamera,
+  faCancel,
+  faEdit,
+  faFloppyDisk,
+  faKey,
+  faLock,
+  faUserLargeSlash
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CustomForm, Field } from '@/components/utils/Form';
 import Image from 'next/image';
@@ -17,6 +26,8 @@ import { useAuthenticatedMutation } from '@/hooks/useAuthenticatedMutation';
 import { useOpenModal } from '@/components/utils/Modal';
 import PasswordAskingModal from '@/components/modals/PasswordAskingModal';
 import { faFacebook, faGoogle } from '@fortawesome/free-brands-svg-icons';
+import { useLogout } from '@/auth/logout';
+import { useRouter } from 'next/navigation';
 
 export function PasswordInputUpdate({ onSubmit }: { onSubmit: (password: string) => Promise<any> }) {
   const [password, setPassword] = useState('');
@@ -91,7 +102,8 @@ export function PasswordInputUpdate({ onSubmit }: { onSubmit: (password: string)
 
 export default function UserProfile() {
   const user = useUser();
-  if (!user) return <>Loading shit!</>;
+  const logout = useLogout();
+  const router = useRouter();
 
   const PROFILE_UPDATE_FIELDS: Field<string>[] = useMemo(
     () => [
@@ -100,7 +112,7 @@ export default function UserProfile() {
         name: 'Username',
         type: 'text',
         placeholder: 'Username',
-        defaultValue: user!.username,
+        defaultValue: user?.username,
         validate: value => (value.trim().length >= 5 ? null : 'Username is too short!')
       },
       {
@@ -108,8 +120,8 @@ export default function UserProfile() {
         name: 'Email',
         type: 'email',
         placeholder: 'you@email.com',
-        defaultValue: user!.email,
-        isDisabled: user!.authProvider !== 'email',
+        defaultValue: user?.email,
+        isDisabled: user?.authProvider !== 'email',
         validate: value => (isValidEmail(value) ? null : 'Email is invalid!')
       }
     ],
@@ -187,6 +199,8 @@ export default function UserProfile() {
     else onPasswordInputSend(formData, updateUserAsyncMutation)('not_important');
   }, []);
 
+  if (!user) return <>Loading shit!</>;
+
   return (
     <main className='w-full min-h-screen flex justify-center text-neutral-content py-10 max-sm:py-0'>
       <div className='flex flex-col my-auto rounded-xl border border-neutral bg-neutral py-10 gap-10 px-8 w-fit min-w-[450px] max-md:min-w-min max-w-full max-sm:w-full max-sm:min-h-screen max-sm:rounded-none max-sm:py-16'>
@@ -204,7 +218,7 @@ export default function UserProfile() {
           </a>
         </div>
         <div className='flex flex-col gap-2'>
-          <PasswordInputUpdate onSubmit={onPasswordFormSubmit} />
+          {user!.authProvider === 'email' && <PasswordInputUpdate onSubmit={onPasswordFormSubmit} />}
           <div className='flex flex-col w-full border-4 border-[hsl(var(--b1)/0.2)] p-2 rounded-xl'>
             {!isEditingUser ? (
               <>
@@ -252,6 +266,16 @@ export default function UserProfile() {
               </button>
             )}
           </div>
+          <button
+            onClick={async () => {
+              await logout();
+              router.push('/');
+            }}
+            className='mt-2 btn w-full btn-error rounded flex'
+          >
+            <FontAwesomeIcon className='my-auto' icon={faUserLargeSlash} />
+            <span className='flex flex-grow justify-center font-bold'>Log Out</span>
+          </button>
         </div>
       </div>
     </main>
