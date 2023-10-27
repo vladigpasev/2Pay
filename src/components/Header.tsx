@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useHydrateAtoms } from 'jotai/utils';
 import ThemeToggler from './ThemeToggler';
 import { useLogout } from '@/auth/logout';
+import { useUser } from '@/hooks/useUser';
 
 export const lightTheme = 'garden';
 export const darkTheme = 'forest';
@@ -14,6 +15,8 @@ const LightDarkThemeSwitch = ({ cookies }: { cookies: Map<string, any> }) => {
 };
 
 export const Header = ({ cookies }: { cookies: Map<string, any> }) => {
+  const user = useUser();
+
   return (
     <div className='navbar text-neutral-content top-0 sticky bg-[hsl(var(--nf)/0.65)] shadow-md shadow-[hsl(var(--b2)/0.25)] backdrop-blur-md z-50'>
       <div className='navbar-start'>
@@ -82,12 +85,20 @@ export const Header = ({ cookies }: { cookies: Map<string, any> }) => {
       </div>
       <div className='navbar-end flex align-middle gap-1'>
         <LightDarkThemeSwitch cookies={cookies} />
-        <Link href='/auth/signin' className='btn btn-ghost ml-1 max-sm:ml-0 max-sm:p-1'>
-          Sign In
-        </Link>
-        <Link href='/auth/signup' className='btn btn-secondary max-sm:p-2'>
-          Register
-        </Link>
+        {user ? (
+          <Link href='/user/profile'>
+            <img src={user.profilePictureURL} alt='user profile' width={42} height={42} className='ml-2 rounded' />
+          </Link>
+        ) : (
+          <>
+            <Link href='/auth/signin' className='btn btn-ghost ml-1 max-sm:ml-0 max-sm:p-1'>
+              Sign In
+            </Link>
+            <Link href='/auth/signup' className='btn btn-secondary max-sm:p-2'>
+              Register
+            </Link>
+          </>
+        )}
       </div>
     </div>
   );
