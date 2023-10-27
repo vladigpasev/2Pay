@@ -9,6 +9,7 @@ import { sql } from 'drizzle-orm';
 import db from '../src/drizzle';
 
 const INDEXES: Record<string, MySqlColumn[]> = {
+  companies: [schema.companies.name, schema.companies.description],
   products: [schema.products.name, schema.products.description]
 };
 
