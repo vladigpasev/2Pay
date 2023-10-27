@@ -14,3 +14,4 @@ export default function PageWrapper({ children }: { children: React.ReactNode })
     </motion.div>
   );
 }
+

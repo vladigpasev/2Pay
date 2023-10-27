@@ -1,15 +1,23 @@
 import { tokenAtom, useToken } from '@/auth/token';
+import { getCookie } from 'cookies-next';
 import jsonwebtoken from 'jsonwebtoken';
 import IUser from '@/types/User';
 import { useAtom } from 'jotai';
 import { useCookies } from 'next-client-cookies';
 
 export function useUser() {
-  const token = useAtom(tokenAtom)[0];
-  return token?.tokenData || serverUser();
+  const [tokenDataFromClient] = useAtom(tokenAtom);
+  const cookies = useCookies();
+
+  if (typeof window !== 'undefined') return tokenDataFromClient?.tokenData;
+
+  const token = cookies.get('token');
+  if (token == null) return null;
+
+  try {
+    return jsonwebtoken.verify(token, process.env.JWT_SECRET!);
+  } catch (err) {
+    return null;
+  }
 }
 
-export function serverUser() {
-  const cookies = useCookies();
-  return jsonwebtoken.decode(cookies.get('token') || '') as IUser;
-}
