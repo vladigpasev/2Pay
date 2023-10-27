@@ -16,10 +16,10 @@ export default function Home() {
           <section className="flex flex-col items-center mx-0 mt-28 text-primary">
             <p className="py-8 pb-10 mx-5 md:mx-0 text-7xl text-center">Effective payments.</p>
             <p className='py-2 text-xl mx-5 md:mx-0 md:w-1/2 text-center font-light'>Already tired of setting up your e-commerce for hours with the casual platforms? 2Pay makes this happen in no time! Our payment service allows for easier, faster and more secure transactions between users and businesses!</p>
-            <section className="btn btn-primary">Start now!</section>
+            <section className="btn btn-primary mb-5">Start now!</section>
           </section>
 
-          <section className="image  flex md:justify-end items-start md:basis-2/3">
+          <section className="image  flex justify-center min-[1650px]:justify-end m-auto min-[1650px]:items-start md:basis-2/3">
             <Image src={landing_hero} alt='' className='md:my-12 md:mx-48 my-2 mx-5'></Image>
           </section>
         </section>
@@ -27,7 +27,7 @@ export default function Home() {
         <section className="features text-center text-2xl mb-32 text-primary">
           <p className="text-3xl">Our features:</p>
 
-          <section className="features-items flex max-[768px]:flex-col gap-28 justify-center text-center 
+          <section className="features-items flex max-[1280px]:flex-col gap-28 justify-center text-center 
           my-8 ">
             <section className='text-center flex flex-col justify-center items-center text-primary'>
               <Image src={feature1} alt='' className='w-32 text-primary'></Image>
