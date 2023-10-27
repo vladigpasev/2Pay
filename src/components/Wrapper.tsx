@@ -19,7 +19,7 @@ export const Wrapper = ({ children, cookies }: { children: React.ReactNode; cook
   useLoadTokens();
 
   return (
-    <div data-theme='garden' /* {theme || (cookies.get('theme')?.value ?? darkTheme)} */>
+    <div data-theme={theme || (cookies.get('theme')?.value ?? darkTheme)}>
       <div className='w-full'>
         <Header cookies={cookies} />
         <div className='relative h-fit min-h-[calc(100vh-65px)]'>
