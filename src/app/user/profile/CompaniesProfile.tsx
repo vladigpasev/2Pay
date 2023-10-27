@@ -10,7 +10,32 @@ export default function CompaniesProfile() {
         <u>Your companies: </u>
       </h1>
       {companies.length > 0 ? (
-        companies.map(companie => <></>)
+        companies.map(companie =>
+          companies.map((company, index) => (
+            <div
+              key={index}
+              className='bg-[#00b65e0d] p-2 rounded-xl transition-transform transform hover:scale-105 cursor-pointer'
+            >
+              <div className='flex items-start'>
+                <img
+                  src={company.logo}
+                  alt={company.title}
+                  className='w-12 h-12 rounded-full object-cover mr-2 border-2 border-indigo-200'
+                />
+                <div className='flex-1 min-w-0'>
+                  <h2 className='text-md font-semibold text-base-content truncate'>{company.title}</h2>
+                  <p className='text-xs text-gray-500 mt-0.5 line-clamp-3 overflow-hidden'>{company.description}</p>
+                  <a
+                    href={`mailto:${company.email}`}
+                    className='text-[#00b65eb4] text-xs hover:underline mt-0.5 block truncate overflow-hidden'
+                  >
+                    {company.email}
+                  </a>
+                </div>
+              </div>
+            </div>
+          ))
+        )
       ) : (
         <div className='flex w-full h-full'>
           <div className='flex mx-auto my-auto flex-col p-10 gap-3'>
