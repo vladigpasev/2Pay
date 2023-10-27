@@ -1,8 +1,8 @@
 import { createNextRouteHandler } from 'uploadthing/next';
 
-import { profilePictureFileRouter } from './core';
+import { UploadFileRouter } from './core';
 
 // Export routes for Next App Router
 export const { GET, POST } = createNextRouteHandler({
-  router: profilePictureFileRouter
+  router: UploadFileRouter
 });

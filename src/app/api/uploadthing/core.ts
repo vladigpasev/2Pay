@@ -31,7 +31,7 @@ const useMiddleware = async ({ req }: any) => {
   return { userId: user.uuid };
 };
 
-export const profilePictureFileRouter = {
+export const UploadFileRouter = {
   // Define as many FileRoutes as you like, each with a unique routeSlug
   profilePicture: f({ image: { maxFileSize: '4MB' } })
     // Set permissions and file types for this FileRoute
@@ -50,4 +50,4 @@ export const profilePictureFileRouter = {
     })
 } satisfies FileRouter;
 
-export type profilePictureFileRouter = typeof profilePictureFileRouter;
+export type UploadFileRouter = typeof UploadFileRouter;
