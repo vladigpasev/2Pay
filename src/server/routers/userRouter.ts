@@ -25,7 +25,6 @@ export const userRouter = t.router({
           code: 'NOT_FOUND',
           message: 'Invalid Password! Try again!'
         });
-        return;
       }
       const verificationToken = id();
       await db

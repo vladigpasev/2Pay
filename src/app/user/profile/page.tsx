@@ -28,7 +28,7 @@ export default function UserProfile() {
         name: 'Username',
         type: 'text',
         placeholder: 'Username',
-        defaultValue: user.username,
+        defaultValue: user!.username,
         validate: value => (value.trim().length >= 5 ? null : 'Username is too short!')
       },
       {
@@ -36,8 +36,8 @@ export default function UserProfile() {
         name: 'Email',
         type: 'email',
         placeholder: 'you@email.com',
-        defaultValue: user.email,
-        isDisabled: user.authProvider !== 'email',
+        defaultValue: user!.email,
+        isDisabled: user!.authProvider !== 'email',
         validate: value => (isValidEmail(value) ? null : 'Email is invalid!')
       }
     ],
@@ -94,7 +94,7 @@ export default function UserProfile() {
   const onFormSubmit = useCallback((formData: any) => {
     setError(null);
 
-    if (user.authProvider === 'email')
+    if (user!.authProvider === 'email')
       openModal(<PasswordAskingModal onSubmit={onPasswordInputSend(formData)} />, () => {});
     else onPasswordInputSend(formData)('not_important');
   }, []);
@@ -105,7 +105,7 @@ export default function UserProfile() {
         <h1 className='text-2xl text-center font-bold'>Your Profile:</h1>
         <div className='flex flex-col'>
           <img
-            src={user.profilePictureURL || '/images/pngs/user-profile.png'}
+            src={user!.profilePictureURL || '/images/pngs/user-profile.png'}
             width={350}
             height={350}
             alt='user proifle'
@@ -120,22 +120,22 @@ export default function UserProfile() {
             <>
               <div className='flex justify-between -mb-2'>
                 <p className='text-lg flex'>Username:</p>
-                <p className='text-lg font-semibold flex'>{user.username}</p>
+                <p className='text-lg font-semibold flex'>{user!.username}</p>
               </div>
               <div className='divider'></div>
               <div className='flex justify-between -mt-2'>
                 <p className='text-lg flex'>
-                  {user.authProvider === 'email' ? (
+                  {user!.authProvider === 'email' ? (
                     'E-Mail '
                   ) : (
                     <FontAwesomeIcon
-                      icon={user.authProvider === 'facebook' ? faFacebook : faGoogle}
+                      icon={user!.authProvider === 'facebook' ? faFacebook : faGoogle}
                       className='my-auto mr-2'
                     />
                   )}
                   :
                 </p>
-                <p className='text-lg font-semibold flex'>{user.email}</p>
+                <p className='text-lg font-semibold flex'>{user!.email}</p>
               </div>
             </>
           ) : (

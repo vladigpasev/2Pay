@@ -1,5 +1,5 @@
 'use client';
-import { serverUser, useUser } from '@/hooks/useUser';
+import { useUser } from '@/hooks/useUser';
 import { faClipboardCheck, faBomb, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import IUser from '@/types/User';
