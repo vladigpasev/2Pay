@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Lilita+One&family=Paytone+One&display=swap');
+
 :root {
   --primary-hex: #759e80;
   --primary-content-hex: #d1e0d5;

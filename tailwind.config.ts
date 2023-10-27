@@ -7,6 +7,9 @@ const config: Config = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+    fontFamily: {
+      "paytone-one" : ['"Paytone One"', "sans-serif"]
+    },
     extend: {
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
@@ -14,7 +17,7 @@ const config: Config = {
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
       fontFamily: {
-        "paytone-one" : ["Paytone One", "sans-serif"]
+        "paytone-one" : ['Paytone One', 'sans-serif']
       }
     },
   },
@@ -22,10 +25,10 @@ const config: Config = {
     themes: [
       {
         paymentLight : {
-          "primary": "#00b65d",
-          "secondary": "#217cce",
+          "primary": "#ffffff",
+          "secondary": "#00b65d",
           "accent": "#ea5234",
-          "neutral": "#ffffff", 
+          "neutral": "#217cce", 
           "base-100": "#1e1e1e", 
           "info": "#3abff8",
           "success": "#36d399",       
