@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "db:push": "drizzle-kit push:mysql --config=drizzle.config.ts",
+    "db:push": "drizzle-kit push:mysql --config=drizzle.config.ts && ts-node-esm ./scripts/setupFullTextIndexes.ts",
     "db:studio": "npx drizzle-kit studio",
     "format": "npx prettier --write ./src"
   },
@@ -52,6 +52,7 @@
     "@types/react-dom": "^18",
     "@types/uuid": "^9.0.6",
     "autoprefixer": "^10",
+    "cross-fetch": "^4.0.0",
     "daisyui": "^3.9.2",
     "drizzle-kit": "^0.19.13",
     "eslint": "^8",
@@ -61,6 +62,8 @@
     "prettier": "^3.0.3",
     "pretty-quick": "^3.1.3",
     "tailwindcss": "^3",
+    "ts-node": "^10.9.1",
     "typescript": "^5"
   }
 }
+
