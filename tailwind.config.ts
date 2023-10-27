@@ -16,7 +16,26 @@ const config: Config = {
     },
   },
   daisyui: {
-    themes: ["forest", "garden"],
+    themes: [
+      {
+        paymentLight: {
+          "primary-green": "#00b65d",
+          "secondary-blue": "#217cce",
+          "white": "#ffffff", 
+          "black": "#1e1e1e", 
+          "action-red": "#ea5234",
+        }
+      },
+      {
+        paymentDark: {
+          "primary-dark": "#1e1e1e",
+          "secondary-green": "#00b65d",
+          "white": "#ffffff",
+          "tetriary-blue": "#217cce",
+          "action-red": "#ea5234"
+        }
+      }
+      , "forest"],
   },
   plugins: [require("daisyui")],
 };
