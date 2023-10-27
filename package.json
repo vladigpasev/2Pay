@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "db:push": "drizzle-kit push:mysql --config=drizzle.config.ts",
+    "db:push": "drizzle-kit push:mysql --config=drizzle.config.ts && ts-node-esm ./scripts/setupFullTextIndexes.ts",
     "db:studio": "npx drizzle-kit studio",
     "format": "npx prettier --write ./src"
   },
@@ -23,6 +23,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.4.2",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@planetscale/database": "^1.11.0",
+    "@stripe/stripe-js": "^2.1.10",
     "@trpc/client": "^10.41.0",
     "@trpc/react-query": "^10.41.0",
     "@trpc/server": "^10.41.0",
@@ -43,6 +44,7 @@
     "react": "^18",
     "react-dom": "^18",
     "uploadthing": "^5.7.2",
+    "stripe": "^14.2.0",
     "uuid": "^9.0.1",
     "zod": "^3.22.4"
   },
@@ -54,6 +56,7 @@
     "@types/react-dom": "^18",
     "@types/uuid": "^9.0.6",
     "autoprefixer": "^10",
+    "cross-fetch": "^4.0.0",
     "daisyui": "^3.9.2",
     "drizzle-kit": "^0.19.13",
     "eslint": "^8",
@@ -63,6 +66,8 @@
     "prettier": "^3.0.3",
     "pretty-quick": "^3.1.3",
     "tailwindcss": "^3",
+    "ts-node": "^10.9.1",
     "typescript": "^5"
   }
 }
+

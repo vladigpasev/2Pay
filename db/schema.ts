@@ -1,4 +1,14 @@
-import { int, timestamp, mysqlTable, primaryKey, varchar, mysqlEnum, boolean } from 'drizzle-orm/mysql-core';
+import {
+  int,
+  timestamp,
+  mysqlTable,
+  primaryKey,
+  varchar,
+  mysqlEnum,
+  boolean,
+  float,
+  index
+} from 'drizzle-orm/mysql-core';
 import { relations, sql } from 'drizzle-orm';
 
 export const authProviderEnum = mysqlEnum('authProvider', ['email', 'google', 'facebook']);
@@ -24,8 +34,32 @@ export const tokens = mysqlTable('tokens', {
   userUuid: varchar('userUuid', { length: 256 }).notNull()
 });
 
+export const companies = mysqlTable('companies', {
+  uuid: varchar('uuid', { length: 256 })
+    .default(sql`(uuid())`)
+    .notNull()
+    .primaryKey(),
+  name: varchar('name', { length: 128 }).notNull(),
+  contactEmail: varchar('contactEmail', { length: 256 }).notNull(),
+  logoURL: varchar('logoURL', { length: 256 }),
+  creatorUuid: varchar('creatorUuid', { length: 256 }).notNull()
+});
+
+export const products = mysqlTable('products', {
+  uuid: varchar('uuid', { length: 256 })
+    .default(sql`(uuid())`)
+    .notNull()
+    .primaryKey(),
+  name: varchar('name', { length: 128 }).notNull(),
+  price: float('price').notNull(),
+  description: varchar('description', { length: 2048 }).notNull(),
+  pictureURL: varchar('pictureURL', { length: 256 }),
+  companyUuid: varchar('companyUuid', { length: 256 }).notNull()
+});
+
 export const usersRelations = relations(users, ({ many }) => ({
-  refreshTokens: many(tokens)
+  refreshTokens: many(tokens),
+  companies: many(companies)
 }));
 
 export const tokensRelations = relations(tokens, ({ one }) => ({
@@ -34,3 +68,19 @@ export const tokensRelations = relations(tokens, ({ one }) => ({
     references: [users.uuid]
   })
 }));
+
+export const companiesRelations = relations(companies, ({ one, many }) => ({
+  products: many(products),
+  creator: one(users, {
+    fields: [companies.creatorUuid],
+    references: [users.uuid]
+  })
+}));
+
+export const productsRelations = relations(products, ({ one }) => ({
+  company: one(companies, {
+    fields: [products.companyUuid],
+    references: [companies.uuid]
+  })
+}));
+

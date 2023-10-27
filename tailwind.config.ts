@@ -10,13 +10,44 @@ const config: Config = {
   theme: {
     extend: {
       backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))'
+        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
+        "gradient-conic":
+          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+      },
+      fontFamily: {
+        "paytone-one" : ["Paytone One", "sans-serif"]
       }
-    }
+    },
   },
   daisyui: {
-    themes: ['forest', 'garden']
+    themes: [
+      {
+        paymentLight : {
+          "primary": "#00b65d",
+          "secondary": "#217cce",
+          "accent": "#ea5234",
+          "neutral": "#ffffff", 
+          "base-100": "#1e1e1e", 
+          "info": "#3abff8",
+          "success": "#36d399",       
+          "warning": "#fbbd23",        
+          "error": "#f87272",
+        }
+      },
+      {
+        paymentDark : {
+          "primary": "#1e1e1e",
+          "secondary": "#00b65d",
+          "accent": "#ea5234",
+          "neutral": "#ffffff",
+          "base-100": "#217cce",
+          "info": "#3abff8",
+          "success": "#36d399",               
+          "warning": "#fbbd23",           
+          "error": "#f87272",
+        }
+      }
+      ,"forest", "garden"],
   },
   plugins: [require('daisyui')]
 };
