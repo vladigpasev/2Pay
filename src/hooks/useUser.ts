@@ -1,8 +1,8 @@
-import { tokenAtom, useToken } from '@/auth/token';
+import { useCookies } from 'next-client-cookies';
+import { tokenAtom } from '@/auth/token';
 import jsonwebtoken from 'jsonwebtoken';
 import IUser from '@/types/User';
 import { useAtom } from 'jotai';
-import { useCookies } from 'next-client-cookies';
 
 export function useUser(): IUser | null {
   const [tokenDataFromClient] = useAtom(tokenAtom);
@@ -14,8 +14,8 @@ export function useUser(): IUser | null {
   if (token == null) return null;
 
   try {
-    return jsonwebtoken.verify(token, process.env.JWT_SECRET!) as any;
-  } catch (err) {
+    return jsonwebtoken.verify(token, process.env.JWT_SECRET!, { ignoreExpiration: true }) as any;
+  } catch (error: any) {
     return null;
   }
 }

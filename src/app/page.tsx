@@ -1,11 +1,6 @@
-'use client';
-
-import { useUser } from '@/hooks/useUser';
 import Image from 'next/image';
 
 export default function Home() {
-  const user = useUser();
-
   return (
     <>
       <section className='w-fit -translate-x-1/2 relative left-1/2 flex flex-col gap-5 min-h-screen justify-center sm:-mt-10'>
@@ -20,7 +15,7 @@ export default function Home() {
             />
             <div className='w-2/4 max-md:w-full'>
               <h1 className='text-6xl max-sm:text-5xl leading-9 text-center font-semibold text-base-content'>
-                {JSON.stringify(user)} <strong className='text-accent'>Goal</strong> ⚽
+                Our <strong className='text-accent'>Goal</strong> ⚽
               </h1>
               <p className='py-6 text-base-content'>
                 We want <strong>not just</strong> to let you be happy, but make you{' '}
