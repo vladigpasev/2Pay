@@ -19,6 +19,8 @@ export const stripeRouter = t.router({
     .mutation(async ({ ctx, input }) => {
       const { priceId, successUrl, cancelUrl } = input;
 
+      const userEmail = ctx.tokenData?.email;
+
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ['card'],
         line_items: [
@@ -30,6 +32,7 @@ export const stripeRouter = t.router({
         mode: 'payment',
         success_url: successUrl,
         cancel_url: cancelUrl,
+        customer_email: userEmail, // set the user email
       });
 
       return session.id;
