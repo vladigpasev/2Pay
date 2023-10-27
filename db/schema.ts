@@ -41,6 +41,7 @@ export const companies = mysqlTable('companies', {
     .primaryKey(),
   name: varchar('name', { length: 128 }).notNull(),
   contactEmail: varchar('contactEmail', { length: 256 }).notNull(),
+  description: varchar('description', { length: 2048 }).notNull(),
   logoURL: varchar('logoURL', { length: 256 }),
   creatorUuid: varchar('creatorUuid', { length: 256 }).notNull()
 });
