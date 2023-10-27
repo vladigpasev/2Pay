@@ -1,20 +1,25 @@
+'use client';
+
 import { atom } from 'jotai';
 import Link from 'next/link';
 import { useHydrateAtoms } from 'jotai/utils';
 import ThemeToggler from './ThemeToggler';
 import { useLogout } from '@/auth/logout';
 import { useUser } from '@/hooks/useUser';
+import { useLoadTokens } from '@/auth/token';
 
 export const lightTheme = 'paymentLight';
 export const darkTheme = 'paymentDark';
 
-export let themeAtom = atom<undefined | typeof lightTheme | typeof darkTheme>(undefined);
+export let themeAtom = atom<undefined | typeof lightTheme | typeof darkTheme>(darkTheme);
 
 const LightDarkThemeSwitch = ({ cookies }: { cookies: Map<string, any> }) => {
   return <ThemeToggler />;
 };
 
 export const Header = ({ cookies }: { cookies: Map<string, any> }) => {
+  useLoadTokens();
+
   const user = useUser();
 
   return (

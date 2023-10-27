@@ -4,14 +4,26 @@ import { useAtom } from 'jotai';
 import { ChangeEvent, useEffect } from 'react';
 import { useCookies } from 'next-client-cookies';
 import { darkTheme, lightTheme, themeAtom } from './Header';
+import { useHydrateAtoms } from 'jotai/utils';
+import { useImmediateOnMount } from '@/hooks/useImmediateOnMount';
 
 export default function ThemeToggler() {
+  let [theme, setTheme] = useAtom(themeAtom);
   const cookies = useCookies();
-  const [theme, settheme] = useAtom(themeAtom);
+
+  useImmediateOnMount(() => {
+    theme = cookies.get('theme') ?? (darkTheme as any);
+    setTheme(theme);
+  });
 
   const toggleTheme = (e: ChangeEvent<HTMLInputElement>) => {
-    cookies.set('theme', e.target.checked ? darkTheme : lightTheme);
-    settheme(e.target.checked ? darkTheme : lightTheme);
+    const chosenTheme = e.target.checked ? darkTheme : lightTheme;
+
+    cookies.set('theme', chosenTheme);
+    setTheme(chosenTheme);
+
+    const themeHolder = document.querySelector('[data-theme]');
+    if (themeHolder) themeHolder.setAttribute('data-theme', chosenTheme);
   };
 
   useEffect(() => {
@@ -20,7 +32,7 @@ export default function ThemeToggler() {
         window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
           ? cookies.set('theme', darkTheme)
           : cookies.set('theme', lightTheme);
-      settheme((cookies.get('theme') || darkTheme) as any);
+      setTheme((cookies.get('theme') || darkTheme) as any);
     }
   }, []);
 
