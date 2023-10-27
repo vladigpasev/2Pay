@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import { drizzle } from 'drizzle-orm/planetscale-serverless';
 import { connect } from '@planetscale/database';
-import * as schema from '@/../db/schema';
+import * as schema from '../db/schema';
 
 import * as dotenv from 'dotenv';
 dotenv.config();
@@ -14,3 +14,4 @@ const connection = connect({
 const db = drizzle(connection, { schema });
 
 export default db;
+
