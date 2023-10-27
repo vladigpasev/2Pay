@@ -1,13 +1,14 @@
 import './globals.css';
 import type { Metadata } from 'next';
 //import { Inter } from 'next/font/google';
-import { Paytone_One } from 'next/font/google';
+//import { Paytone_One } from 'next/font/google';
+import { Rowdies } from 'next/font/google'
 import { Wrapper } from '@/components/Wrapper';
 import ReactQueryProvider from '@/trpc/Provider';
 import { cookies } from 'next/headers';
 import { ClientCookiesProvider } from '@/components/CookiesProvider';
 
-const paytoneOne = Paytone_One({ subsets: ['latin'], weight: "400" });
+const paytoneOne = Rowdies({ subsets: ['latin'], weight: "300" });
 
 export const metadata: Metadata = {
   title: 'N2D2T - Tech Stack',
