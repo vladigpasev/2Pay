@@ -103,3 +103,6 @@ export const Header = ({ cookies }: { cookies: Map<string, any> }) => {
     </div>
   );
 };
+function useServerUser() {
+  throw new Error('Function not implemented.');
+}

@@ -1,6 +1,6 @@
 import jsonwebtoken from 'jsonwebtoken';
 import { atom, useAtom } from 'jotai';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useCookies } from 'next-client-cookies';
 import { useRouter } from 'next/navigation';
 import IUser from '@/types/User';
@@ -15,12 +15,13 @@ interface Token {
 export const tokenAtom = atom(null as Token | null);
 
 export function useLoadTokens() {
+  const [hasRan, setHasRan] = useState(false);
   const [_, setToken] = useAtom(tokenAtom);
   const refreshTokens = useRefreshTokens();
   const cookies = useCookies();
   const router = useRouter();
 
-  useEffect(() => {
+  if (!hasRan) {
     let refreshToken = localStorage.getItem('refreshToken');
 
     const search = new URLSearchParams(window.location.search);
@@ -44,7 +45,9 @@ export function useLoadTokens() {
       token,
       tokenData: jsonwebtoken.decode(token) as any
     });
-  }, []);
+
+    setHasRan(true);
+  }
 }
 
 export function useSetTokens() {
