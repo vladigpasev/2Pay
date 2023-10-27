@@ -9,6 +9,7 @@ export interface Field<T> {
   type: string;
   placeholder?: string;
   defaultValue?: string;
+  isDisabled?: boolean;
   transform?: (input: string) => T;
   validate?: (value: T) => string | null;
 }
@@ -22,7 +23,6 @@ type Props = React.PropsWithChildren<{
   error: string | null;
   onSubmit: OnFormSubmit;
   icon?: IconDefinition;
-  isDisabled?: boolean;
 }>;
 
 function getFormData(fields: Field<any>[], rawFormData: Record<string, string>): [Record<string, string>, any] {
@@ -44,7 +44,7 @@ function getFormData(fields: Field<any>[], rawFormData: Record<string, string>):
   return [errors, formData];
 }
 
-export function CustomForm({ buttonText, fields, canSubmit, error, onSubmit, children, icon, isDisabled }: Props) {
+export function CustomForm({ buttonText, fields, canSubmit, error, onSubmit, children, icon }: Props) {
   const [rawFormData, setRawFormData] = useState<Record<string, string>>(() =>
     Object.fromEntries(fields.map(field => [field.id, field.defaultValue ?? '']))
   );
@@ -74,13 +74,13 @@ export function CustomForm({ buttonText, fields, canSubmit, error, onSubmit, chi
           <input
             className={`w-full rounded-lg bg-base-100 border border-base-content p-2 ${
               errors[field.id] ? 'border-rose-600' : ''
-            }`}
+            } ${field.isDisabled ? 'brightness-50' : ''}`}
             onInput={e => setRawFormData({ ...rawFormData, [field.id]: (e.target as any).value })}
             id={field.id}
             type={field.type}
             placeholder={field.placeholder}
             value={rawFormData[field.id]}
-            disabled={isDisabled}
+            disabled={field.isDisabled}
           />
           {errors[field.id] && <p className='text-rose-600 text-sm'>{errors[field.id]}</p>}
         </div>

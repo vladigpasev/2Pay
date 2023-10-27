@@ -19,18 +19,21 @@ export const userRouter = t.router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      if (ctx.tokenData!.authProvider == 'email' && !verifyPassword(ctx.tokenData!.uuid, input.password))
+      if (ctx.tokenData!.authProvider === 'email' && !(await verifyPassword(ctx.tokenData!.uuid, input.password))) {
+        console.log('Invalid pass');
         throw new TRPCError({
           code: 'NOT_FOUND',
           message: 'Invalid Password! Try again!'
         });
+        return;
+      }
       const verificationToken = id();
       await db
         .update(users)
         .set(
           ctx.tokenData!.authProvider == 'email' && ctx.tokenData?.email !== input.email
             ? {
-                email: input.email,
+                email: ctx.tokenData!.authProvider == 'email' ? input.email : ctx.tokenData?.email,
                 username: input.username,
                 verified: false,
                 verificationToken: verificationToken
