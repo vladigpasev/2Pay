@@ -13,7 +13,7 @@ export interface Tokens {
 
 const REFRESH_TOKEN_EXPIRATION_TIME = 1000 * 60 * 60 * 24; // 1 day
 const REFRESH_TOKEN_DEATH_TIME = 1000 * 60 * 60 * 24 * 5; // 5 days
-const TOKEN_EXPIRATION_TIME = '1h';
+const TOKEN_EXPIRATION_TIME = '10s';
 
 type User = InferSelectModel<typeof users>;
 
@@ -23,6 +23,17 @@ const signToken = (data: IUser) =>
   jsonwebtoken.sign(data, process.env.JWT_SECRET as string, {
     expiresIn: TOKEN_EXPIRATION_TIME
   });
+
+export const queryAndCreateUserData = async (uuid: string) => {
+  const [user] = await db.select().from(users).where(eq(users.uuid, uuid));
+  return await createTokenForUser({
+    authProvider: user.authProvider,
+    email: user.email,
+    profilePictureURL: user.profilePictureURL || '',
+    username: user.username,
+    uuid: user.uuid
+  });
+};
 
 async function createTokenForUser(user: IUser): Promise<Tokens> {
   const token = signToken({

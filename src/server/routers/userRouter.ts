@@ -3,7 +3,7 @@ import { protectedProcedure, t } from '../trpc';
 import db from '@/drizzle';
 import { users } from '../../../db/schema';
 import { eq } from 'drizzle-orm';
-import { createTokenForUser } from '../service/auth/token';
+import { createTokenForUser, queryAndCreateUserData } from '../service/auth/token';
 import { hashPassword, template_VerificationEmailBody, verifyPassword } from '../service/auth/emailAuthentication';
 import { TRPCError } from '@trpc/server';
 import { id } from '@/utils/id';
@@ -70,5 +70,8 @@ export const userRouter = t.router({
         .set({ password: await hashPassword(input.newPassword) })
         .where(eq(users.uuid, ctx.tokenData!.uuid!));
       return createTokenForUser({ ...ctx.tokenData!, ...input });
-    })
+    }),
+  updateToken: protectedProcedure.mutation(async ({ ctx, input }) => {
+    return await queryAndCreateUserData(ctx.tokenData?.uuid!);
+  })
 });
