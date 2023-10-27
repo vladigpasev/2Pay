@@ -3,7 +3,7 @@
 import { useAtom } from 'jotai';
 import { Footer } from './Footer';
 import { Header, darkTheme, themeAtom } from './Header';
-import { Suspense, useEffect } from 'react';
+import { Suspense } from 'react';
 import PageLoading from '@/app/loading';
 import AlertDialog from './utils/Modal';
 // import dynamic from "next/dynamic";

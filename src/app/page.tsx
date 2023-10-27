@@ -1,10 +1,8 @@
-'use client';
-
-import { useUser } from '@/hooks/useUser';
+import { useUserServer } from '@/hooks/useUserServer';
 import Image from 'next/image';
 
 export default function Home() {
-  const user = useUser();
+  const user = useUserServer();
 
   return (
     <>
