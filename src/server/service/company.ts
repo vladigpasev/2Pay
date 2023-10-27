@@ -8,7 +8,7 @@ export interface CompanyInfo {
   name: string;
   contactEmail: string;
   description: string;
-  logoURL: string;
+  logoURL: string | null;
 }
 
 async function createCompany(userInfo: IUser, companyInfo: CompanyInfo) {
@@ -30,10 +30,13 @@ async function getCompany(companyId: string) {
 }
 
 async function updateCompany(userInfo: IUser, companyId: string, newCompanyInfo: CompanyInfo) {
+  console.log(newCompanyInfo.name);
   const updateOperation = await db
     .update(companies)
     .set(newCompanyInfo)
     .where(and(eq(companies.uuid, companyId), eq(companies.creatorUuid, userInfo.uuid)));
+
+  console.log(updateOperation);
 
   if (updateOperation.rowsAffected === 0) return null;
 
@@ -70,4 +73,3 @@ async function findCompanies(search: string) {
 }
 
 export { createCompany, getCompany, updateCompany, deleteCompany, getCompaniesOfUser, findCompanies };
-

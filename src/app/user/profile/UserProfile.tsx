@@ -29,6 +29,7 @@ import { faFacebook, faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { useLogout } from '@/auth/logout';
 import { useRouter } from 'next/navigation';
 import UserProfilePictureUploader from '@/components/UserProfilePictureUploader';
+import IUser from '@/types/User';
 
 export function PasswordInputUpdate({ onSubmit }: { onSubmit: (password: string) => Promise<any> }) {
   const [password, setPassword] = useState('');
@@ -101,8 +102,7 @@ export function PasswordInputUpdate({ onSubmit }: { onSubmit: (password: string)
   );
 }
 
-export default function UserProfile() {
-  const user = useUser();
+export default function UserProfile({ user }: { user: IUser | null }) {
   const logout = useLogout();
   const router = useRouter();
 

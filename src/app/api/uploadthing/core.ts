@@ -2,7 +2,7 @@ import { cookies } from 'next/headers';
 import { createUploadthing, type FileRouter } from 'uploadthing/next';
 import { verifyToken } from '@/server/trpc';
 import db from '@/drizzle';
-import { users } from '../../../../db/schema';
+import { companies, users } from '../../../../db/schema';
 import { eq } from 'drizzle-orm';
 import { createTokenForUser } from '@/server/service/auth/token';
 
@@ -33,7 +33,7 @@ const useMiddleware = async ({ req }: any) => {
 
 export const UploadFileRouter = {
   // Define as many FileRoutes as you like, each with a unique routeSlug
-  profilePicture: f({ image: { maxFileSize: '4MB' } })
+  profilePicture: f({ image: { maxFileSize: '2MB' } })
     // Set permissions and file types for this FileRoute
     .middleware(useMiddleware)
     .onUploadComplete(async ({ metadata, file }) => {
@@ -47,6 +47,14 @@ export const UploadFileRouter = {
           profilePictureURL: file.url
         })
         .where(eq(users.uuid, metadata.userId as string));
+    }),
+  companyLogo: f({ image: { maxFileSize: '2MB' } })
+    // Set permissions and file types for this FileRoute
+    .middleware(useMiddleware)
+    .onUploadComplete(async ({ metadata, file }) => {
+      // This code RUNS ON YOUR SERVER after upload
+      console.log('Upload complete for userId:', metadata.userId);
+      console.log('file url', file.url);
     })
 } satisfies FileRouter;
 

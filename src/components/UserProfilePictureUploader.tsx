@@ -27,8 +27,6 @@ export default function UserProfilePictureUploader() {
         className='mt-2'
         onClientUploadComplete={async res => {
           // Do something with the response
-          console.log('Files: ', res);
-          alert('Upload Completed');
           setTokens(await refreshTokenAsyncMutation());
         }}
         onUploadError={(error: Error) => {
