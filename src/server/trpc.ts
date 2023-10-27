@@ -17,13 +17,16 @@ export const createContext = async ({ req }: { req: NextRequest }): Promise<Cont
 
 export const t = initTRPC.context<Context>().create();
 
+export const verifyToken = (rawToken: string, options: jsonwebtoken.VerifyOptions = {}) =>
+  jsonwebtoken.verify(rawToken, process.env.JWT_SECRET as string, options) as IUser;
+
 const createVerifyTokenMiddleware =
   (options: jsonwebtoken.VerifyOptions) =>
   ({ ctx, next }: any) => {
     if (!ctx.rawToken) throw new TRPCError({ code: 'UNAUTHORIZED' });
 
     try {
-      const data = jsonwebtoken.verify(ctx.rawToken, process.env.JWT_SECRET as string, options) as IUser;
+      const data = verifyToken(ctx.rawToken, options) as IUser;
       return next({
         ctx: {
           rawToken: ctx.rawToken,
@@ -35,10 +38,10 @@ const createVerifyTokenMiddleware =
     }
   };
 
-export const verifyToken = t.middleware(createVerifyTokenMiddleware({}));
-export const verifyTokenIgnoreExpired = t.middleware(createVerifyTokenMiddleware({ ignoreExpiration: true }));
+export const verifyTokenMiddleware = t.middleware(createVerifyTokenMiddleware({}));
+export const verifyTokenIgnoreExpiredMiddleware = t.middleware(createVerifyTokenMiddleware({ ignoreExpiration: true }));
 
 export const router = t.router;
 export const publicProcedure = t.procedure;
-export const protectedProcedure = t.procedure.use(verifyToken);
-export const protectedProcedureIgnoreExpired = t.procedure.use(verifyTokenIgnoreExpired);
+export const protectedProcedure = t.procedure.use(verifyTokenMiddleware);
+export const protectedProcedureIgnoreExpired = t.procedure.use(verifyTokenIgnoreExpiredMiddleware);

@@ -87,7 +87,13 @@ export const Header = ({ cookies }: { cookies: Map<string, any> }) => {
         <LightDarkThemeSwitch cookies={cookies} />
         {user ? (
           <Link href='/user/profile'>
-            <img src={user.profilePictureURL} alt='user profile' width={42} height={42} className='ml-2 rounded' />
+            <img
+              src={user.profilePictureURL}
+              alt='user profile'
+              width={42}
+              height={42}
+              className='ml-2 rounded aspect-square'
+            />
           </Link>
         ) : (
           <>
@@ -103,3 +109,6 @@ export const Header = ({ cookies }: { cookies: Map<string, any> }) => {
     </div>
   );
 };
+function useServerUser() {
+  throw new Error('Function not implemented.');
+}
