@@ -1,8 +1,8 @@
 import { InferInsertModel, InferSelectModel, and, eq, sql } from 'drizzle-orm';
 import { companies } from '../../../db/schema';
 import IUser from '@/types/User';
+import * as uuid from 'uuid';
 import db from '@/drizzle';
-import uuid from 'uuid';
 
 export interface CompanyInfo {
   name: string;
@@ -60,8 +60,11 @@ async function findCompanies(search: string) {
   return (
     await db.execute(sql`
     SELECT * FROM ${companies}
-    WHERE MATCH (${companies.name}, ${companies.description})
-    AGAINST (${search} IN NATURAL LANGUAGE MODE)
+    WHERE
+      LOWER(${companies.name}) LIKE ${'%' + search.toLowerCase() + '%'} OR
+      LOWER(${companies.description}) LIKE ${'%' + search.toLowerCase() + '%'} OR
+      MATCH (${companies.name}, ${companies.description})
+      AGAINST (${search} IN NATURAL LANGUAGE MODE)
   `)
   ).rows as InferSelectModel<typeof companies>[];
 }
