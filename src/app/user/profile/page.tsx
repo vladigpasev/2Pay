@@ -28,6 +28,7 @@ import PasswordAskingModal from '@/components/modals/PasswordAskingModal';
 import { faFacebook, faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { useLogout } from '@/auth/logout';
 import { useRouter } from 'next/navigation';
+import UserProfilePictureUploader from '@/components/UserProfilePictureUploader';
 
 export function PasswordInputUpdate({ onSubmit }: { onSubmit: (password: string) => Promise<any> }) {
   const [password, setPassword] = useState('');
@@ -205,18 +206,7 @@ export default function UserProfile() {
     <main className='w-full min-h-screen flex justify-center text-neutral-content py-10 max-sm:py-0'>
       <div className='flex flex-col my-auto rounded-xl border border-neutral bg-neutral py-10 gap-10 px-8 w-fit min-w-[450px] max-md:min-w-min max-w-full max-sm:w-full max-sm:min-h-screen max-sm:rounded-none max-sm:py-16'>
         <h1 className='text-2xl text-center font-bold'>Your Profile:</h1>
-        <div className='flex flex-col'>
-          <img
-            src={user!.profilePictureURL || '/images/pngs/user-profile.png'}
-            width={350}
-            height={350}
-            alt='user proifle'
-            className='mx-auto rounded-md'
-          />
-          <a className='flex mx-auto link cursor-pointer font-semibold gap-2'>
-            Upload Photo <FontAwesomeIcon icon={faCamera} className='my-auto' />
-          </a>
-        </div>
+        <UserProfilePictureUploader />
         <div className='flex flex-col gap-2'>
           {user!.authProvider === 'email' && <PasswordInputUpdate onSubmit={onPasswordFormSubmit} />}
           <div className='flex flex-col w-full border-4 border-[hsl(var(--b1)/0.2)] p-2 rounded-xl'>

@@ -21,7 +21,7 @@ export function useLoadTokens() {
   const cookies = useCookies();
   const router = useRouter();
 
-  if (!hasRan) {
+  if (!hasRan && typeof window !== 'undefined') {
     let refreshToken = localStorage.getItem('refreshToken');
 
     const search = new URLSearchParams(window.location.search);

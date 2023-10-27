@@ -87,7 +87,13 @@ export const Header = ({ cookies }: { cookies: Map<string, any> }) => {
         <LightDarkThemeSwitch cookies={cookies} />
         {user ? (
           <Link href='/user/profile'>
-            <img src={user.profilePictureURL} alt='user profile' width={42} height={42} className='ml-2 rounded' />
+            <img
+              src={user.profilePictureURL}
+              alt='user profile'
+              width={42}
+              height={42}
+              className='ml-2 rounded aspect-square'
+            />
           </Link>
         ) : (
           <>
