@@ -34,13 +34,15 @@ export const template_VerificationEmailBody = ({
   <a href="${process.env.NEXT_PUBLIC_APP_URL}/auth/verify/${verificationToken}"><h1>Verify your E-Mail!</h1></a>
 `;
 
+export const hashPassword = async (password: string) => await bcrypt.hash(password, SALT_ROUNDS);
+
 async function registerUserByEmail(data: RegisterData): Promise<Value<Tokens>> {
   const user: InferSelectModel<typeof users> = {
     uuid: uuid.v4(),
     authProvider: 'email',
     username: data.username,
     email: data.email,
-    password: await bcrypt.hash(data.password, SALT_ROUNDS),
+    password: await hashPassword(data.password),
     verified: false,
     verificationToken: id(),
     profilePictureURL: `https://api.dicebear.com/7.x/bottts/svg?seed=${id()}`

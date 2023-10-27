@@ -22,17 +22,25 @@ export interface Notification {
   type: NotificationType;
   key: string;
   message: string;
+  created: number;
 }
 
 export const notificationAtom = atom([] as Notification[]);
 export const notifications = splitAtom(notificationAtom);
 
+const firstNotificationAtom = atom(get => {
+  const _notifications = get(notifications);
+  if (_notifications.length == 0) return null;
+  return get(_notifications[0]);
+});
+
 export function useDispatchNotification() {
   const [_, dispatchNotification] = useAtom(notifications);
 
   return useCallback(
-    (notification: Optional<Notification, 'key'>) => {
+    (notification: Optional<Notification, 'key' | 'created'>) => {
       if (!notification.key) notification.key = id();
+      notification.created = Date.now();
 
       dispatchNotification({
         type: 'insert',
@@ -83,15 +91,20 @@ function Notifye({ notificationAtom }: { notificationAtom: PrimitiveAtom<Notific
 
 export default function Notifyers() {
   const [notifyes, dispatchNotifications] = useAtom(notifications);
-
-  if (notifyes.length > 0)
-    setTimeout(() => {
-      dispatchNotifications({ type: 'remove', atom: notifyes[0] });
-    }, 8500);
+  const [fitstNotification] = useAtom(firstNotificationAtom);
 
   useEffect(() => {
-    dispatchNotifications({ type: 'remove', atom: notifyes[0] });
-  }, []);
+    if (fitstNotification != null) {
+      const timeoutId = setTimeout(
+        () => {
+          dispatchNotifications({ type: 'remove', atom: notifyes[0] });
+        },
+        Math.max(fitstNotification.created + 8500 - Date.now(), 0)
+      );
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [notifyes, fitstNotification]);
 
   return (
     <div className='toast toast-end'>

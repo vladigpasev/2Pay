@@ -1,12 +1,12 @@
 'use client';
 
 import { useUser } from '@/hooks/useUser';
-import { faBan, faCamera, faEdit, faFloppyDisk } from '@fortawesome/free-solid-svg-icons';
+import { faBan, faCamera, faCancel, faEdit, faFloppyDisk, faKey, faLock } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CustomForm, Field } from '@/components/utils/Form';
 import Image from 'next/image';
 import { isValidEmail } from '@/utils/isValidEmail';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import loading from '@/app/loading';
 import error from 'next/error';
 import { motion } from 'framer-motion';
@@ -18,8 +18,80 @@ import { useOpenModal } from '@/components/utils/Modal';
 import PasswordAskingModal from '@/components/modals/PasswordAskingModal';
 import { faFacebook, faGoogle } from '@fortawesome/free-brands-svg-icons';
 
+export function PasswordInputUpdate({ onSubmit }: { onSubmit: (password: string) => Promise<any> }) {
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [isEditing, setIsEditing] = useState(false);
+
+  const finalizeSubmit = async () => {
+    await onSubmit(password);
+    setIsEditing(false);
+  };
+
+  const localSubmit = useCallback(async () => {
+    if (password.length < 5) {
+      setError('Password must be at least 5 characters long');
+      return;
+    }
+    if (password.length > 60) {
+      setError('Password must be at most 60 characters long');
+      return;
+    }
+
+    finalizeSubmit();
+  }, [password]);
+
+  useEffect(() => {
+    setPassword('');
+  }, [isEditing]);
+
+  return (
+    <div className='flex flex-col gap-3 p-1.5 items-center mx-auto w-full'>
+      {isEditing ? (
+        <>
+          <p className='-mb-3 text-left w-full'>New Password: </p>
+          <input
+            type='password'
+            placeholder='Enter your new password:'
+            className='input input-bordered w-full text-neutral'
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+          />
+          {error && <p className='text-red-500'>{error}</p>}
+          <button onClick={() => localSubmit()} className='btn btn-accent font-bold text-xl w-full flex -mt-1.5'>
+            <span className='flex flex-grow'>Update Password</span>
+            <FontAwesomeIcon icon={faFloppyDisk} className='h-8 -mr-1' />
+          </button>
+          <button
+            onClick={() => setIsEditing(false)}
+            className='btn btn-sm btn-error font-bold text-xl w-full flex -mt-1.5'
+          >
+            <span className='flex flex-grow'>Cancel Changes</span>
+            <FontAwesomeIcon icon={faCancel} className='h-4 -mr-1' />
+          </button>
+        </>
+      ) : (
+        <>
+          <div className='flex w-full justify-between '>
+            <h3 className='flex text-lg font-semibold my-auto'>
+              <FontAwesomeIcon icon={faKey} className='mr-4 my-auto' /> Password:{' '}
+            </h3>
+            <span className='flex my-auto gap-2'>
+              <p className='flex text-lg my-auto'>**********</p>
+              <button onClick={() => setIsEditing(true)} className='btn w-fit my-auto px-1.5 h-fit btn-sm btn-primary'>
+                <FontAwesomeIcon icon={faEdit} />
+              </button>
+            </span>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
 export default function UserProfile() {
   const user = useUser();
+  if (!user) return <>Loading shit!</>;
 
   const PROFILE_UPDATE_FIELDS: Field<string>[] = useMemo(
     () => [
@@ -58,45 +130,61 @@ export default function UserProfile() {
   const [error, setError] = useState(null as string | null);
 
   const [updateMutation, updateUserAsyncMutation] = useAuthenticatedMutation(trpc.user.updateUserProfile);
+  const [updatePasswordMutation, updatePasswordAsyncMutation] = useAuthenticatedMutation(trpc.user.updatePassword);
   const setTokens = useSetTokens();
 
   const errorContainsToErrorMapper = new Map([['AlreadyExists', 'This E-Mail is already in use!']]);
 
-  const onSubmit = useCallback(async (formData: IUpdateUser, password: string) => {
-    try {
-      const res = await updateUserAsyncMutation({ ...formData, password });
-      setTokens(res);
-      setIsEditingUser(false);
-    } catch (error: any) {
-      error = JSON.parse(error.message)[0];
-      errorContainsToErrorMapper.forEach((k: string, v: string) => {
-        if (error.message.includes(k)) error.message = v;
-      });
-      dispatchNotification({
-        type: NotificationType.Error,
-        message: error.message
-      });
+  const onSubmit = useCallback(
+    async (
+      formData: IUpdateUser | { newPassword: string },
+      password: string,
+      data: Promise<{ refreshToken: string; token: string }>
+    ) => {
+      try {
+        const res = await data;
+        setTokens(res);
+        setIsEditingUser(false);
+      } catch (error: any) {
+        Array.from(errorContainsToErrorMapper.keys()).map((k: string) => {
+          if (error.message.includes(k)) error.message = errorContainsToErrorMapper.get(k);
+        });
+        dispatchNotification({
+          type: NotificationType.Error,
+          message: error.message
+        });
 
-      return null;
-    }
-  }, []);
+        return null;
+      }
+    },
+    []
+  );
 
-  const onPasswordInputSend = (formData: any) => {
+  const onPasswordInputSend = (formData: any, mutation: (input: any) => Promise<any>) => {
     return async (password: string) => {
       try {
-        const ret = await onSubmit(formData, password);
+        console.log('like kokos');
+        const ret = await onSubmit(formData, password, mutation({ ...formData, password }));
       } catch (error: any) {
+        console.log('like noss');
         setError(error.message ?? 'Something went wrong!');
       }
     };
+  };
+
+  const onPasswordFormSubmit = async (password: string) => {
+    openModal(
+      <PasswordAskingModal onSubmit={onPasswordInputSend({ newPassword: password }, updatePasswordAsyncMutation)} />,
+      () => {}
+    );
   };
 
   const onFormSubmit = useCallback((formData: any) => {
     setError(null);
 
     if (user!.authProvider === 'email')
-      openModal(<PasswordAskingModal onSubmit={onPasswordInputSend(formData)} />, () => {});
-    else onPasswordInputSend(formData)('not_important');
+      openModal(<PasswordAskingModal onSubmit={onPasswordInputSend(formData, updateUserAsyncMutation)} />, () => {});
+    else onPasswordInputSend(formData, updateUserAsyncMutation)('not_important');
   }, []);
 
   return (
@@ -115,52 +203,55 @@ export default function UserProfile() {
             Upload Photo <FontAwesomeIcon icon={faCamera} className='my-auto' />
           </a>
         </div>
-        <div className='flex flex-col w-full border-4 border-[hsl(var(--b1)/0.2)] p-2 rounded-xl'>
-          {!isEditingUser ? (
-            <>
-              <div className='flex justify-between -mb-2'>
-                <p className='text-lg flex'>Username:</p>
-                <p className='text-lg font-semibold flex'>{user!.username}</p>
-              </div>
-              <div className='divider'></div>
-              <div className='flex justify-between -mt-2'>
-                <p className='text-lg flex'>
-                  {user!.authProvider === 'email' ? (
-                    'E-Mail '
-                  ) : (
-                    <FontAwesomeIcon
-                      icon={user!.authProvider === 'facebook' ? faFacebook : faGoogle}
-                      className='my-auto mr-2'
-                    />
-                  )}
-                  :
-                </p>
-                <p className='text-lg font-semibold flex'>{user!.email}</p>
-              </div>
-            </>
-          ) : (
-            <motion.div initial={{ opacity: 0, x: 45 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -45 }}>
-              <CustomForm
-                icon={faFloppyDisk}
-                buttonText='Save Data'
-                fields={PROFILE_UPDATE_FIELDS}
-                canSubmit={!updateMutation.isLoading}
-                error={error}
-                onSubmit={onFormSubmit}
-              />
-            </motion.div>
-          )}
-          {!isEditingUser ? (
-            <button className='mt-10 btn w-full btn-primary rounded-xl flex' onClick={() => setIsEditingUser(true)}>
-              <FontAwesomeIcon className='my-auto' icon={faEdit} />
-              <span className='flex flex-grow justify-center'>Edit Profile</span>
-            </button>
-          ) : (
-            <button className='mt-2 btn w-full btn-error rounded flex' onClick={() => setIsEditingUser(false)}>
-              <FontAwesomeIcon className='my-auto' icon={faBan} />
-              <span className='flex flex-grow justify-center'>Cancel Editing</span>
-            </button>
-          )}
+        <div className='flex flex-col gap-2'>
+          <PasswordInputUpdate onSubmit={onPasswordFormSubmit} />
+          <div className='flex flex-col w-full border-4 border-[hsl(var(--b1)/0.2)] p-2 rounded-xl'>
+            {!isEditingUser ? (
+              <>
+                <div className='flex justify-between -mb-2'>
+                  <p className='text-lg flex'>Username:</p>
+                  <p className='text-lg font-semibold flex'>{user!.username}</p>
+                </div>
+                <div className='divider'></div>
+                <div className='flex justify-between -mt-2'>
+                  <p className='text-lg flex'>
+                    {user!.authProvider === 'email' ? (
+                      'E-Mail '
+                    ) : (
+                      <FontAwesomeIcon
+                        icon={user!.authProvider === 'facebook' ? faFacebook : faGoogle}
+                        className='my-auto mr-2'
+                      />
+                    )}
+                    :
+                  </p>
+                  <p className='text-lg font-semibold flex'>{user!.email}</p>
+                </div>
+              </>
+            ) : (
+              <motion.div initial={{ opacity: 0, x: 45 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -45 }}>
+                <CustomForm
+                  icon={faFloppyDisk}
+                  buttonText='Save Data'
+                  fields={PROFILE_UPDATE_FIELDS}
+                  canSubmit={!updateMutation.isLoading}
+                  error={error}
+                  onSubmit={onFormSubmit}
+                />
+              </motion.div>
+            )}
+            {!isEditingUser ? (
+              <button className='mt-10 btn w-full btn-primary rounded-xl flex' onClick={() => setIsEditingUser(true)}>
+                <FontAwesomeIcon className='my-auto' icon={faEdit} />
+                <span className='flex flex-grow justify-center'>Edit Profile</span>
+              </button>
+            ) : (
+              <button className='mt-2 btn w-full btn-error rounded flex' onClick={() => setIsEditingUser(false)}>
+                <FontAwesomeIcon className='my-auto' icon={faBan} />
+                <span className='flex flex-grow justify-center'>Cancel Editing</span>
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </main>
