@@ -82,19 +82,19 @@ export function useClearTokens() {
 
 export function useRefreshTokens() {
   const refreshTokenReq = trpc.authentication.refreshToken.useMutation();
-  const [token] = useAtom(tokenAtom);
   const setTokens = useSetTokens();
 
   return useCallback(
     async (updateUserData: boolean = false, refreshToken?: string) => {
-      if (refreshToken == null && token?.refreshToken == null) throw new Error('Not logged in!');
+      refreshToken = refreshToken ?? localStorage.getItem('refreshToken') ?? '';
+      if (refreshToken == null) throw new Error('Not logged in!');
 
       const tokens = await refreshTokenReq.mutateAsync({
-        refreshToken: refreshToken ?? token!.refreshToken,
+        refreshToken,
         updateUserData
       });
       setTokens(tokens);
     },
-    [refreshTokenReq, setTokens, token]
+    [refreshTokenReq, setTokens]
   );
 }

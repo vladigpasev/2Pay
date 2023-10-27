@@ -16,6 +16,7 @@ import { useSetTokens } from '@/auth/token';
 import { useAuthenticatedMutation } from '@/hooks/useAuthenticatedMutation';
 import { useOpenModal } from '@/components/utils/Modal';
 import PasswordAskingModal from '@/components/modals/PasswordAskingModal';
+import { faFacebook, faGoogle } from '@fortawesome/free-brands-svg-icons';
 
 export default function UserProfile() {
   const user = useUser();
@@ -59,12 +60,18 @@ export default function UserProfile() {
   const [updateMutation, updateUserAsyncMutation] = useAuthenticatedMutation(trpc.user.updateUserProfile);
   const setTokens = useSetTokens();
 
+  const errorContainsToErrorMapper = new Map([['AlreadyExists', 'This E-Mail is already in use!']]);
+
   const onSubmit = useCallback(async (formData: IUpdateUser, password: string) => {
     try {
       const res = await updateUserAsyncMutation({ ...formData, password });
       setTokens(res);
       setIsEditingUser(false);
     } catch (error: any) {
+      error = JSON.parse(error.message)[0];
+      errorContainsToErrorMapper.forEach((k: string, v: string) => {
+        if (error.message.includes(k)) error.message = v;
+      });
       dispatchNotification({
         type: NotificationType.Error,
         message: error.message
@@ -102,7 +109,7 @@ export default function UserProfile() {
             width={350}
             height={350}
             alt='user proifle'
-            className='mx-auto'
+            className='mx-auto rounded-md'
           />
           <a className='flex mx-auto link cursor-pointer font-semibold gap-2'>
             Upload Photo <FontAwesomeIcon icon={faCamera} className='my-auto' />
@@ -117,7 +124,17 @@ export default function UserProfile() {
               </div>
               <div className='divider'></div>
               <div className='flex justify-between -mt-2'>
-                <p className='text-lg flex'>E-Mail:</p>
+                <p className='text-lg flex'>
+                  {user.authProvider === 'email' ? (
+                    'E-Mail '
+                  ) : (
+                    <FontAwesomeIcon
+                      icon={user.authProvider === 'facebook' ? faFacebook : faGoogle}
+                      className='my-auto mr-2'
+                    />
+                  )}
+                  :
+                </p>
                 <p className='text-lg font-semibold flex'>{user.email}</p>
               </div>
             </>
