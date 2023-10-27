@@ -13,6 +13,9 @@ const config: Config = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      fontFamily: {
+        "paytone-one" : ['Paytone One', 'sans-serif'],
+      },
     },
   },
   daisyui: {
@@ -37,6 +40,6 @@ const config: Config = {
       }
       , "forest"],
   },
-  plugins: [require("daisyui")],
+  plugins: [require("daisyui"), require("@tailwindcss/typography")],
 };
 export default config;
