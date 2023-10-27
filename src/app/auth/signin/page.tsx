@@ -23,7 +23,7 @@ const LOGIN_FIELDS: Field<string>[] = [
     name: 'Password',
     type: 'password',
     placeholder: 'Password',
-    validate: value => (value.trim().length >= 8 ? null : 'Password is too short!')
+    validate: value => (value.trim().length >= 5 ? null : 'Password is too short!')
   }
 ];
 

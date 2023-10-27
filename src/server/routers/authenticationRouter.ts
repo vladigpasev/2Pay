@@ -29,7 +29,7 @@ export const authenticationRouter = t.router({
     .input(
       z.object({
         email: z.string().email().max(70).min(5),
-        password: z.string().max(50).min(8)
+        password: z.string().max(50).min(5)
       })
     )
     .mutation(async ({ input }) => {
