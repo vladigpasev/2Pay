@@ -54,7 +54,7 @@ async function authGoogleUser(data: GoogleData) {
   const user = existingUserRecord ?? {
     uuid: data.id,
     authProvider: 'google',
-    username: data.name,
+    name: data.name,
     email: data.email,
     password: null,
     verified: true,
@@ -66,10 +66,11 @@ async function authGoogleUser(data: GoogleData) {
 
   return await createTokenForUser({
     uuid: user.uuid,
-    username: user.username,
+    name: user.name,
     email: user.email,
     profilePictureURL: user.profilePictureURL!,
-    authProvider: user.authProvider
+    authProvider: user.authProvider,
+    verified: user.verified
   });
 }
 
@@ -92,3 +93,4 @@ const handler = async (req: NextRequest) => {
 };
 
 export { handler as GET };
+

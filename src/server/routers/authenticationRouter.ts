@@ -9,7 +9,7 @@ export const authenticationRouter = t.router({
   registerByEmail: publicProcedure
     .input(
       z.object({
-        username: z.string().max(50).min(5),
+        name: z.string().max(50).min(5),
         email: z.string().email().max(70).min(5),
         password: z.string().max(50).min(5)
       })
@@ -63,3 +63,4 @@ export const authenticationRouter = t.router({
     return await isVerified(ctx.tokenData!.uuid);
   })
 });
+
