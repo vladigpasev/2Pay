@@ -25,25 +25,28 @@ async function CompanyInfo({ params }: { params: { id: string } }) {
   return (
     <section className='min-h-screen bg-gradient-to-r from-[#00a54d20] to-secondary flex flex-col justify-center items-center gap-16'>
       {companyData?.creatorUuid === user?.uuid && (
-        <div className='stats stats-vertical lg:stats-horizontal shadow w-9/12 mt-10'>
-          <div className='stat'>
-            <div className='stat-title'>Products Sold</div>
-            <div className='stat-value'>{companyData?.soldItems}</div>
-            <div className='stat-desc'>Since Company Creation</div>
-          </div>
+        <>
+          <div className='fixed top-2 right-2 rounded-lg'>KUR</div>
+          <div className='stats stats-vertical lg:stats-horizontal shadow w-9/12 mt-10'>
+            <div className='stat'>
+              <div className='stat-title'>Products Sold</div>
+              <div className='stat-value'>{companyData?.soldItems}</div>
+              <div className='stat-desc'>Since Company Creation</div>
+            </div>
 
-          <div className='stat'>
-            <div className='stat-title'>Revenue</div>
-            <div className='stat-value text-primary'>{revenue}€</div>
-            <div className='stat-desc'>overall profit</div>
-          </div>
+            <div className='stat'>
+              <div className='stat-title'>Revenue</div>
+              <div className='stat-value text-primary'>{revenue}€</div>
+              <div className='stat-desc'>overall profit</div>
+            </div>
 
-          <div className='stat'>
-            <div className='stat-title'>Products</div>
-            <div className='stat-value'>{products.length}</div>
-            <div className='stat-desc'>up for sale</div>
+            <div className='stat'>
+              <div className='stat-title'>Products</div>
+              <div className='stat-value'>{products.length}</div>
+              <div className='stat-desc'>up for sale</div>
+            </div>
           </div>
-        </div>
+        </>
       )}
       <div className='flex flex-col md:flex-row items-center justify-center'>
         <div className='w-full md:w-1/2 p-8 flex flex-col items-center justify-center border-r-2 md:border-b-0 border-[#00a54d56]'>
