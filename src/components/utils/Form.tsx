@@ -71,17 +71,30 @@ export function CustomForm({ buttonText, fields, canSubmit, error, onSubmit, chi
           <label htmlFor={field.id} className='mb-0 pb-0 leading-4 font-bold'>
             {field.name}:
           </label>
-          <input
-            className={`w-full rounded-lg bg-base-100 border border-base-content p-2 text-neutral ${
-              errors[field.id] ? 'border-rose-600' : ''
-            } ${field.isDisabled ? 'brightness-50' : ''}`}
-            onInput={e => setRawFormData({ ...rawFormData, [field.id]: (e.target as any).value })}
-            id={field.id}
-            type={field.type}
-            placeholder={field.placeholder}
-            value={rawFormData[field.id]}
-            disabled={field.isDisabled}
-          />
+          {field.type === 'longText' ? (
+            <textarea
+              className={`w-full rounded-lg bg-base-100 border border-base-content p-2 text-base-content ${
+                errors[field.id] ? 'border-rose-600' : ''
+              } ${field.isDisabled ? 'brightness-50' : ''}`}
+              onInput={e => setRawFormData({ ...rawFormData, [field.id]: (e.target as any).value })}
+              id={field.id}
+              placeholder={field.placeholder}
+              value={rawFormData[field.id]}
+              disabled={field.isDisabled}
+            />
+          ) : (
+            <input
+              className={`w-full rounded-lg bg-base-100 border border-base-content p-2 text-base-content ${
+                errors[field.id] ? 'border-rose-600' : ''
+              } ${field.isDisabled ? 'brightness-50' : ''}`}
+              onInput={e => setRawFormData({ ...rawFormData, [field.id]: (e.target as any).value })}
+              id={field.id}
+              type={field.type}
+              placeholder={field.placeholder}
+              value={rawFormData[field.id]}
+              disabled={field.isDisabled}
+            />
+          )}
           {errors[field.id] && <p className='text-rose-600 text-sm'>{errors[field.id]}</p>}
         </div>
       ))}

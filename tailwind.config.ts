@@ -10,9 +10,8 @@ const config: Config = {
   theme: {
     extend: {
       backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))'
       },
       fontFamily: {
         "paytone-one" : ["Paytone One", "sans-serif"]
@@ -22,7 +21,7 @@ const config: Config = {
         'xl-min': {'min': '1700px'},
         'supersmall': {'min': '350px'}
       }
-    },
+    }
   },
   daisyui: {
     themes: [
@@ -52,8 +51,10 @@ const config: Config = {
         "warning": "#fcb144",     // По-тъмен мек жълт
         "error": "#fc4d4d",       // По-тъмен мек червен
         }
-      }
-      ,"forest", "garden"],
+      },
+      'forest',
+      'garden'
+    ]
   },
   plugins: [require('daisyui')]
 };
