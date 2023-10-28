@@ -4,6 +4,7 @@ import banking from '../../../public/images/svg/Hybrid-Events-for-Financial-Serv
 import crypto from '../../../public/images/pngs/crypto.png'
 import teamMember from '../../../public/images/pngs/team-member.png'
 import aboutTitle from '../../../public/images/pngs/about-payments.png'
+import card from '../../../public/images/pngs/card-about.png'
 
 export default function About() {
 
@@ -38,30 +39,34 @@ export default function About() {
                     </section>
                 </section>
             </section>
-            <section className="highlight-text bg-neutral text-base min-[425px]:text-2xl md:text-3xl leading-7 mb-32 py-7 text-center px-20">
-                2Pay is one of the highest rising payment platforms right now! We deliver to our customers the most effective payment and e-commerce services in the region. But to make this possible, there is a team of dedicated developers, that stands behind 2Pay.
+            <section className="highlight-text flex max-[768px]:flex-col items-center gap-12 bg-neutral leading-10 mb-32 py-7 text-center px-7 md:px-20">
+                <Image src={card} alt="" className="w-64"></Image>
+                <section>
+                    <p className="text-bold text-3xl md:text-5xl mb-10">Best payment system in the region</p>
+                    <p className="font-light text-base mt-7 min-[425px]:text-2xl md:text-3xl">2Pay is one of the highest rising payment platforms right now! We deliver to our customers the most effective payment and e-commerce services in the region. But to make this possible, there is a team of dedicated developers, that stands behind 2Pay.</p>
+                </section>
             </section>
             <section className="team pb-12">
                 <p className="text-5xl text-primary text-center pb-16">Our team</p>
                 <section className="team-members flex flex-col min-[1280px]:flex-row gap-40 items-center justify-center md:mx-28">
                     <section className="flex flex-col items-center justify-center">
                         <Image src={teamMember} alt="" className="w-64"></Image>
-                        <p className="text-3xl">Vladimir Pasev</p>
+                        <p className="text-3xl text-center">Vladimir Pasev</p>
                         <p className="text-lg">Front-End Developer</p>
                     </section>
                     <section className="flex flex-col items-center justify-center">
                         <Image src={teamMember} alt="" className="w-64"></Image>
-                        <p className="text-3xl">Aleks Nikolov</p>
+                        <p className="text-3xl text-center">Aleks Nikolov</p>
                         <p className="text-lg">Front-End Developer</p>
                     </section>
                     <section className="flex flex-col items-center justify-center">
                         <Image src={teamMember} alt="" className="w-64"></Image>
-                        <p className="text-3xl">Spasimir Pavlov</p>
+                        <p className="text-3xl text-center">Spasimir Pavlov</p>
                         <p className="text-lg">Front-End Developer</p>
                     </section>
                     <section className="flex flex-col items-center justify-center">
                         <Image src={teamMember} alt="" className="w-64"></Image>
-                        <p className="text-3xl">Nikola Andreev</p>
+                        <p className="text-3xl text-center">Nikola Andreev</p>
                         <p className="text-lg">Front-End Developer</p>
                     </section>
                 </section>
