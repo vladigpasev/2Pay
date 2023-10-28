@@ -55,4 +55,3 @@ export const productRouter = t.router({
     .query(({ input }) => getProductsOfCompany(input.uuid)),
   findProducts: publicProcedure.input(z.object({ search: z.string() })).query(({ input }) => findProducts(input.search))
 });
-
