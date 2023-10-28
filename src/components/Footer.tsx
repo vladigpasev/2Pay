@@ -39,7 +39,7 @@ export const Footer = () => (
     </nav>
     <nav>
       <header className='footer-title'>2Pay</header>
-      <Link href='/' className='link link-hover'>
+      <Link href='/about' className='link link-hover'>
         About us
       </Link>
       <Link href='/' className='link link-hover'>
