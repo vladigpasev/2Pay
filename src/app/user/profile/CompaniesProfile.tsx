@@ -24,7 +24,7 @@ export default function CompaniesProfile({ user }: { user: IUser | null }) {
           <h1 className='text-3xl font-bold'>
             <u>Your companies: </u>
           </h1>
-          <div className='grid grid-cols-1 min-[1200px]:grid-cols-2 gap-6'>
+          <div className='grid grid-cols-1 min-[1100px]:grid-cols-2 gap-6'>
             {companies.data && companies.data.length > 0 ? (
               <>
                 {companies.data.map((company, index) => (
