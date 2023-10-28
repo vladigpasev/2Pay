@@ -1,7 +1,7 @@
 // hooks/useStripeCheckout.ts
-import { useCallback } from 'react';
 import { useAuthenticatedMutation } from './useAuthenticatedMutation';
 import { trpc } from '@/trpc/client';
+
 export function useStripeCheckout() {
   const [_, createCheckoutSession] = useAuthenticatedMutation(trpc.stripe.createCheckoutSession);
   console.log('The only console log showing');
