@@ -34,7 +34,8 @@ export const companies = mysqlTable('companies', {
   description: varchar('description', { length: 2048 }).notNull(),
   logoURL: varchar('logoURL', { length: 256 }),
   creatorUuid: varchar('creatorUuid', { length: 256 }).notNull(),
-  soldItems: int('soldItems').notNull().default(0)
+  soldItems: int('soldItems').notNull(),
+  revenue: int('revenue').notNull()
 });
 
 export const products = mysqlTable('products', {
@@ -49,6 +50,7 @@ export const products = mysqlTable('products', {
   pictureURL: varchar('pictureURL', { length: 256 }).notNull(),
   galleryJSON: json('galleryJSON').$type<string[]>().notNull(),
   amountSold: int('amountSold').notNull(),
+  revenue: int('revenue').notNull(),
   companyUuid: varchar('companyUuid', { length: 256 }).notNull()
 });
 
@@ -78,3 +80,4 @@ export const productsRelations = relations(products, ({ one }) => ({
     references: [companies.uuid]
   })
 }));
+
