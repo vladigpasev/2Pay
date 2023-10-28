@@ -1,5 +1,3 @@
-'use client';
-
 import Image from 'next/image';
 import logo from '../../public/images/branding/2pay-logo-green-short.png'
 import landing_hero from '../../public/images/pngs/landing-1.png'
@@ -60,3 +58,4 @@ export default function Home() {
     </>
   );
 }
+
