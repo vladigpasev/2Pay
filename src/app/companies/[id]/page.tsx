@@ -8,13 +8,14 @@ async function CompanyInfo({ params }: { params: { id: string } }) {
     tokenData: null
   });
   const companyData = await caller.company.get({ id: params.id });
+  const products = await caller.product.getProductsOfCompany({ uuid: params.id });
 
   return (
     <div className='flex flex-col md:flex-row items-center justify-center min-h-screen bg-gradient-to-r from-[#00a54d20] to-secondary'>
       <div className='w-full md:w-1/2 p-8 flex flex-col items-center justify-center border-r-2 md:border-b-0 border-[#00a54d56]'>
         <div className='text-center'>
           <img
-            src={companyData?.logoURL || '/images/png/commpany.jpg'}
+            src={companyData?.logoURL || '/images/pngs/company.jpg'}
             alt='Company Logo'
             className='w-40 h-40 md:w-52 md:h-52 rounded-full mx-auto border-4 border-[#00a54d56] shadow-xl'
           />
@@ -29,7 +30,7 @@ async function CompanyInfo({ params }: { params: { id: string } }) {
         </div>
       </div>
       <div className='w-full md:w-1/2 p-8'>
-        <Products />
+        <Products products={products} />
       </div>
     </div>
   );

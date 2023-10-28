@@ -111,7 +111,7 @@ async function findProducts(search: string) {
       LOWER(${products.name}) LIKE ${'%' + search.toLowerCase() + '%'} OR
       LOWER(${products.description}) LIKE ${'%' + search.toLowerCase() + '%'} OR
       MATCH (${products.name}, ${products.description})
-      AGAINST (${products} IN NATURAL LANGUAGE MODE)
+      AGAINST (${search} IN NATURAL LANGUAGE MODE)
   `)
   ).rows as ListedProduct[];
 }
