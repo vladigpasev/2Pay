@@ -6,7 +6,6 @@ import db from '@/drizzle';
 import { createStripeProduct, deleteStripeProduct, updateStripeProduct } from './stripeProducts';
 import { sendMail } from '@/server/lib/sendMail';
 
-
 export type Product = InferSelectModel<typeof products>;
 
 export type PublicProduct = Omit<Product, 'revenue'>;
@@ -164,6 +163,8 @@ async function buyProduct(buyerId: string, id: string) {
       companyAmountSold: companies.soldItems,
       companyRevenue: companies.revenue,
       companyOwnerId: companies.creatorUuid,
+      companyId: companies.uuid,
+      productId: products.uuid,
       pictureURL: products.pictureURL,
       name: products.name,
       price: products.price
@@ -177,14 +178,20 @@ async function buyProduct(buyerId: string, id: string) {
   const record = records[0];
 
   await Promise.all([
-    db.update(products).set({
-      amountSold: record.productAmountSold + 1,
-      revenue: record.productRevenue + record.price
-    }),
-    db.update(companies).set({
-      soldItems: record.companyAmountSold + 1,
-      revenue: record.companyRevenue + record.price
-    })
+    db
+      .update(products)
+      .set({
+        amountSold: record.productAmountSold + 1,
+        revenue: record.productRevenue + record.price
+      })
+      .where(eq(products.uuid, record.productId)),
+    db
+      .update(companies)
+      .set({
+        soldItems: record.companyAmountSold + 1,
+        revenue: record.companyRevenue + record.price
+      })
+      .where(eq(companies.uuid, record.companyId))
   ]);
 
   const neededUsers = await db
@@ -203,13 +210,13 @@ async function buyProduct(buyerId: string, id: string) {
 
   const sellerEmail = seller.email;
   const buyerEmail = buyer.email;
-  
+
   const currentDate = new Date().toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
     day: 'numeric'
   });
-  
+
   // TODO: Send email to buyer
   sendMail({
     subject: 'Payment completed successfully',
@@ -251,7 +258,7 @@ async function buyProduct(buyerId: string, id: string) {
      No longer want to receive these emails?&nbsp;<a href="" target="_blank" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:underline;color:#CCCCCC;font-size:12px">Unsubscribe</a>.<a target="_blank" href="" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:underline;color:#CCCCCC;font-size:12px"></a></p></td></tr></table></td></tr></table></td></tr></table></td></tr></table></td></tr></table></div></body></html>`,
     to: buyerEmail
   });
-  
+
   sendMail({
     subject: 'New order',
     body: `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html dir="ltr" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office" lang="en"><head><meta charset="UTF-8"><meta content="width=device-width, initial-scale=1" name="viewport"><meta name="x-apple-disable-message-reformatting"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta content="telephone=no" name="format-detection"><title>New Template 2</title> <!--[if (mso 16)]><style type="text/css">     a {text-decoration: none;}     </style><![endif]--> <!--[if gte mso 9]><style>sup { font-size: 100% !important; }</style><![endif]--> <!--[if gte mso 9]><xml> <o:OfficeDocumentSettings> <o:AllowPNG></o:AllowPNG> <o:PixelsPerInch>96</o:PixelsPerInch> </o:OfficeDocumentSettings> </xml>
@@ -291,7 +298,6 @@ async function buyProduct(buyerId: string, id: string) {
      No longer want to receive these emails?&nbsp;<a href="" target="_blank" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:underline;color:#CCCCCC;font-size:12px">Unsubscribe</a>.<a target="_blank" href="" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:underline;color:#CCCCCC;font-size:12px"></a></p></td></tr></table></td></tr></table></td></tr></table></td></tr></table></td></tr></table></div></body></html>`,
     to: sellerEmail
   });
-  
 }
 
 export {
