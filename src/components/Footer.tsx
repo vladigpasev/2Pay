@@ -5,7 +5,7 @@ import logo from '../../public/images/branding/2pay-logo-green-short.png'
 export const Footer = () => (
   <footer className='footer p-10 bg-base-200 text-base-content'>
     <aside>
-      <Image src={logo} alt='' className='w-2/5'></Image>
+      <Link href="/"><Image src={logo} alt='' className='w-3/5'></Image></Link>
       <p>
         2Pay Inc.
         <br />
