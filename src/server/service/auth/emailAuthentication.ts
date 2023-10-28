@@ -12,7 +12,7 @@ import { Value, value } from '@/utils/value';
 const SALT_ROUNDS = 5;
 
 interface RegisterData {
-  username: string;
+  name: string;
   email: string;
   password: string;
 }
@@ -23,10 +23,10 @@ interface LoginData {
 }
 
 export const template_VerificationEmailBody = ({
-  username,
+  name,
   verificationToken
 }: {
-  username: string;
+  name: string;
   verificationToken: string;
 }) => `
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html dir="ltr" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office" lang="en"><head><meta charset="UTF-8"><meta content="width=device-width, initial-scale=1" name="viewport"><meta name="x-apple-disable-message-reformatting"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta content="telephone=no" name="format-detection"><title>New Message</title> <!--[if (mso 16)]><style type="text/css">     a {text-decoration: none;}     </style><![endif]--> <!--[if gte mso 9]><style>sup { font-size: 100% !important; }</style><![endif]--> <!--[if gte mso 9]><xml> <o:OfficeDocumentSettings> <o:AllowPNG></o:AllowPNG> <o:PixelsPerInch>96</o:PixelsPerInch> </o:OfficeDocumentSettings> </xml>
@@ -64,7 +64,7 @@ async function registerUserByEmail(data: RegisterData): Promise<Value<Tokens>> {
   const user: InferSelectModel<typeof users> = {
     uuid: uuid.v4(),
     authProvider: 'email',
-    username: data.username,
+    name: data.name,
     email: data.email,
     password: await hashPassword(data.password),
     verified: false,
@@ -80,10 +80,11 @@ async function registerUserByEmail(data: RegisterData): Promise<Value<Tokens>> {
 
   const tokens = await createTokenForUser({
     uuid: user.uuid,
-    username: user.username,
+    name: user.name,
     email: user.email,
     profilePictureURL: user.profilePictureURL!,
-    authProvider: user.authProvider
+    authProvider: user.authProvider,
+    verified: user.verified
   });
 
   sendMail({
@@ -112,10 +113,11 @@ async function loginUserByEmail(data: LoginData): Promise<Value<Tokens>> {
 
   const tokens = await createTokenForUser({
     uuid: user.uuid,
-    username: user.username,
+    name: user.name,
     email: user.email,
     profilePictureURL: user.profilePictureURL!,
-    authProvider: user.authProvider
+    authProvider: user.authProvider,
+    verified: user.verified
   });
 
   return value.value(tokens);
@@ -128,3 +130,4 @@ async function verifyPassword(uuid: string, pass: string) {
 }
 
 export { registerUserByEmail, loginUserByEmail, verifyPassword };
+

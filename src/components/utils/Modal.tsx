@@ -48,7 +48,7 @@ export default function modalDialog() {
         open={modal.opened}
         className='modal fixed flex modal-bottom sm:modal-middle w-[100vw] backdrop-blur-sm backdrop-contrast-50'
       >
-        <div className='modal-box left-1/2 relative -translate-x-1/2 p-3 pt-0' onClick={e => e.stopPropagation()}>
+        <div className='modal-box left-1/2 relative -translate-x-1/2 p-3' onClick={e => e.stopPropagation()}>
           {modal.content}
         </div>
       </dialog>

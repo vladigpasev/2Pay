@@ -12,78 +12,94 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 import { UploadFileResponse } from 'uploadthing/client';
 import { useRouter } from 'next/navigation';
+import { ProductInfo } from '@/server/service/products';
 
-interface CreateCompanyFormData {
+interface CreateproductFormData {
   name: string;
-  contactEmail: string;
+  price: number;
   description: string;
 }
 
-export interface ICompany extends CreateCompanyFormData {
-  logoURL: string;
-  id: string;
-}
-
-export default function CompanyForm({ type, company }: { type: 'create' | 'update'; company?: ICompany }) {
-  const CREATE_COMPANY_FIELDS: Field<string>[] = [
+export default function ProductForm({
+  type,
+  product,
+  companyUuid,
+  id
+}: {
+  type: 'create' | 'update';
+  product?: ProductInfo;
+  companyUuid: string;
+  id?: string;
+}) {
+  const CREATE_product_FIELDS: Field<any>[] = [
     {
       id: 'name',
-      name: 'Company Name',
+      name: 'product Name',
       type: 'text',
-      placeholder: 'Company Name',
-      defaultValue: type === 'update' ? company?.name : undefined,
-      validate: value => (value.trim().length >= 1 ? null : 'Company name is too short!')
+      placeholder: 'Product Name',
+      defaultValue: type === 'update' ? product?.name : undefined,
+      validate: value => (value.trim().length >= 1 ? null : 'Product name is too short!')
     },
     {
-      id: 'contactEmail',
-      name: 'Contact Email',
-      type: 'email',
-      placeholder: 'contact@company.com',
-      defaultValue: type === 'update' ? company?.contactEmail : undefined,
-      validate: value => (isValidEmail(value) ? null : 'Contact email is invalid!')
+      id: 'price',
+      name: 'Price in €',
+      type: 'number',
+      placeholder: '10',
+      defaultValue: type === 'update' ? product!.price.toString() : undefined,
+      transform: value => parseFloat(value),
+      validate: value => (value > 2 && value < 10000 ? null : 'Price shall be between 3€ and 10000€!')
     },
     {
       id: 'description',
       name: 'Description',
       type: 'longText',
-      placeholder: 'A few words about your business',
-      defaultValue: type === 'update' ? company?.description : undefined,
-      validate: value => (value.trim().length >= 5 ? null : 'Company description is too short!')
+      placeholder: 'A few words about hte prduct you are selling',
+      defaultValue: type === 'update' ? product?.description : undefined,
+      validate: value => (value.trim().length >= 5 ? null : 'Product description is too short!')
     }
   ];
 
   const dispatchNotification = useDispatchNotification();
 
-  const [_, createConpanyAsyncMutation] = useAuthenticatedMutation(trpc.company.create);
-  const [__, updateConpanyAsyncMutation] = useAuthenticatedMutation(trpc.company.update);
-  const [___, deleteConpanyAsyncMutation] = useAuthenticatedMutation(trpc.company.delete);
+  const [_, createProductAsyncMutation] = useAuthenticatedMutation(trpc.product.create);
+  const [__, updateProductAsyncMutation] = useAuthenticatedMutation(trpc.product.update);
+  const [___, deleteProductAsyncMutation] = useAuthenticatedMutation(trpc.product.delete);
 
   const [logoURL, setLogoURL] = useState('');
 
   const router = useRouter();
 
-  const onSubmit = async (data: CreateCompanyFormData) => {
+  const onSubmit = async (data: CreateproductFormData) => {
+    if (!logoURL && type === 'create') {
+      dispatchNotification({
+        type: NotificationType.Error,
+        message: 'Please upload product image first!'
+      });
+      return null;
+    }
     try {
       let res = null;
       if (type === 'create') {
-        res = await createConpanyAsyncMutation({
+        res = await createProductAsyncMutation({
           name: data.name,
-          contactEmail: data.contactEmail,
           description: data.description,
-          logoURL: logoURL || null
+          companyUuid: companyUuid,
+          price: data.price,
+          pictureURL: logoURL,
+          galleryJSON: []
         });
       } else {
-        res = await updateConpanyAsyncMutation({
+        res = await updateProductAsyncMutation({
           name: data.name,
-          contactEmail: data.contactEmail,
           description: data.description,
-          logoURL: logoURL || null,
-          id: company?.id!
+          id: id!,
+          price: data.price,
+          pictureURL: logoURL,
+          galleryJSON: []
         });
       }
       router.push('/user/profile');
     } catch (error: any) {
-      console.error(error);
       dispatchNotification({
         type: NotificationType.Error,
         message: error.message
@@ -95,7 +111,7 @@ export default function CompanyForm({ type, company }: { type: 'create' | 'updat
 
   useEffect(() => {
     if (type === 'update') {
-      setLogoURL(company?.logoURL || '');
+      setLogoURL(product?.pictureURL || '/images/pngs/product.png');
     }
   }, []);
 
@@ -103,12 +119,12 @@ export default function CompanyForm({ type, company }: { type: 'create' | 'updat
     <div className='h-[calc(100vh-90px)] w-full flex justify-center items-center'>
       <div className='sm:shadow-xl px-12 py-12 sm:bg-base-200 rounded-xl'>
         <h1 className='font-semibold text-3xl text-start mb-4'>
-          Create a <strong>Company</strong>
+          Create a <strong>Product</strong>
         </h1>
         <div className='flex gap-5 flex-row max-md:flex-col'>
           <div className='flex flex-col'>
             <img
-              src={logoURL || '/images/pngs/company.jpg'}
+              src={logoURL || '/images/pngs/product.png'}
               alt='user proifle'
               className='mx-auto rounded-md w-full max-w-[350px] aspect-square bg-cover'
             />
@@ -143,8 +159,8 @@ export default function CompanyForm({ type, company }: { type: 'create' | 'updat
           </div>
           <div className='flex flex-col'>
             <CustomForm
-              buttonText={type === 'create' ? 'Create Company' : 'Update Company'}
-              fields={CREATE_COMPANY_FIELDS}
+              buttonText={type === 'create' ? 'Create Product' : 'Update Product'}
+              fields={CREATE_product_FIELDS}
               canSubmit={true}
               error={null}
               onSubmit={onSubmit}
@@ -154,7 +170,7 @@ export default function CompanyForm({ type, company }: { type: 'create' | 'updat
                 className='btn btn-error font-semibold mt-2 rounded-sm'
                 onClick={async () => {
                   try {
-                    await deleteConpanyAsyncMutation({ id: company?.id! });
+                    await deleteProductAsyncMutation({ id: id! });
                     router.push('/user/profile');
                   } catch (error: any) {
                     console.error(error);
@@ -167,7 +183,7 @@ export default function CompanyForm({ type, company }: { type: 'create' | 'updat
                   }
                 }}
               >
-                Delete Company
+                Delete Product
               </button>
             )}
           </div>
