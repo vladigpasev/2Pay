@@ -12,7 +12,7 @@ import {
   faUserLargeSlash
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { CustomForm, Field } from '@/components/utils/Form';
+import { CustomForm, Field, Fields } from '@/components/utils/Form';
 import Image from 'next/image';
 import { isValidEmail } from '@/utils/isValidEmail';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -106,16 +106,26 @@ export default function UserProfile({ user }: { user: IUser | null }) {
   const logout = useLogout();
   const router = useRouter();
 
-  const PROFILE_UPDATE_FIELDS: Field<string>[] = useMemo(
+  const PROFILE_UPDATE_FIELDS: Fields = useMemo(
     () => [
-      {
-        id: 'username',
-        name: 'Username',
-        type: 'text',
-        placeholder: 'Username',
-        defaultValue: user?.username,
-        validate: value => (value.trim().length >= 5 ? null : 'Username is too short!')
-      },
+      [
+        {
+          id: 'firstName',
+          name: 'First Name',
+          type: 'text',
+          placeholder: 'First Name',
+          defaultValue: user ? user.name.split(' ')[0] : undefined,
+          validate: (value: string) => (value.trim().length >= 5 ? null : 'First name is too short!')
+        },
+        {
+          id: 'lastName',
+          name: 'Last Name',
+          type: 'text',
+          placeholder: 'Last Name',
+          defaultValue: user ? user.name.split(' ')[1] : undefined,
+          validate: (value: string) => (value.trim().length >= 5 ? null : 'Last name is too short!')
+        }
+      ],
       {
         id: 'email',
         name: 'Email',
@@ -130,7 +140,7 @@ export default function UserProfile({ user }: { user: IUser | null }) {
   );
 
   interface IUpdateUser {
-    username: string;
+    name: string;
     email: string;
     password: string;
   }
@@ -196,7 +206,18 @@ export default function UserProfile({ user }: { user: IUser | null }) {
     setError(null);
 
     if (user!.authProvider === 'email')
-      openModal(<PasswordAskingModal onSubmit={onPasswordInputSend(formData, updateUserAsyncMutation)} />, () => {});
+      openModal(
+        <PasswordAskingModal
+          onSubmit={onPasswordInputSend(
+            {
+              name: `${formData.firstName} ${formData.lastName}`,
+              email: formData.email
+            },
+            updateUserAsyncMutation
+          )}
+        />,
+        () => {}
+      );
     else onPasswordInputSend(formData, updateUserAsyncMutation)('not_important');
   }, []);
 
@@ -212,8 +233,8 @@ export default function UserProfile({ user }: { user: IUser | null }) {
           {!isEditingUser ? (
             <>
               <div className='flex justify-between -mb-2'>
-                <p className='text-lg flex'>Username:</p>
-                <p className='text-lg font-semibold flex'>{user!.username}</p>
+                <p className='text-lg flex'>Name:</p>
+                <p className='text-lg font-semibold flex'>{user!.name}</p>
               </div>
               <div className='divider'></div>
               <div className='flex justify-between -mt-2'>
@@ -269,3 +290,4 @@ export default function UserProfile({ user }: { user: IUser | null }) {
     </section>
   );
 }
+

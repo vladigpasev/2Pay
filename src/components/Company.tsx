@@ -36,3 +36,4 @@ export default function Compnay({ company }: { company: Company | PublicCompany 
     </div>
   );
 }
+
