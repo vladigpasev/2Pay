@@ -1,13 +1,13 @@
 'use client';
 
 import { OAuthButtons } from './oauthButtons/OAuthButtons';
-import { CustomForm, Field } from '../utils/Form';
+import { CustomForm, Field, Fields } from '../utils/Form';
 import { useCallback, useState } from 'react';
 import Link from 'next/link';
 
 interface Props {
   titleHtml: string;
-  fields: Field<any>[];
+  fields: Fields;
   buttonText: string;
   redirect: {
     text: string;
@@ -44,3 +44,4 @@ export default function AuthPage({ titleHtml, fields, buttonText, redirect, onSu
     </div>
   );
 }
+

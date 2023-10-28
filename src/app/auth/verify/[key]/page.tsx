@@ -60,3 +60,4 @@ export default async function VerifyAccount({ params }: { params: { key: string 
     </main>
   );
 }
+

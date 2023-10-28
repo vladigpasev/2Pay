@@ -13,7 +13,7 @@ export interface Tokens {
 
 const REFRESH_TOKEN_EXPIRATION_TIME = 1000 * 60 * 60 * 24; // 1 day
 const REFRESH_TOKEN_DEATH_TIME = 1000 * 60 * 60 * 24 * 5; // 5 days
-const TOKEN_EXPIRATION_TIME = '10s';
+const TOKEN_EXPIRATION_TIME = '10m';
 
 type User = InferSelectModel<typeof users>;
 
@@ -30,8 +30,9 @@ export const queryAndCreateUserData = async (uuid: string) => {
     authProvider: user.authProvider,
     email: user.email,
     profilePictureURL: user.profilePictureURL || '',
-    username: user.username,
-    uuid: user.uuid
+    name: user.name,
+    uuid: user.uuid,
+    verified: user.verified
   });
 };
 
@@ -39,9 +40,10 @@ async function createTokenForUser(user: IUser): Promise<Tokens> {
   const token = signToken({
     uuid: user.uuid,
     email: user.email,
-    username: user.username,
+    name: user.name,
     profilePictureURL: user.profilePictureURL,
-    authProvider: user.authProvider
+    authProvider: user.authProvider,
+    verified: user.verified
   });
   const refreshToken = generateRefreshToken();
 
@@ -79,7 +81,7 @@ async function refreshToken(userData: IUser, oldRefreshToken: string, updateUser
         .select({
           uuid: users.uuid,
           email: users.email,
-          username: users.username,
+          name: users.name,
           profilePictureURL: users.profilePictureURL
         })
         .from(users)
@@ -90,9 +92,10 @@ async function refreshToken(userData: IUser, oldRefreshToken: string, updateUser
   const token = signToken({
     uuid: userData.uuid,
     email: userData.email,
-    username: userData.username,
+    name: userData.name,
     profilePictureURL: userData.profilePictureURL,
-    authProvider: userData.authProvider
+    authProvider: userData.authProvider,
+    verified: userData.verified
   });
   const refreshToken = generateRefreshToken();
 
@@ -111,3 +114,4 @@ async function deleteToken(userUuid: string) {
 }
 
 export { createTokenForUser, refreshToken, deleteToken };
+
