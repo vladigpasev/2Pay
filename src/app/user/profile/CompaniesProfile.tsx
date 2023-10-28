@@ -18,7 +18,9 @@ export default function CompaniesProfile({ user }: { user: IUser | null }) {
   return (
     <section className='flex min-h-[100%] relative flex-grow w-full rounded-xl border border-neutral mx-auto bg-neutral gap-10 min-w-[450px] max-md:min-w-min max-sm:w-full max-sm:min-h-screen max-sm:rounded-none'>
       {companies.isLoading ? (
-        <PageLoading />
+        <div className='min-h-[300px]'>
+          <PageLoading />
+        </div>
       ) : (
         <div className='flex h-full my-auto flex-grow w-full text-start flex-col mx-auto py-10 gap-10 px-8 max-sm:py-16'>
           <h1 className='text-3xl font-bold'>

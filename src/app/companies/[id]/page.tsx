@@ -1,4 +1,5 @@
 import Products from '@/components/Products';
+import { useUserServer, useUserServerNoExpiration } from '@/hooks/useUserServer';
 import { appRouter } from '@/server';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -10,6 +11,7 @@ async function CompanyInfo({ params }: { params: { id: string } }) {
     rawToken: '',
     tokenData: null
   });
+  const user = useUserServerNoExpiration();
   const companyData = await caller.company.get({ id: params.id });
   const products = await caller.product.getProductsOfCompany({ uuid: params.id });
 
@@ -22,7 +24,15 @@ async function CompanyInfo({ params }: { params: { id: string } }) {
             alt='Company Logo'
             className='w-40 h-40 md:w-52 md:h-52 rounded-full mx-auto border-4 border-[#00a54d56] shadow-xl'
           />
-          <h1 className='mt-6 text-3xl md:text-4xl font-bold text-primary'>{companyData?.name}</h1>
+          <h1 className='mt-6 text-3xl md:text-4xl font-bold text-primary w-full text-center flex'>
+            <span className='mx-auto flex gap-3'>
+              {companyData?.name}{' '}
+              <span className='py-0.5 px-1.5 w-fit rounded pb-1 border border-base-content flex flex-col'>
+                <p className='text-[0.5rem] mx-auto leading-3'>Items Sold:</p>
+                <p className='text-[2rem] font-extrabold mx-auto leading-5 text-accent'>{companyData?.soldItems}</p>
+              </span>
+            </span>
+          </h1>
           <a
             href={`mailto:${companyData?.contactEmail}`}
             className='text-md md:text-lg text-primary hover:text-accent hover:underline mt-2 block'
@@ -34,13 +44,15 @@ async function CompanyInfo({ params }: { params: { id: string } }) {
       </div>
       <div className='w-full md:w-1/2 p-8'>
         <Products products={products} />
-        <Link
-          href={`/products/create/${companyData?.uuid}`}
-          className='btn btn-primary h-full px-5 flex justify-center w-full max-w-xs mx-auto '
-        >
-          <FontAwesomeIcon size='sm' className='py-auto h-4 mr-1' icon={faPlus} />
-          <span className='my-auto'>Create Product</span>
-        </Link>
+        {user?.uuid === companyData?.creatorUuid && (
+          <Link
+            href={`/products/create/${companyData?.uuid}`}
+            className='btn btn-primary h-full px-5 flex justify-center w-full max-w-xs mx-auto '
+          >
+            <FontAwesomeIcon size='sm' className='py-auto h-4 mr-1' icon={faPlus} />
+            <span className='my-auto'>Create Product</span>
+          </Link>
+        )}
       </div>
     </div>
   );
