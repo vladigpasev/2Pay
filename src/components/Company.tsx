@@ -1,14 +1,18 @@
+'use client';
+
 import { Company } from '@/server/service/company';
 import { index } from 'drizzle-orm/mysql-core';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function Compnay({ company }: { company: Company }) {
+  const router = useRouter();
   return (
-    <Link
-      href={`/companies/${company.uuid}`}
-      className='bg-[#00b65e0d] p-2 px-3 rounded-xl transition-transform transform hover:scale-[1.02] cursor-pointer relative'
+    <div
+      onClick={() => router.push(`/companies/${company.uuid}`)}
+      className='bg-[#00b65e0d] p-2 px-3 rounded-xl min-w-fit transition-transform transform hover:scale-[1.02] cursor-pointer relative'
     >
-      <div className='flex items-start gap-2'>
+      <div className='flex items-start gap-2 max-w-sm'>
         <img
           src={company.logoURL || '/images/pngs/company.jpg'}
           alt={company.name}
@@ -29,6 +33,6 @@ export default function Compnay({ company }: { company: Company }) {
         <p className='text-[0.4rem] mx-auto leading-3'>Items Sold:</p>
         <p className='text-[1.4rem] font-extrabold mx-auto leading-4'>{company.soldItems}</p>
       </span>
-    </Link>
+    </div>
   );
 }
