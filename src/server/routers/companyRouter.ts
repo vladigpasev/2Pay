@@ -5,6 +5,7 @@ import {
   findCompanies,
   getCompaniesOfUser,
   getCompany,
+  getCompanyRevenue,
   updateCompany
 } from '../service/company';
 import { z } from 'zod';
@@ -19,6 +20,9 @@ const companyInfoZod = z.object({
 export const companyRouter = t.router({
   create: protectedProcedure.input(companyInfoZod).mutation(({ input, ctx }) => createCompany(ctx.tokenData!, input)),
   get: publicProcedure.input(z.object({ id: z.string().uuid() })).query(({ input }) => getCompany(input.id)),
+  getRevenue: protectedProcedure
+    .input(z.object({ id: z.string().uuid() }))
+    .query(({ ctx, input }) => getCompanyRevenue(ctx.tokenData!, input.id)),
   update: protectedProcedure
     .input(
       companyInfoZod.extend({
@@ -41,3 +45,4 @@ export const companyRouter = t.router({
     .input(z.object({ search: z.string() }))
     .query(({ input }) => findCompanies(input.search))
 });
+

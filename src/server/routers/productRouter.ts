@@ -4,6 +4,7 @@ import {
   deleteProduct,
   findProducts,
   getProduct,
+  getProductRevenue,
   getProductsOfCompany,
   updateProduct
 } from '../service/products';
@@ -31,6 +32,9 @@ export const productRouter = t.router({
       return await createProduct(ctx.tokenData!, input.companyUuid, productInfo);
     }),
   get: publicProcedure.input(z.object({ id: z.string().uuid() })).query(({ input }) => getProduct(input.id)),
+  getRevenue: protectedProcedure
+    .input(z.object({ id: z.string().uuid() }))
+    .query(({ ctx, input }) => getProductRevenue(ctx.tokenData!, input.id)),
   update: protectedProcedure
     .input(
       productInfoZod.extend({
