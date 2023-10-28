@@ -51,17 +51,17 @@ export default function About() {
                     </section>
                     <section className="flex flex-col items-center justify-center">
                         <Image src={teamMember} alt="" className="w-64"></Image>
-                        <p className="text-3xl">Vladimir Pasev</p>
+                        <p className="text-3xl">Aleks Nikolov</p>
                         <p className="text-lg">Front-End Developer</p>
                     </section>
                     <section className="flex flex-col items-center justify-center">
                         <Image src={teamMember} alt="" className="w-64"></Image>
-                        <p className="text-3xl">Vladimir Pasev</p>
+                        <p className="text-3xl">Spasimir Pavlov</p>
                         <p className="text-lg">Front-End Developer</p>
                     </section>
                     <section className="flex flex-col items-center justify-center">
                         <Image src={teamMember} alt="" className="w-64"></Image>
-                        <p className="text-3xl">Vladimir Pasev</p>
+                        <p className="text-3xl">Nikola Andreev</p>
                         <p className="text-lg">Front-End Developer</p>
                     </section>
                 </section>
