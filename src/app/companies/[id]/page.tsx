@@ -1,7 +1,7 @@
 import Products from '@/components/Products';
 import { useUserServer, useUserServerNoExpiration } from '@/hooks/useUserServer';
 import { appRouter } from '@/server';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 import React from 'react';
@@ -26,7 +26,12 @@ async function CompanyInfo({ params }: { params: { id: string } }) {
     <section className='min-h-screen bg-gradient-to-r from-[#00a54d20] to-secondary flex flex-col justify-center items-center gap-16'>
       {companyData?.creatorUuid === user?.uuid && (
         <>
-          <div className='fixed top-2 right-2 rounded-lg'>KUR</div>
+          <Link
+            href={`/companies/update/${params.id}`}
+            className='absolute top-2 right-2 rounded-lg aspect-square bg-accent cursor-pointer p-2'
+          >
+            <FontAwesomeIcon icon={faEdit} className='w-5 h-5' />
+          </Link>
           <div className='stats stats-vertical lg:stats-horizontal shadow w-9/12 mt-10'>
             <div className='stat'>
               <div className='stat-title'>Products Sold</div>

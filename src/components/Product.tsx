@@ -52,9 +52,11 @@ const Product: React.FC<ProductProps> = ({ product }) => {
         </div>
         <p>{product.description}</p>
         <div className='flex flex-row card-actions space-x-2 items-center justify-between sm:flex-row sm:space-x-2 sm:space-y-0 space-y-2'>
-          <span className='text-lg font-semibold'>{product.price}</span>
-          <div className='flex flex-row gap-3'>
-            <Link href={`product/${product.uuid}`} className='btn btn-primary'>
+          <span className='text-2xl my-auto font-semibold text-base-content p-0.5 px-2 rounded bg-base-200'>
+            {product.price}€
+          </span>
+          <div className='flex flex-row gap-3 my-auto'>
+            <Link href={`/products/${product.uuid}`} className='btn btn-primary'>
               Details
             </Link>
             {/* <button className="btn btn-outline">Edit</button> */}

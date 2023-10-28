@@ -73,7 +73,7 @@ async function updateCompany(userInfo: IUser, companyId: string, newCompanyInfo:
 
   if (company == null) throw new Error('You do not own this company!');
 
-  const updateOperation = await db.update(products).set(newCompanyInfo).where(eq(companies.uuid, companyId));
+  const updateOperation = await db.update(companies).set(newCompanyInfo).where(eq(companies.uuid, companyId));
 
   if (updateOperation.rowsAffected === 0) throw new Error('Something went wrong!');
 
@@ -127,4 +127,3 @@ export {
   getCompaniesOfUser,
   findCompanies
 };
-
