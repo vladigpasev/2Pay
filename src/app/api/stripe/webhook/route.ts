@@ -28,7 +28,9 @@ export async function POST(req: Request) {
     case 'checkout.session.completed':
       const webhookData = event.data.object;
       const metadata = webhookData.metadata as { stripeId: string; userId: string };
-      await buyProduct(metadata.userId, metadata.stripeId);
+      const transactionInfo = await buyProduct(metadata.userId, metadata.stripeId);
+      // TODO: Transfer funds to seller
+      break;
     default:
       console.log(`Unhandled event type ${event.type}`);
   }
@@ -37,4 +39,3 @@ export async function POST(req: Request) {
     status: 201
   });
 }
-

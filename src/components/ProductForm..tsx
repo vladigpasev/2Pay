@@ -251,9 +251,9 @@ export default function ProductForm({
             )}
           </div>
         </div>
-        <div className='bg-neutral rounded-xl w-full p-8 max-sm:p-3 mt-3 max-w-full'>
+        <div className='bg-neutral rounded-xl w-full p-8 pt-4 max-sm:p-3 mt-3 max-w-full'>
           <h3 className='font-semibold text-2xl'>Product Images - Gallery</h3>
-          <div className='flex flex-wrap flex-row max-sm:flex-col mt-3 gap-3 justify-center'>
+          <div className='flex flex-wrap flex-row max-sm:flex-col mt-4 gap-3 items-center'>
             {galleryImageURLs.map((v, i) => (
               <GalleryUpload
                 imgUrl={v}
