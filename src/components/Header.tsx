@@ -19,7 +19,7 @@ export const Header = () => {
   //[hsl(var(--nf)/0.65)] -for bg color
   return (
     <div className='navbar top-0 sticky bg-secondary shadow-md shadow-[hsl(var(--b2)/0.25)] backdrop-blur-md z-50 text-neutral-content'>
-      <div className='navbar-start -ml-2'>
+      <div className='navbar-start max-[400px]:-ml-2'>
         <div className='dropdown'>
           <label tabIndex={0} className='btn btn-ghost lg:hidden'>
             <svg
@@ -69,7 +69,7 @@ export const Header = () => {
         <Link href="/" className=''><Image src={logo} alt='' className='w-3/5 min-[500px]:w-2/5'></Image></Link>
       </div>
       <div className='navbar-center hidden lg:flex'>
-        <ul className='menu menu-horizontal px-1'>
+        <ul className='menu menu-horizontal max-[400px]:px-1'>
           <li tabIndex={0}>
             <details>
               <summary>For Business</summary>
