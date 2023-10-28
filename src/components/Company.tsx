@@ -5,7 +5,7 @@ import { index } from 'drizzle-orm/mysql-core';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-export default function Compnay({ company }: { company: PublicCompany }) {
+export default function Compnay({ company }: { company: Company | PublicCompany }) {
   const router = useRouter();
   return (
     <div

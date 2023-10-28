@@ -3,7 +3,7 @@ import { NextRequest } from 'next/server';
 import jsonwebtoken from 'jsonwebtoken';
 import IUser from '@/types/User';
 
-interface Context {
+export interface Context {
   rawToken: string | null;
   tokenData: IUser | null;
 }

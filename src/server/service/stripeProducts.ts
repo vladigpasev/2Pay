@@ -2,7 +2,7 @@ import { ProductInfo } from './products';
 import Stripe from 'stripe';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2023-10-16',
+  apiVersion: '2023-10-16'
 });
 
 async function createStripeProduct(productInfo: ProductInfo): Promise<string> {
@@ -12,7 +12,7 @@ async function createStripeProduct(productInfo: ProductInfo): Promise<string> {
     images: [productInfo.pictureURL],
     default_price_data: {
       currency: 'eur',
-      unit_amount_decimal: productInfo.price.toString()
+      unit_amount: productInfo.price * 100
     }
   });
 
@@ -23,7 +23,7 @@ async function updateStripeProduct(stripeId: string, productInfo: ProductInfo): 
   const [productId, _] = stripeId.split(' ; ');
   const price = await stripe.prices.create({
     currency: 'eur',
-    unit_amount_decimal: productInfo.price.toString(),
+    unit_amount: productInfo.price * 100,
     product: productId,
     nickname: 'Current price'
   });

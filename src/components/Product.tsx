@@ -5,6 +5,7 @@ import { trpc } from '@/trpc/client';
 import React, { useState } from 'react';
 import { useOpenModal } from './utils/Modal';
 import Gallery from './Gallery';
+import Link from 'next/link';
 
 interface ProductProps {
   product: ListedProduct;
@@ -44,16 +45,20 @@ const Product: React.FC<ProductProps> = ({ product }) => {
         <div className='flex justify-between'>
           <h2 className='card-title'>{product.name}</h2>
           <span className='py-0.5 px-1.5 rounded pb-1 border border-base-content flex flex-col'>
-            <p className='text-[0.5rem] mx-auto leading-3'>Items Sold:</p>
-            <p className='text-[1.5rem] font-extrabold mx-auto leading-5 text-accent'>15</p>
+            <p className='text-[0.6rem] mx-auto leading-3'>Sold:</p>
+            <p className='text-[1.5rem] font-extrabold mx-auto leading-5 text-accent'>{product.amountSold}</p>
           </span>
           {/* Тук се показва броя продадени единици */}
         </div>
         <p>{product.description}</p>
         <div className='flex flex-row card-actions space-x-2 items-center justify-between sm:flex-row sm:space-x-2 sm:space-y-0 space-y-2'>
-          <span className='text-lg font-semibold'>{product.price}</span>
-          <div className='flex flex-row gap-3'>
-            <button className='btn btn-primary'>Details</button>
+          <span className='text-2xl my-auto font-semibold text-base-content p-0.5 px-2 rounded bg-base-200'>
+            {product.price}€
+          </span>
+          <div className='flex flex-row gap-3 my-auto'>
+            <Link href={`/products/${product.uuid}`} className='btn btn-primary'>
+              Details
+            </Link>
             {/* <button className="btn btn-outline">Edit</button> */}
           </div>
         </div>

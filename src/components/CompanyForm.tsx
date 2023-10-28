@@ -100,10 +100,10 @@ export default function CompanyForm({ type, company }: { type: 'create' | 'updat
   }, []);
 
   return (
-    <div className='h-[calc(100vh-90px)] w-full flex justify-center items-center'>
+    <div className='min-h-[calc(100vh-90px)] w-full flex justify-center items-center'>
       <div className='sm:shadow-xl px-12 py-12 sm:bg-base-200 rounded-xl'>
         <h1 className='font-semibold text-3xl text-start mb-4'>
-          Create a <strong>Company</strong>
+          {type === 'create' ? 'Create' : 'Update'} a <strong>Company</strong>
         </h1>
         <div className='flex gap-5 flex-row max-md:flex-col'>
           <div className='flex flex-col'>

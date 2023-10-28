@@ -7,7 +7,7 @@ import { UploadButton } from '@/components/utils/Uoloader';
 import { useAuthenticatedMutation } from '@/hooks/useAuthenticatedMutation';
 import { trpc } from '@/trpc/client';
 import { isValidEmail } from '@/utils/isValidEmail';
-import { faCamera } from '@fortawesome/free-solid-svg-icons';
+import { faAdd, faCamera } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 import { UploadFileResponse } from 'uploadthing/client';
@@ -98,7 +98,7 @@ export default function ProductForm({
           galleryJSON: []
         });
       }
-      router.push('/user/profile');
+      router.push(`/companies/${companyUuid}`);
     } catch (error: any) {
       dispatchNotification({
         type: NotificationType.Error,
@@ -116,10 +116,10 @@ export default function ProductForm({
   }, []);
 
   return (
-    <div className='h-[calc(100vh-90px)] w-full flex justify-center items-center'>
+    <div className='min-h-[calc(100vh-90px)] w-full flex justify-center items-center'>
       <div className='sm:shadow-xl px-12 py-12 sm:bg-base-200 rounded-xl'>
         <h1 className='font-semibold text-3xl text-start mb-4'>
-          Create a <strong>Product</strong>
+          {type === 'create' ? 'Create' : 'Update'} a <strong>Product</strong>
         </h1>
         <div className='flex gap-5 flex-row max-md:flex-col'>
           <div className='flex flex-col'>
@@ -171,7 +171,7 @@ export default function ProductForm({
                 onClick={async () => {
                   try {
                     await deleteProductAsyncMutation({ id: id! });
-                    router.push('/user/profile');
+                    router.push(`/companies/${companyUuid}`);
                   } catch (error: any) {
                     console.error(error);
                     dispatchNotification({
@@ -186,6 +186,16 @@ export default function ProductForm({
                 Delete Product
               </button>
             )}
+          </div>
+        </div>
+        <div className='bg-neutral rounded-xl w-full p-8 mt-3'>
+          <h3 className='font-semibold text-2xl'>Product Images - Gallery</h3>
+          <div className='flex flex-wrap flex-row max-sm:flex-col mt-3'>
+            <div className='flex aspect-square h-full justify-center items-center rounded-xl p-5 bg-secondary cursor-pointer'>
+              <h3 className='text-xl font-semibold'>
+                <FontAwesomeIcon icon={faAdd} /> Add Image
+              </h3>
+            </div>
           </div>
         </div>
       </div>
