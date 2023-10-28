@@ -6,11 +6,11 @@ export function useStripeCheckout() {
   const [_, createCheckoutSession] = useAuthenticatedMutation(trpc.stripe.createCheckoutSession);
   console.log('The only console log showing');
 
-  return async (priceId: string) => {
+  return async (priceId: string, productId: string) => {
     try {
       console.log('Creating checkout session...');
       const sessionId = await createCheckoutSession({
-        priceId,
+        stripeId: `${productId} ; ${priceId}`,
         successUrl: `${window.location.origin}/payment/success`,
         cancelUrl: `${window.location.origin}/payment/error`,
       });
