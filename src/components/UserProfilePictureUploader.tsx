@@ -25,10 +25,11 @@ export default function UserProfilePictureUploader() {
       <UploadButton
         endpoint='profilePicture'
         className='mt-2'
-        onClientUploadComplete={async res => {
-          // Do something with the response
-          setTokens(await refreshTokenAsyncMutation());
-        }}
+        onClientUploadComplete={() =>
+          setTimeout(async () => {
+            setTokens(await refreshTokenAsyncMutation());
+          }, 3000)
+        }
         onUploadError={(error: Error) => {
           // Do something with the error.
           dispatchNotification({

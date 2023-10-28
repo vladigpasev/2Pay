@@ -12,6 +12,7 @@ export const users = mysqlTable('users', {
   name: varchar('name', { length: 50 }).notNull(),
   email: varchar('email', { length: 70 }).notNull().unique(),
   password: varchar('password', { length: 256 }),
+  stripeSellerId: varchar('stripeSellerId', { length: 64 }),
   verified: boolean('verified').default(false).notNull(),
   verificationToken: varchar('verificationToken', { length: 12 }).unique(),
   profilePictureURL: varchar('profilePicture', { length: 256 })
@@ -80,4 +81,3 @@ export const productsRelations = relations(products, ({ one }) => ({
     references: [companies.uuid]
   })
 }));
-

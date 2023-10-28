@@ -1,10 +1,13 @@
 import { z } from 'zod';
 import { t, protectedProcedure } from '../trpc';
+import { companies, products, users } from '../../../db/schema';
 import Stripe from 'stripe';
 import { TRPCError } from '@trpc/server';
+import db from '@/drizzle';
+import { eq } from 'drizzle-orm';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2023-10-16',
+  apiVersion: '2023-10-16'
 });
 
 export const stripeRouter = t.router({
@@ -13,7 +16,7 @@ export const stripeRouter = t.router({
       z.object({
         stripeId: z.string(),
         successUrl: z.string(),
-        cancelUrl: z.string(),
+        cancelUrl: z.string()
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -28,14 +31,14 @@ export const stripeRouter = t.router({
         line_items: [
           {
             price: priceId,
-            quantity: 1,
-          },
+            quantity: 1
+          }
         ],
         mode: 'payment',
         success_url: successUrl,
         cancel_url: cancelUrl,
         customer_email: userEmail, // set the user email
-        metadata: {userId: ctx.tokenData!.uuid, stripeId},
+        metadata: { userId: ctx.tokenData!.uuid, stripeId }
       });
 
       return session.id;
@@ -45,7 +48,7 @@ export const stripeRouter = t.router({
     .input(
       z.object({
         amount: z.number(),
-        currency: z.string(),
+        currency: z.string()
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -53,7 +56,7 @@ export const stripeRouter = t.router({
 
       const paymentIntent = await stripe.paymentIntents.create({
         amount,
-        currency,
+        currency
       });
 
       return paymentIntent.client_secret;
@@ -64,7 +67,7 @@ export const stripeRouter = t.router({
       z.object({
         email: z.string().email(),
         name: z.string(),
-        paymentMethodId: z.string(),
+        paymentMethodId: z.string()
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -75,8 +78,8 @@ export const stripeRouter = t.router({
         name,
         payment_method: paymentMethodId,
         invoice_settings: {
-          default_payment_method: paymentMethodId,
-        },
+          default_payment_method: paymentMethodId
+        }
       });
 
       return customer.id;
@@ -86,7 +89,7 @@ export const stripeRouter = t.router({
     .input(
       z.object({
         customerId: z.string(),
-        priceId: z.string(),
+        priceId: z.string()
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -95,7 +98,7 @@ export const stripeRouter = t.router({
       const subscription = await stripe.subscriptions.create({
         customer: customerId,
         items: [{ price: priceId }],
-        expand: ['latest_invoice.payment_intent'],
+        expand: ['latest_invoice.payment_intent']
       });
 
       if (subscription.status === 'active') {
@@ -103,8 +106,27 @@ export const stripeRouter = t.router({
       } else {
         throw new TRPCError({
           code: 'INTERNAL_SERVER_ERROR',
-          message: 'Failed to create subscription',
+          message: 'Failed to create subscription'
         });
       }
     }),
+  createConnectedAccount: protectedProcedure.mutation(async () => {
+    const account = await stripe.accounts.create({ type: 'express' });
+    return account.id;
+  }),
+  createAccountLink: protectedProcedure
+    .input(z.object({ accountId: z.string(), refreshUrl: z.string(), returnUrl: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const { accountId, refreshUrl, returnUrl } = input;
+      const accountLink = await stripe.accountLinks.create({
+        account: accountId,
+        refresh_url: refreshUrl,
+        return_url: returnUrl,
+        type: 'account_onboarding'
+      });
+
+      await db.update(users).set({ stripeSellerId: input.accountId }).where(eq(users.uuid, ctx.tokenData!.uuid));
+
+      return accountLink.url;
+    })
 });
