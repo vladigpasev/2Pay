@@ -48,7 +48,7 @@ export const UploadFileRouter = {
         })
         .where(eq(users.uuid, metadata.userId as string));
     }),
-  companyLogo: f({ image: { maxFileSize: '2MB' } })
+  imageUpload: f({ image: { maxFileSize: '2MB' } })
     // Set permissions and file types for this FileRoute
     .middleware(useMiddleware)
     .onUploadComplete(async ({ metadata, file }) => {
