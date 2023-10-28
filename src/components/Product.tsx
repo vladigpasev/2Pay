@@ -2,22 +2,32 @@
 
 import { ListedProduct, ProductInfo } from '@/server/service/products';
 import { trpc } from '@/trpc/client';
-import React from 'react';
+import React, { useState } from 'react';
+import { useOpenModal } from './utils/Modal';
+import Gallery from './Gallery';
 
 interface ProductProps {
   product: ListedProduct;
-  setActiveGallery: (gallery: string[] | null) => void;
 }
 
-const Product: React.FC<ProductProps> = ({ product, setActiveGallery }) => {
+const Product: React.FC<ProductProps> = ({ product }) => {
   const productDetails = trpc.product.get.useQuery({ id: product.uuid }, { enabled: false, refetchOnMount: false });
+  const [isModalOpened, setIsModalOpended] = useState(false);
+  const [isClicked, setIsClicked] = useState(false);
 
-  if (productDetails.isFetched) {
-    setActiveGallery(productDetails.data?.galleryJSON || null);
+  const openModal = useOpenModal();
+
+  if (productDetails.isFetched && !isModalOpened && isClicked) {
+    const images = [product.pictureURL];
+    images.push(...(productDetails.data?.galleryJSON || []));
+    setIsModalOpended(true);
+    setIsClicked(false);
+    setTimeout(() => openModal(<Gallery images={images} />, () => setIsModalOpended(false)), 0);
   }
 
   const getProductDetails = () => {
     productDetails.refetch();
+    setIsClicked(true);
   };
 
   return (

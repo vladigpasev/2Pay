@@ -35,7 +35,7 @@ async function CompanyInfo({ params }: { params: { id: string } }) {
       <div className='w-full md:w-1/2 p-8'>
         <Products products={products} />
         <Link
-          href={`/products/create`}
+          href={`/products/create/${companyData?.uuid}`}
           className='btn btn-primary h-full px-5 flex justify-center w-full max-w-xs mx-auto '
         >
           <FontAwesomeIcon size='sm' className='py-auto h-4 mr-1' icon={faPlus} />
