@@ -56,6 +56,7 @@ export default function CompanyForm({ type, company }: { type: 'create' | 'updat
 
   const [_, createConpanyAsyncMutation] = useAuthenticatedMutation(trpc.company.create);
   const [__, updateConpanyAsyncMutation] = useAuthenticatedMutation(trpc.company.update);
+  const [___, deleteConpanyAsyncMutation] = useAuthenticatedMutation(trpc.company.delete);
 
   const [logoURL, setLogoURL] = useState('');
 
@@ -148,6 +149,27 @@ export default function CompanyForm({ type, company }: { type: 'create' | 'updat
               error={null}
               onSubmit={onSubmit}
             />
+            {type === 'update' && (
+              <button
+                className='btn btn-error font-semibold mt-2 rounded-sm'
+                onClick={async () => {
+                  try {
+                    await deleteConpanyAsyncMutation({ id: company?.id! });
+                    router.push('/user/profile');
+                  } catch (error: any) {
+                    console.error(error);
+                    dispatchNotification({
+                      type: NotificationType.Error,
+                      message: error.message
+                    });
+
+                    return null;
+                  }
+                }}
+              >
+                Delete Company
+              </button>
+            )}
           </div>
         </div>
       </div>

@@ -1,6 +1,7 @@
 'use client';
 
 import PageLoading from '@/app/loading';
+import Compnay from '@/components/Company';
 import { useAuthenticatedQuery } from '@/hooks/useAuthenticatedQuery';
 import { useUser } from '@/hooks/useUser';
 import { trpc } from '@/trpc/client';
@@ -23,35 +24,11 @@ export default function CompaniesProfile({ user }: { user: IUser | null }) {
           <h1 className='text-3xl font-bold'>
             <u>Your companies: </u>
           </h1>
-          <div className='grid grid-cols-1 sm:grid-cols-2 gap-6'>
+          <div className='grid grid-cols-1 min-[1200px]:grid-cols-2 gap-6'>
             {companies.data && companies.data.length > 0 ? (
               <>
                 {companies.data.map((company, index) => (
-                  <Link
-                    href={`/companies/${company.uuid}`}
-                    key={index}
-                    className='bg-[#00b65e0d] p-2 px-3 rounded-xl transition-transform transform hover:scale-105 cursor-pointer'
-                  >
-                    <div className='flex items-start gap-2'>
-                      <img
-                        src={company.logoURL || '/images/pngs/company.jpg'}
-                        alt={company.name}
-                        className='w-12 h-12 rounded-full object-cover mr-2 border-2 border-indigo-200 my-auto'
-                      />
-                      <div className='flex-1 min-w-0'>
-                        <h2 className='text-md font-semibold text-base-content truncate'>{company.name}</h2>
-                        <p className='text-xs text-gray-500 mt-0.5 line-clamp-3 overflow-hidden'>
-                          {company.description}
-                        </p>
-                        <a
-                          href={`mailto:${company.contactEmail}`}
-                          className='text-[#00b65eb4] text-xs hover:underline mt-0.5 block truncate overflow-hidden'
-                        >
-                          {company.contactEmail}
-                        </a>
-                      </div>
-                    </div>
-                  </Link>
+                  <Compnay company={company} key={index} />
                 ))}
                 <Link
                   href='/companies/create'
@@ -62,7 +39,7 @@ export default function CompaniesProfile({ user }: { user: IUser | null }) {
                 </Link>
               </>
             ) : (
-              <div className='flex w-full h-full'>
+              <div className='flex top-0 left-0 absolute w-full h-full'>
                 <div className='flex mx-auto my-auto flex-col p-10 gap-3'>
                   <h3 className='text-xl font-semibold text-center'>
                     You are not connected to any <strong>Companies</strong>!

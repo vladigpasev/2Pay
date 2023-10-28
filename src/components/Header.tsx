@@ -5,8 +5,8 @@ import ThemeToggler from './ThemeToggler';
 import { useLogout } from '@/auth/logout';
 import { useUser } from '@/hooks/useUser';
 
-export const lightTheme = 'forest';
-export const darkTheme = 'garden';
+export const lightTheme = 'paymentLight';
+export const darkTheme = 'paymentDark';
 
 export let themeAtom = atom<undefined | typeof lightTheme | typeof darkTheme>(undefined);
 

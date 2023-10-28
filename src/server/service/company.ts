@@ -11,6 +11,8 @@ export interface CompanyInfo {
   logoURL: string | null;
 }
 
+export type Company = InferSelectModel<typeof companies>;
+
 async function createCompany(userInfo: IUser, companyInfo: CompanyInfo) {
   const company: InferInsertModel<typeof companies> = {
     uuid: uuid.v4(),

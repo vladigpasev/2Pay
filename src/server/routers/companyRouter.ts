@@ -25,7 +25,12 @@ export const companyRouter = t.router({
         id: z.string().uuid()
       })
     )
-    .mutation(({ input, ctx }) => updateCompany(ctx.tokenData!, input.id, input)),
+    .mutation(async ({ input, ctx }) => {
+      const companyInfo = { ...input };
+      // @ts-ignore
+      delete companyInfo.id;
+      return await updateCompany(ctx.tokenData!, input.id, companyInfo);
+    }),
   delete: protectedProcedure
     .input(z.object({ id: z.string().uuid() }))
     .mutation(({ input, ctx }) => deleteCompany(ctx.tokenData!, input.id)),
