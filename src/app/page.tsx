@@ -1,5 +1,3 @@
-'use client';
-
 import Image from 'next/image';
 import logo from '../../public/images/branding/2pay-logo-green-short.png'
 import landing_hero from '../../public/images/pngs/landing-1.png'
@@ -7,6 +5,7 @@ import feature1 from '../../public/images/svg/integration-svgrepo-com.svg'
 import feature2 from '../../public/images/svg/powerful-svgrepo-com.svg';
 import feature3 from '../../public/images/svg/secure-wallet-svgrepo-com.svg'
 import card from '../../public/images/pngs/card.png'
+import MyCompanies from '@/components/MyCompanies';
 
 export default function Home() {
   return (
@@ -60,3 +59,4 @@ export default function Home() {
     </>
   );
 }
+
