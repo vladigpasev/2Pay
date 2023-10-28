@@ -5,6 +5,7 @@ import feature1 from '../../public/images/svg/integration-svgrepo-com.svg'
 import feature2 from '../../public/images/svg/powerful-svgrepo-com.svg';
 import feature3 from '../../public/images/svg/secure-wallet-svgrepo-com.svg'
 import card from '../../public/images/pngs/card.png'
+import MyCompanies from '@/components/MyCompanies';
 
 export default function Home() {
   return (
