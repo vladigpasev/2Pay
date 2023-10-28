@@ -1,14 +1,4 @@
-import {
-  int,
-  timestamp,
-  mysqlTable,
-  primaryKey,
-  varchar,
-  mysqlEnum,
-  boolean,
-  float,
-  index
-} from 'drizzle-orm/mysql-core';
+import { int, timestamp, mysqlTable, varchar, mysqlEnum, boolean, float, json } from 'drizzle-orm/mysql-core';
 import { relations, sql } from 'drizzle-orm';
 
 export const authProviderEnum = mysqlEnum('authProvider', ['email', 'google', 'facebook']);
@@ -53,9 +43,12 @@ export const products = mysqlTable('products', {
     .notNull()
     .primaryKey(),
   name: varchar('name', { length: 128 }).notNull(),
+  stripeId: varchar('stripeId', { length: 64 }).notNull(),
   price: float('price').notNull(),
   description: varchar('description', { length: 2048 }).notNull(),
-  pictureURL: varchar('pictureURL', { length: 256 }),
+  pictureURL: varchar('pictureURL', { length: 256 }).notNull(),
+  galleryJSON: json('galleryJSON').$type<string[]>().notNull(),
+  amountSold: int('amountSold').notNull(),
   companyUuid: varchar('companyUuid', { length: 256 }).notNull()
 });
 
