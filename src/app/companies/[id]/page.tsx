@@ -1,5 +1,8 @@
 import Products from '@/components/Products';
 import { appRouter } from '@/server';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Link from 'next/link';
 import React from 'react';
 
 async function CompanyInfo({ params }: { params: { id: string } }) {
@@ -31,6 +34,13 @@ async function CompanyInfo({ params }: { params: { id: string } }) {
       </div>
       <div className='w-full md:w-1/2 p-8'>
         <Products products={products} />
+        <Link
+          href={`/products/create`}
+          className='btn btn-primary h-full px-5 flex justify-center w-full max-w-xs mx-auto '
+        >
+          <FontAwesomeIcon size='sm' className='py-auto h-4 mr-1' icon={faPlus} />
+          <span className='my-auto'>Create Product</span>
+        </Link>
       </div>
     </div>
   );
