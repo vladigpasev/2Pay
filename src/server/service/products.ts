@@ -132,7 +132,9 @@ async function deleteProduct(userInfo: IUser, productId: string) {
 
   const deleteOperation = await db.delete(products).where(eq(products.uuid, productId));
 
-  await deleteStripeProduct(product.stripeId);
+  try {
+    await deleteStripeProduct(product.stripeId);
+  } catch (err) {}
 
   return deleteOperation.rowsAffected > 0;
 }
@@ -310,4 +312,3 @@ export {
   findProducts,
   buyProduct
 };
-
