@@ -107,4 +107,22 @@ export const stripeRouter = t.router({
         });
       }
     }),
+
+    createConnectedAccount: protectedProcedure.mutation(async () => {
+      const account = await stripe.accounts.create({ type: 'express', });
+      console.log (account.id);
+      return account.id;
+    }),
+  
+    createAccountLink: protectedProcedure
+      .input(z.object({ accountId: z.string(), refreshUrl: z.string(), returnUrl: z.string(), }))
+      .mutation(async ({ input }) => {
+        const { accountId, refreshUrl, returnUrl } = input;
+        const accountLink = await stripe.accountLinks.create({
+          account: accountId, refresh_url: refreshUrl, return_url: returnUrl, type: 'account_onboarding',
+        });
+        return accountLink.url;
+      }),
+  
+
 });
