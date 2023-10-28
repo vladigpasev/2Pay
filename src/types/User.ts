@@ -3,7 +3,7 @@ export default interface IUser {
   name: string;
   email: string;
   profilePictureURL: string | undefined;
+  stripeSellerId: string | null;
   authProvider: string;
   verified: boolean;
 }
-
