@@ -1,20 +1,18 @@
 'use client';
 
 import { useAtom } from 'jotai';
-import { ChangeEvent, useEffect } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { useCookies } from 'next-client-cookies';
-import { darkTheme, lightTheme, themeAtom } from './Header';
 import { useHydrateAtoms } from 'jotai/utils';
 import { useImmediateOnMount } from '@/hooks/useImmediateOnMount';
 
+export const lightTheme = 'paymentLight';
+export const darkTheme = 'paymentDark';
+
 export default function ThemeToggler() {
-  let [theme, setTheme] = useAtom(themeAtom);
   const cookies = useCookies();
 
-  useImmediateOnMount(() => {
-    theme = cookies.get('theme') ?? (darkTheme as any);
-    setTheme(theme);
-  });
+  const [theme, setTheme] = useState(() => cookies.get('theme') ?? (darkTheme as any));
 
   const toggleTheme = (e: ChangeEvent<HTMLInputElement>) => {
     const chosenTheme = e.target.checked ? darkTheme : lightTheme;
@@ -58,3 +56,4 @@ export default function ThemeToggler() {
     </label>
   );
 }
+
