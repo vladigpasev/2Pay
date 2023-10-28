@@ -7,7 +7,7 @@ import { UploadButton } from '@/components/utils/Uoloader';
 import { useAuthenticatedMutation } from '@/hooks/useAuthenticatedMutation';
 import { trpc } from '@/trpc/client';
 import { isValidEmail } from '@/utils/isValidEmail';
-import { faCamera } from '@fortawesome/free-solid-svg-icons';
+import { faAdd, faCamera } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 import { UploadFileResponse } from 'uploadthing/client';
@@ -186,6 +186,16 @@ export default function ProductForm({
                 Delete Product
               </button>
             )}
+          </div>
+        </div>
+        <div className='bg-neutral rounded-xl w-full p-8 mt-3'>
+          <h3 className='font-semibold text-2xl'>Product Images - Gallery</h3>
+          <div className='flex flex-wrap flex-row max-sm:flex-col mt-3'>
+            <div className='flex aspect-square h-full justify-center items-center rounded-xl p-5 bg-secondary cursor-pointer'>
+              <h3 className='text-xl font-semibold'>
+                <FontAwesomeIcon icon={faAdd} /> Add Image
+              </h3>
+            </div>
           </div>
         </div>
       </div>

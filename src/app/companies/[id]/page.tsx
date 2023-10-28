@@ -1,25 +1,29 @@
 import Products from '@/components/Products';
-import { useUserServer, useUserServerNoExpiration } from '@/hooks/useUserServer';
+import ProfileStatistics from '@/components/ProfileStatistics';
+import { useUserServer, useUserServerNoExpiration, useUserTRPCServerContext } from '@/hooks/useUserServer';
 import { appRouter } from '@/server';
 import { faEdit, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 import React from 'react';
 
-async function CompanyInfo({ params }: { params: { id: string } }) {
-  const caller = appRouter.createCaller({
-    rawToken: '',
-    tokenData: null
-  });
-  const user = useUserServerNoExpiration();
-  const companyData = await caller.company.get({ id: params.id });
-  const products = await caller.product.getProductsOfCompany({ uuid: params.id });
+const error = <h3 className='font-semibold text-3xl w-full text-center text-error'>No company found with this ID!</h3>;
 
-  let revenue = 0;
-  if (companyData?.creatorUuid === user?.uuid) {
-    try {
-      revenue = await caller.product.getRevenue({ id: params.id });
-    } catch (error) {}
+async function CompanyInfo({ params }: { params: { id: string } }) {
+  const user = useUserServerNoExpiration();
+  const caller = appRouter.createCaller(useUserTRPCServerContext());
+  let companyData;
+  let products;
+
+  try {
+    companyData = await caller.company.get({ id: params.id });
+    products = await caller.product.getProductsOfCompany({ uuid: params.id });
+  } catch (_) {
+    return error;
+  }
+
+  if (!companyData || !products) {
+    return error;
   }
 
   return (
@@ -32,25 +36,7 @@ async function CompanyInfo({ params }: { params: { id: string } }) {
           >
             <FontAwesomeIcon icon={faEdit} className='w-5 h-5' />
           </Link>
-          <div className='stats stats-vertical lg:stats-horizontal shadow w-9/12 mt-10'>
-            <div className='stat'>
-              <div className='stat-title'>Products Sold</div>
-              <div className='stat-value'>{companyData?.soldItems}</div>
-              <div className='stat-desc'>Since Company Creation</div>
-            </div>
-
-            <div className='stat'>
-              <div className='stat-title'>Revenue</div>
-              <div className='stat-value text-primary'>{revenue}€</div>
-              <div className='stat-desc'>overall profit</div>
-            </div>
-
-            <div className='stat'>
-              <div className='stat-title'>Products</div>
-              <div className='stat-value'>{products.length}</div>
-              <div className='stat-desc'>up for sale</div>
-            </div>
-          </div>
+          <ProfileStatistics companyData={companyData!} productsLength={products.length} />
         </>
       )}
       <div className='flex flex-col md:flex-row items-center justify-center'>
