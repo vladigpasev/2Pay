@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import logo from '../../public/images/branding/2pay-logo-green-short.png'
+import logo from '../../public/images/branding/2pay-logo-green-short.png';
+import mail from '../../public/images/svg/email.svg';
+import phone from '../../public/images/svg/call_phone_icon.svg'
 
 export const Footer = () => (
   <footer className='footer p-10 bg-base-200 text-base-content'>
@@ -11,6 +13,14 @@ export const Footer = () => (
         <br />
         Effective Payments since 2023
       </p>
+      <div className="mail flex gap-1 justify-center items-center">
+        <Image src={mail} alt='' className='w-3 canInvert'></Image>
+        <Link href="mailto:2pay@gmail.com">2pay@gmail.com</Link>
+      </div>
+      <div className="phone flex gap-1 justify-center items-center">
+        <Image src={phone} alt='' className='w-3 canInvert'></Image>
+        <Link href="tel:0877222555">+359 877 222 555</Link>
+      </div>
     </aside>
     <nav>
       <header className='footer-title'>Services</header>
