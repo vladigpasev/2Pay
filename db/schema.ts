@@ -43,7 +43,8 @@ export const companies = mysqlTable('companies', {
   contactEmail: varchar('contactEmail', { length: 256 }).notNull(),
   description: varchar('description', { length: 2048 }).notNull(),
   logoURL: varchar('logoURL', { length: 256 }),
-  creatorUuid: varchar('creatorUuid', { length: 256 }).notNull()
+  creatorUuid: varchar('creatorUuid', { length: 256 }).notNull(),
+  soldItems: int('soldItems').notNull().default(0)
 });
 
 export const products = mysqlTable('products', {
@@ -84,4 +85,3 @@ export const productsRelations = relations(products, ({ one }) => ({
     references: [companies.uuid]
   })
 }));
-
