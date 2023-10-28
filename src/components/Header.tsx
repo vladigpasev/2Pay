@@ -1,20 +1,16 @@
+'use client';
+
 import { atom } from 'jotai';
 import Link from 'next/link';
 import { useHydrateAtoms } from 'jotai/utils';
 import ThemeToggler from './ThemeToggler';
 import { useLogout } from '@/auth/logout';
 import { useUser } from '@/hooks/useUser';
+import { useLoadTokens } from '@/auth/token';
 
-export const lightTheme = 'paymentLight';
-export const darkTheme = 'paymentDark';
+export const Header = () => {
+  useLoadTokens();
 
-export let themeAtom = atom<undefined | typeof lightTheme | typeof darkTheme>(undefined);
-
-const LightDarkThemeSwitch = ({ cookies }: { cookies: Map<string, any> }) => {
-  return <ThemeToggler />;
-};
-
-export const Header = ({ cookies }: { cookies: Map<string, any> }) => {
   const user = useUser();
 
   return (
@@ -84,7 +80,7 @@ export const Header = ({ cookies }: { cookies: Map<string, any> }) => {
         </ul>
       </div>
       <div className='navbar-end flex align-middle gap-1'>
-        <LightDarkThemeSwitch cookies={cookies} />
+        <ThemeToggler />
         {user ? (
           <Link href='/user/profile'>
             <img
@@ -109,6 +105,4 @@ export const Header = ({ cookies }: { cookies: Map<string, any> }) => {
     </div>
   );
 };
-function useServerUser() {
-  throw new Error('Function not implemented.');
-}
+
