@@ -1,11 +1,11 @@
 'use client';
 
-import { Company } from '@/server/service/company';
+import { Company, PublicCompany } from '@/server/service/company';
 import { index } from 'drizzle-orm/mysql-core';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-export default function Compnay({ company }: { company: Company }) {
+export default function Compnay({ company }: { company: Company | PublicCompany }) {
   const router = useRouter();
   return (
     <div

@@ -30,7 +30,12 @@ export default function CompaniesProfile({ user }: { user: IUser | null }) {
             {companies.data && companies.data.length > 0 ? (
               <>
                 {companies.data.map((company, index) => (
-                  <Compnay company={company} key={index} />
+                  <Compnay
+                    company={{
+                      ...company
+                    }}
+                    key={index}
+                  />
                 ))}
                 <Link
                   href='/companies/create'
