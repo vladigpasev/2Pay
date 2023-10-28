@@ -11,13 +11,15 @@ export const stripeRouter = t.router({
   createCheckoutSession: protectedProcedure
     .input(
       z.object({
-        priceId: z.string(),
+        stripeId: z.string(),
         successUrl: z.string(),
         cancelUrl: z.string(),
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const { priceId, successUrl, cancelUrl } = input;
+      const { stripeId, successUrl, cancelUrl } = input;
+
+      const [_, priceId] = stripeId.split(' ; ');
 
       const userEmail = ctx.tokenData?.email;
 
@@ -33,6 +35,7 @@ export const stripeRouter = t.router({
         success_url: successUrl,
         cancel_url: cancelUrl,
         customer_email: userEmail, // set the user email
+        metadata: {userId: ctx.tokenData!.uuid, stripeId},
       });
 
       return session.id;
