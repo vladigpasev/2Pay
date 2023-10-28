@@ -13,7 +13,7 @@ export const userRouter = t.router({
   updateUserProfile: protectedProcedure
     .input(
       z.object({
-        username: z.string().max(50).min(5),
+        name: z.string().max(50).min(5),
         email: z.string().email().max(70).min(5),
         password: z.string().min(5).max(50)
       })
@@ -32,20 +32,20 @@ export const userRouter = t.router({
           ctx.tokenData!.authProvider == 'email' && ctx.tokenData?.email !== input.email
             ? {
                 email: ctx.tokenData!.authProvider == 'email' ? input.email : ctx.tokenData?.email,
-                username: input.username,
+                name: input.name,
                 verified: false,
                 verificationToken: verificationToken
               }
             : {
                 email: input.email,
-                username: input.username
+                name: input.name
               }
         )
         .where(eq(users.uuid, ctx.tokenData!.uuid!));
       if (ctx.tokenData!.authProvider === 'email' && ctx.tokenData?.email !== input.email) {
         sendMail({
           subject: 'Verify your N2D2T account',
-          body: template_VerificationEmailBody({ username: input.username, verificationToken: verificationToken }),
+          body: template_VerificationEmailBody({ name: input.name, verificationToken: verificationToken }),
           to: input.email
         });
       }
@@ -75,3 +75,4 @@ export const userRouter = t.router({
     return await queryAndCreateUserData(ctx.tokenData?.uuid!);
   })
 });
+
