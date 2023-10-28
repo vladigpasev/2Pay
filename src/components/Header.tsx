@@ -19,7 +19,7 @@ export const Header = () => {
   //[hsl(var(--nf)/0.65)] -for bg color
   return (
     <div className='navbar top-0 sticky bg-secondary shadow-md shadow-[hsl(var(--b2)/0.25)] backdrop-blur-md z-50 text-neutral-content'>
-      <div className='navbar-start'>
+      <div className='navbar-start max-[400px]:-ml-2'>
         <div className='dropdown'>
           <label tabIndex={0} className='btn btn-ghost lg:hidden'>
             <svg
@@ -34,7 +34,7 @@ export const Header = () => {
           </label>
           <ul
             tabIndex={0}
-            className='menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52 text-base-content text-'
+            className='menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52 text-base-content'
           >
             <li>
               <a>For Businesses</a>
@@ -66,10 +66,10 @@ export const Header = () => {
             </li>
           </ul>
         </div>
-        <Image src={logo} alt='' className='w-2/5 md:w-1/5'></Image>
+        <Link href="/" className=''><Image src={logo} alt='' className='w-3/5 min-[500px]:w-2/5'></Image></Link>
       </div>
       <div className='navbar-center hidden lg:flex'>
-        <ul className='menu menu-horizontal px-1'>
+        <ul className='menu menu-horizontal max-[400px]:px-1'>
           <li tabIndex={0}>
             <details>
               <summary>For Business</summary>
@@ -104,7 +104,7 @@ export const Header = () => {
           </li>
         </ul>
       </div>
-      <div className='navbar-end flex align-middle gap-1'>
+      <div className='navbar-end flex align-middle gap-1 ml-2'>
         <ThemeToggler />
         {user ? (
           <Link href='/user/profile'>
@@ -118,10 +118,10 @@ export const Header = () => {
           </Link>
         ) : (
           <>
-            <Link href='/auth/signin' className='btn btn-ghost ml-1 max-sm:ml-0 max-sm:p-1'>
+            <Link href='/auth/signin' className='btn btn-ghost ml-1 max-sm:ml-0 max-sm:p-1 text-sm'>
               Sign In
             </Link>
-            <Link href='/auth/signup' className='btn btn-primary max-sm:p-2'>
+            <Link href='/auth/signup' className='btn btn-primary max-sm:p-2 text-xs'>
               Register
             </Link>
           </>

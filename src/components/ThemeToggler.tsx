@@ -39,7 +39,7 @@ export default function ThemeToggler() {
       <input type='checkbox' onChange={toggleTheme} checked={theme === darkTheme} />
 
       <svg
-        className='swap-on fill-current w-8 h-8 max-sm:w-7 max-sm:h-7'
+        className='swap-on fill-current max-[400px]:w-6 max-[400px]:h-6 w-8 h-8 max-sm:w-7 max-sm:h-7'
         xmlns='http://www.w3.org/2000/svg'
         viewBox='0 0 24 24'
       >
@@ -47,7 +47,7 @@ export default function ThemeToggler() {
       </svg>
 
       <svg
-        className='swap-off fill-current w-8 h-8 max-sm:w-7 max-sm:h-7'
+        className='swap-off fill-current max-[400px]:w-6 max-[400px]:h-6 w-8 h-8 max-sm:w-7 max-sm:h-7'
         xmlns='http://www.w3.org/2000/svg'
         viewBox='0 0 24 24'
       >
