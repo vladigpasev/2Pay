@@ -1,5 +1,5 @@
 import { InferInsertModel, InferSelectModel, and, eq, or, sql } from 'drizzle-orm';
-import { companies, products, users } from '../../../db/schema';
+import { companies, products, transactions, users } from '../../../db/schema';
 import IUser from '@/types/User';
 import * as uuid from 'uuid';
 import db from '@/drizzle';
@@ -213,13 +213,19 @@ async function buyProduct(buyerId: string, id: string) {
   const sellerEmail = seller.email;
   const buyerEmail = buyer.email;
 
+  await db.insert(transactions).values({
+    buyerUuid: buyer.uuid,
+    companyUuid: record.companyId,
+    date: new Date(),
+    price: record.price
+  });
+
   const currentDate = new Date().toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
     day: 'numeric'
   });
 
-  // TODO: Send email to buyer
   sendMail({
     subject: 'Payment completed successfully',
     body: `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html dir="ltr" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office" lang="en"><head><meta charset="UTF-8"><meta content="width=device-width, initial-scale=1" name="viewport"><meta name="x-apple-disable-message-reformatting"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta content="telephone=no" name="format-detection"><title>New Template</title> <!--[if (mso 16)]><style type="text/css">     a {text-decoration: none;}     </style><![endif]--> <!--[if gte mso 9]><style>sup { font-size: 100% !important; }</style><![endif]--> <!--[if gte mso 9]><xml> <o:OfficeDocumentSettings> <o:AllowPNG></o:AllowPNG> <o:PixelsPerInch>96</o:PixelsPerInch> </o:OfficeDocumentSettings> </xml>
