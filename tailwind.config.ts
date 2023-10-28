@@ -16,6 +16,11 @@ const config: Config = {
       },
       fontFamily: {
         "paytone-one" : ["Paytone One", "sans-serif"]
+      },
+      screens: {
+        'xl-max': {'min': '1700px'},
+        'xl-min': {'min': '1700px'},
+        'supersmall': {'min': '350px'}
       }
     },
   },
@@ -31,7 +36,8 @@ const config: Config = {
           "info": "#aec8ff",        // Мек син
           "success": "#00a54c",     // По-заситено зелено
           "warning": "#fcd784",     // Мек жълт
-          "error": "#fc6f6f"        // Мек червен
+          "error": "#fc6f6f",       // Мек червен
+
         }
       },
       {
@@ -44,7 +50,7 @@ const config: Config = {
         "info": "#87a9ff",        // Мек син, но малко по-тъмен
         "success": "#00a54c",     // По-заситено зелено
         "warning": "#fcb144",     // По-тъмен мек жълт
-        "error": "#fc4d4d"        // По-тъмен мек червен
+        "error": "#fc4d4d",       // По-тъмен мек червен
         }
       }
       ,"forest", "garden"],
