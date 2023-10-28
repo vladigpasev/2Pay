@@ -9,7 +9,7 @@ export const users = mysqlTable('users', {
     .notNull()
     .primaryKey(),
   authProvider: authProviderEnum.notNull(),
-  username: varchar('username', { length: 50 }).notNull(),
+  name: varchar('name', { length: 50 }).notNull(),
   email: varchar('email', { length: 70 }).notNull().unique(),
   password: varchar('password', { length: 256 }),
   verified: boolean('verified').default(false).notNull(),

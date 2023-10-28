@@ -1,7 +1,9 @@
 export default interface IUser {
   uuid: string;
-  username: string;
+  name: string;
   email: string;
   profilePictureURL: string | undefined;
   authProvider: string;
+  verified: boolean;
 }
+

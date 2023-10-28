@@ -12,7 +12,7 @@ import { Value, value } from '@/utils/value';
 const SALT_ROUNDS = 5;
 
 interface RegisterData {
-  username: string;
+  name: string;
   email: string;
   password: string;
 }
@@ -23,13 +23,13 @@ interface LoginData {
 }
 
 export const template_VerificationEmailBody = ({
-  username,
+  name,
   verificationToken
 }: {
-  username: string;
+  name: string;
   verificationToken: string;
 }) => `
-  <p>Hello ${username},</p>
+  <p>Hello ${name},</p>
   <p>Welcome to the N2D2T platform.</p>
   <a href="${process.env.NEXT_PUBLIC_APP_URL}/auth/verify/${verificationToken}"><h1>Verify your E-Mail!</h1></a>
 `;
@@ -40,7 +40,7 @@ async function registerUserByEmail(data: RegisterData): Promise<Value<Tokens>> {
   const user: InferSelectModel<typeof users> = {
     uuid: uuid.v4(),
     authProvider: 'email',
-    username: data.username,
+    name: data.name,
     email: data.email,
     password: await hashPassword(data.password),
     verified: false,
@@ -56,15 +56,16 @@ async function registerUserByEmail(data: RegisterData): Promise<Value<Tokens>> {
 
   const tokens = await createTokenForUser({
     uuid: user.uuid,
-    username: user.username,
+    name: user.name,
     email: user.email,
     profilePictureURL: user.profilePictureURL!,
-    authProvider: user.authProvider
+    authProvider: user.authProvider,
+    verified: user.verified
   });
 
   sendMail({
     subject: 'Verify your N2D2T account',
-    body: template_VerificationEmailBody({ username: user.username, verificationToken: user.verificationToken! }),
+    body: template_VerificationEmailBody({ name: user.name, verificationToken: user.verificationToken! }),
     to: user.email
   });
 
@@ -88,10 +89,11 @@ async function loginUserByEmail(data: LoginData): Promise<Value<Tokens>> {
 
   const tokens = await createTokenForUser({
     uuid: user.uuid,
-    username: user.username,
+    name: user.name,
     email: user.email,
     profilePictureURL: user.profilePictureURL!,
-    authProvider: user.authProvider
+    authProvider: user.authProvider,
+    verified: user.verified
   });
 
   return value.value(tokens);
@@ -104,3 +106,4 @@ async function verifyPassword(uuid: string, pass: string) {
 }
 
 export { registerUserByEmail, loginUserByEmail, verifyPassword };
+

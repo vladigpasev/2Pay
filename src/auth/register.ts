@@ -12,7 +12,7 @@ interface OAuthProviderRegisterOptions {
 interface EmailProviderRegisterOptions {
   provider: AuthProvider.Email;
   data: {
-    username: string;
+    name: string;
     email: string;
     password: string;
   };
@@ -39,3 +39,4 @@ export function useRegister() {
     }
   }, []);
 }
+

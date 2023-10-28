@@ -4,7 +4,7 @@ import { useRedirectPath } from '@/hooks/useRedirectPath';
 import { isValidEmail } from '@/utils/isValidEmail';
 import AuthPage from '@/components/auth/AuthPage';
 import { useRegister } from '@/auth/register';
-import { Field } from '@/components/utils/Form';
+import { Field, Fields } from '@/components/utils/Form';
 import { useCallback, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useOpenModal } from '@/components/utils/Modal';
@@ -14,32 +14,42 @@ import { useAtom } from 'jotai';
 import { NotificationType, notifications, useDispatchNotification } from '@/components/utils/Notifyers';
 import { id } from '@/utils/id';
 
-const REGISTER_FIELDS: Field<string>[] = [
-  {
-    id: 'username',
-    name: 'Username',
-    type: 'text',
-    placeholder: 'Username',
-    validate: value => (value.trim().length >= 5 ? null : 'Username is too short!')
-  },
+const REGISTER_FIELDS: Fields = [
+  [
+    {
+      id: 'firstName',
+      name: 'First Name',
+      type: 'text',
+      placeholder: 'First Name',
+      validate: (value: string) => (value.trim().length >= 5 ? null : 'First name is too short!')
+    },
+    {
+      id: 'lastName',
+      name: 'Last Name',
+      type: 'text',
+      placeholder: 'Last Name',
+      validate: (value: string) => (value.trim().length >= 5 ? null : 'Last name is too short!')
+    }
+  ],
   {
     id: 'email',
     name: 'Email',
     type: 'email',
     placeholder: 'you@email.com',
-    validate: value => (isValidEmail(value) ? null : 'Email is invalid!')
+    validate: (value: string) => (isValidEmail(value) ? null : 'Email is invalid!')
   },
   {
     id: 'password',
     name: 'Password',
     type: 'password',
     placeholder: 'Password',
-    validate: value => (value.trim().length >= 5 ? null : 'Password is too short!')
+    validate: (value: string) => (value.trim().length >= 5 ? null : 'Password is too short!')
   }
 ];
 
 interface RegisterFormData {
-  username: string;
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
 }
@@ -55,7 +65,11 @@ export default function RegisterPage() {
     async (formData: RegisterFormData) => {
       const error = await register({
         provider: AuthProvider.Email,
-        data: formData
+        data: {
+          name: `${formData.firstName} ${formData.lastName}`,
+          email: formData.email,
+          password: formData.password
+        }
       });
 
       if (error != null) {
@@ -84,3 +98,4 @@ export default function RegisterPage() {
     />
   );
 }
+
