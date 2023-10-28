@@ -5,6 +5,7 @@ import { useCookies } from 'next-client-cookies';
 import { useRouter } from 'next/navigation';
 import IUser from '@/types/User';
 import { trpc } from '@/trpc/client';
+import { useImmediateOnMount } from '@/hooks/useImmediateOnMount';
 
 interface Token {
   refreshToken: string;
@@ -15,13 +16,14 @@ interface Token {
 export const tokenAtom = atom(null as Token | null);
 
 export function useLoadTokens() {
-  const [hasRan, setHasRan] = useState(false);
   const [_, setToken] = useAtom(tokenAtom);
   const refreshTokens = useRefreshTokens();
   const cookies = useCookies();
   const router = useRouter();
 
-  if (!hasRan && typeof window !== 'undefined') {
+  useImmediateOnMount(() => {
+    if (typeof window === 'undefined') return;
+
     let refreshToken = localStorage.getItem('refreshToken');
 
     const search = new URLSearchParams(window.location.search);
@@ -35,19 +37,17 @@ export function useLoadTokens() {
 
     const token = cookies.get('token');
 
-    if (token == null || refreshToken == null) {
+    if (token == null) {
       setToken(null);
       return;
     }
 
     setToken({
-      refreshToken,
+      refreshToken: refreshToken ?? '',
       token,
       tokenData: jsonwebtoken.decode(token) as any
     });
-
-    setHasRan(true);
-  }
+  });
 }
 
 export function useSetTokens() {
