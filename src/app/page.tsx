@@ -16,7 +16,7 @@ export default function Home() {
           <section className="flex flex-col items-center mx-0 mt-28 text-primary">
             <p className="py-8 pb-10 mx-5 md:mx-0 text-7xl text-center">Effective payments.</p>
             <p className='py-2 text-xl mx-5 md:mx-0 md:w-1/2 text-center font-light'>Already tired of setting up your e-commerce for hours with the casual platforms? 2Pay makes this happen in no time! Our payment service allows for easier, faster and more secure transactions between users and businesses!</p>
-            <section className="btn btn-primary mb-5">Start now!</section>
+            <section className="btn btn-primary mb-5 mt-2">Start now!</section>
           </section>
 
           <section className="image  flex justify-center min-[1650px]:justify-end m-auto min-[1650px]:items-start md:basis-2/3">
@@ -27,20 +27,20 @@ export default function Home() {
         <section className="features text-center text-2xl mb-32 text-primary">
           <p className="text-3xl">Our features:</p>
 
-          <section className="features-items flex max-[1280px]:flex-col gap-28 justify-center text-center 
+          <section className="features-items flex max-[1280px]:flex-col gap-28 justify-center text-center items-start
           my-8 ">
             <section className='text-center flex flex-col justify-center items-center text-primary'>
-              <Image src={feature1} alt='' className='w-32 text-primary'></Image>
+              <Image src={feature1} alt='' className='w-32 text-primary canInvert'></Image>
               <p className='text-4xl'>Integration</p>
               <p className='text-xl w-80 pt-5 font-light'>Our payment system is integrated in more than n-thousand websites, and also in applications such as Netflix, Udemy and many more!</p>
             </section>
             <section className='text-center flex flex-col justify-center items-center text-primary'>
-              <Image src={feature2} alt='' className='w-32 text-primary'></Image>
+              <Image src={feature2} alt='' className='w-32 text-primary canInvert'></Image>
               <p className='text-4xl'>Productivity</p>
               <p className='text-xl w-80 pt-5 font-light'>All payments are way faster with 2Pay! This makes your e-commerce way more effective and productive for your business and users!</p>
             </section>
             <section className='text-center flex flex-col justify-center items-center text-primary'>
-              <Image src={feature3} alt='' className='w-32 text-primary'></Image>
+              <Image src={feature3} alt='' className='w-32 text-primary canInvert'></Image>
               <p className='text-4xl'>Secure</p>
               <p className='text-xl w-80 pt-5 font-light'>In terms of security, our application offers the more secure possible methods, so no one can get your personal data. This make all your payments through this platform secure.</p>
             </section>
