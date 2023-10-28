@@ -4,7 +4,9 @@ import { useStripeCheckout } from '@/hooks/useStripeCheckout';
 
 interface Props {
   priceId: string;
+  productId: string;
 }
+
 
 declare global {
   interface Window {
@@ -12,7 +14,7 @@ declare global {
   }
 }
 
-const StripeCheckoutButton: React.FC<Props> = ({ priceId }) => {
+const StripeCheckoutButton: React.FC<Props> = ({ priceId, productId }) => {
   useEffect(() => {
     if (!window.Stripe) {
       const script = document.createElement('script');
@@ -21,10 +23,11 @@ const StripeCheckoutButton: React.FC<Props> = ({ priceId }) => {
       document.body.appendChild(script);
     }
   }, []);
+
   const startCheckout = useStripeCheckout();
 
   return (
-    <button onClick={() => startCheckout(priceId)}>
+    <button onClick={() => startCheckout(priceId, productId)}>
       Checkout
     </button>
   );
