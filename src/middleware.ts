@@ -8,5 +8,5 @@ export function middleware(request: NextRequest) {
 
 // Supports both a single string value or an array of matchers
 export const config = {
-  matcher: ['/user/:path*', '/verify/sent']
+  matcher: ['/user/:path*', '/verify/sent', '/companies/create']
 };
