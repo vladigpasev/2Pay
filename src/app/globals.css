@@ -35,3 +35,7 @@ html, body {
 .hover-blur:hover .hover-text {
   opacity: 1;
 }
+
+.dropdown.open label{
+  transform: rotate(90deg)
+}
