@@ -13,7 +13,8 @@ export const config = {
     '/auth/verify/sent',
     '/companies/create',
     '/companies/update/:path*',
-    '/product/create/:path*',
-    '/product/update/:path*'
+    '/products/create/:path*',
+    '/products/update/:path*',
+    '/products/:path*'
   ]
 };
