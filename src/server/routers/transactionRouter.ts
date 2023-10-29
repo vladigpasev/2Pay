@@ -5,13 +5,13 @@ import { products, transactions } from '../../../db/schema';
 
 export const transactionRouter = t.router({
   userBuyings: protectedProcedure.query(async ({ ctx }) => {
-    const transactionsRes = await db.query.products.findMany({
+    const transactionsRes = await db.query.transactions.findMany({
       where: eq(transactions.uuid, ctx.tokenData?.uuid || ''),
       orderBy: transactions.date,
       with: {
-        products: true
+        product: true
       }
     });
-    return transactionsRes.map(transaction => transaction.products);
+    return transactionsRes.map(transaction => transaction.product);
   })
 });
