@@ -169,7 +169,8 @@ async function buyProduct(buyerId: string, id: string) {
       productId: products.uuid,
       pictureURL: products.pictureURL,
       name: products.name,
-      price: products.price
+      price: products.price,
+      description: products.description
     })
     .from(products)
     .innerJoin(companies, eq(products.companyUuid, companies.uuid))
@@ -213,12 +214,15 @@ async function buyProduct(buyerId: string, id: string) {
   const sellerEmail = seller.email;
   const buyerEmail = buyer.email;
 
-  // const transactionRecord = await db.insert(transactions).values({
-  //   buyerUuid: buyer.uuid,
-  //   date: new Date(),
-  //   price: record.price,
-  //   productUuid: record.productId
-  // });
+  const transactionRecord = await db.insert(transactions).values({
+    buyerUuid: buyer.uuid,
+    date: new Date(),
+    price: record.price,
+    productDescription: record.description,
+    productName: record.name,
+    productImageUrl: record.pictureURL,
+    sellerUuid: seller.uuid
+  });
 
   const currentDate = new Date().toLocaleDateString('en-US', {
     year: 'numeric',
