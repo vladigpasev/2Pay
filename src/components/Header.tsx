@@ -7,7 +7,9 @@ import ThemeToggler from './ThemeToggler';
 import { useLogout } from '@/auth/logout';
 import { useUser } from '@/hooks/useUser';
 import logo from '../../public/images/branding/2pay-logo-green-short.png'
+import burger from '../../public/images/svg/menu-hamburger.svg'
 import Image from 'next/image';
+import { useState } from 'react';
 
 import { useLoadTokens } from '@/auth/token';
 
@@ -16,53 +18,55 @@ export const Header = () => {
 
   const user = useUser();
 
-  //[hsl(var(--nf)/0.65)] -for bg color
+  /*
+  const [isToggled, setToggled] = useState(false);
+
+  const toggleHamburger = () => {
+    setToggled(!isToggled);
+  }; 
+  */
+
   return (
-    <div className='navbar top-0 sticky bg-secondary shadow-md shadow-[hsl(var(--b2)/0.25)] backdrop-blur-md z-50 text-neutral-content'>
+    <div className='navbar top-0 sticky bg-secondary shadow-md shadow-[hsl(var(--b2)/0.25)] z-50 text-neutral-content'>
       <div className='navbar-start max-[400px]:-ml-2'>
-        <div className='dropdown'>
-          <label tabIndex={0} className='btn btn-ghost lg:hidden'>
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              className='h-5 w-5'
-              fill='none'
-              viewBox='0 0 24 24'
-              stroke='currentColor'
-            >
-              <path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M4 6h16M4 12h8m-8 6h16' />
-            </svg>
+        <div className='dropdown backdrop-blur-sm'>
+          <label tabIndex={0} className='btn btn-ghost lg:hidden '>
+            <Image src={burger} alt='' className='w-12'></Image>
           </label>
           <ul
             tabIndex={0}
-            className='menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52 text-base-content'
+            className='menu menu-sm flex flex-col backdrop-blur-sm dropdown-content mr-32 mt-3 z-[1] p-2 shadow shadow-black bg-base-100 rounded-box text-base-content'
           >
-            <li>
-              <a>For Businesses</a>
+            <li className='flex flex-col w-[768px] '>
+              <Link href="/">For Businesses</Link>
               <ul className='p-2'>
                 <li>
-                  <a>Contacts</a>
+                  <Link href="/">Contacts</Link>
                 </li>
                 <li>
-                  <a>Items</a>
+                  <Link href="/">Items</Link>
                 </li>
                 <li>
-                  <a>Sales</a>
+                  <Link href="/">Sales</Link>
                 </li>
               </ul>
             </li>
             <li>
-              <a>For Clients</a>
-              <ul className='p-2'>
+              <Link href="/">For Clients</Link>
+              <ul className=''>
                 <li>
-                  <a>Contacts</a>
+                  <Link href="/">Contacts</Link>
                 </li>
                 <li>
-                  <a>Purchases</a>
+                  <Link href="/">Purchases</Link>
                 </li>
                 <li>
-                  <a>Payment</a>
+                  <Link href="/">Payment</Link>
                 </li>
               </ul>
+            </li>
+            <li>
+              <Link href="/">Explore</Link>
             </li>
           </ul>
         </div>
@@ -75,13 +79,13 @@ export const Header = () => {
               <summary>For Business</summary>
               <ul className='p-2 text-base-content'>
                 <li>
-                  <a>Contacts</a>
+                  <Link href="/">Contacts</Link>
                 </li>
                 <li>
-                  <a>Items</a>
+                  <Link href="/">Items</Link>
                 </li>
                 <li>
-                  <a>Sales</a>
+                  <Link href="/">Sales</Link>
                 </li>
               </ul>
             </details>
@@ -91,13 +95,13 @@ export const Header = () => {
               <summary>For Clients</summary>
               <ul className='p-2 text-base-content'>
                 <li>
-                  <a>Contacts</a>
+                  <Link href="/">Contacts</Link>
                 </li>
                 <li>
-                  <a>Purchases</a>
+                  <Link href="/">Purchases</Link>
                 </li>
                 <li>
-                  <a>Payment</a>
+                  <Link href="/">Payment</Link>
                 </li>
               </ul>
             </details>
