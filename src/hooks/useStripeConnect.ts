@@ -7,7 +7,10 @@ export function useStripeConnect() {
   const [_, createConnectedAccount] = useAuthenticatedMutation(trpc.stripe.createConnectedAccount);
   const [__, createAccountLink] = useAuthenticatedMutation(trpc.stripe.createAccountLink);
 
-  const [___, refreshTokenAsyncMutation] = useAuthenticatedMutation(trpc.user.updateToken);   const setTokens = useSetTokens();
+  const [___, refreshTokenAsyncMutation] = useAuthenticatedMutation(trpc.user.updateToken);   
+  const setTokens = useSetTokens();
+
+  const checkOnboardingStatus = trpc.stripe.checkOnboardingStatus.useQuery;
 
   return {
     handleOnboarding: async () => {
@@ -17,7 +20,7 @@ export function useStripeConnect() {
         const accountLinkUrl = await createAccountLink({
           accountId,
           refreshUrl: `${window.location.origin}/reauth`,
-          returnUrl: `${window.location.origin}/return`,
+          returnUrl: `${window.location.origin}/user/profile`,
         });
         console.log('Account Link URL:', accountLinkUrl);
         setTokens(await refreshTokenAsyncMutation());
@@ -26,5 +29,6 @@ export function useStripeConnect() {
         console.error("Failed to handle onboarding:", err);
       }
     },
+    checkOnboardingStatus,
   };
 }
