@@ -6,7 +6,7 @@ import { useHydrateAtoms } from 'jotai/utils';
 import ThemeToggler from './ThemeToggler';
 import { useLogout } from '@/auth/logout';
 import { useUser } from '@/hooks/useUser';
-import logo from '../../public/images/branding/2pay-logo-green-short.png'
+import logo from '../../public/images/branding/2pay-logo-green-short.png';
 import Image from 'next/image';
 
 import { useLoadTokens } from '@/auth/token';
@@ -66,7 +66,9 @@ export const Header = () => {
             </li>
           </ul>
         </div>
-        <Link href="/" className=''><Image src={logo} alt='' className='w-3/5 min-[500px]:w-2/5'></Image></Link>
+        <Link href='/' className=''>
+          <Image src={logo} alt='' className='w-3/5 min-[500px]:w-2/5'></Image>
+        </Link>
       </div>
       <div className='navbar-center hidden lg:flex'>
         <ul className='menu menu-horizontal max-[400px]:px-1'>
@@ -105,6 +107,23 @@ export const Header = () => {
         </ul>
       </div>
       <div className='navbar-end flex align-middle gap-1 ml-2'>
+        <Link className='mr-2' href='/search'>
+          <svg
+            style={{ width: '32px', height: '32px' }}
+            xmlns='http://www.w3.org/2000/svg'
+            className='h-6 w-6'
+            fill='none'
+            viewBox='0 0 24 24'
+            stroke='currentColor'
+          >
+            <path
+              strokeLinecap='round'
+              strokeLinejoin='round'
+              strokeWidth='2'
+              d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'
+            />
+          </svg>
+        </Link>
         <ThemeToggler />
         {user ? (
           <Link href='/user/profile'>
@@ -130,4 +149,3 @@ export const Header = () => {
     </div>
   );
 };
-

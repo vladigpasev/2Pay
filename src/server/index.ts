@@ -1,4 +1,5 @@
 import { authenticationRouter } from './routers/authenticationRouter';
+import { coinbaseRouter } from './routers/coinbaseRouter';
 import { productRouter } from './routers/productRouter';
 import { companyRouter } from './routers/companyRouter';
 import { stripeRouter } from './routers/stripeRouter';
@@ -10,8 +11,8 @@ export const appRouter = t.router({
   user: userRouter,
   stripe: stripeRouter,
   product: productRouter,
-  company: companyRouter
+  company: companyRouter,
+  coinbase: coinbaseRouter
 });
 
 export type AppRouter = typeof appRouter;
-

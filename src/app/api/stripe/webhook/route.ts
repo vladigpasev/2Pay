@@ -28,7 +28,7 @@ export async function POST(req: Request) {
     case 'checkout.session.completed':
       const webhookData = event.data.object;
       const metadata = webhookData.metadata as { stripeId: string; userId: string };
-      const transactionInfo = await buyProduct(metadata.userId, metadata.stripeId);
+      const transactionInfo = await buyProduct(metadata.userId, metadata.stripeId, 'card');
       // TODO: Transfer funds to seller
       break;
     default:

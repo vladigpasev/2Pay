@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import ProductStats from '@/components/ProductStats';
 import { ProductImage } from './ProductImage';
-import { BuyButton } from './BuyButton';
+import { BuyButtons } from './BuyButtons';
 
 const ERROR = (
   <section className='min-h-screen bg-gradient-to-r from-[#00a54d20] to-secondary flex flex-col justify-center items-center gap-16'>
@@ -61,7 +61,7 @@ export default async function ProductPage({ params }: { params: { id: string } }
             </div>
             <div className='flex flex-row gap-4 items-center max-md:justify-between mb-5 mt-5'>
               <p className='text-3xl text-accent'>{product.price.toFixed(2)}€</p>
-              <BuyButton enabled={company.creatorUuid !== user?.uuid} product={product} />
+              <BuyButtons enabled={company.creatorUuid !== user?.uuid} product={product} />
             </div>
           </div>
         </div>
