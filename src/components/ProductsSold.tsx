@@ -17,6 +17,7 @@ interface ProductsSoldReturnType {
   productImageUrl: string | null;
   productName: string;
   productDescription: string;
+  buyer: IUser;
 }
 
 export default function ProductsSold({ user }: { user: IUser | null }) {
@@ -36,9 +37,9 @@ export default function ProductsSold({ user }: { user: IUser | null }) {
             You have not sold anything yet! <FontAwesomeIcon icon={faSackDollar} />
           </h3>
         ) : (
-          <div className='w-full overflow-auto flex flex-wrap'>
+          <div className='w-full overflow-auto flex flex-wrap justify-between overflow-x-hidden'>
             {(getBoughtProducts.data as ProductsSoldReturnType[]).map(product => (
-              <div className='card card-normal min-[1200px]:card-side bg-base-100 shadow-xl mb-6'>
+              <div className='card card-normal min-[1200px]:card-side bg-base-100 shadow-xl mb-6 min-w-full'>
                 <figure className='w-full min-h-full bg-red-300 max-w-[185px] max-[1200px]:max-w-full'>
                   <img
                     src={product.productImageUrl || 'images/pngs/product.png'}
@@ -47,7 +48,7 @@ export default function ProductsSold({ user }: { user: IUser | null }) {
                   />
                 </figure>
                 <div className='card-body mt-4 xl-max:mt-0'>
-                  <div className='flex flex-row gap-3'>
+                  <div className='flex flex-row gap-3 justify-between max-md:flex-col'>
                     <div className='flex flex-col'>
                       <div className='flex justify-between'>
                         <h2 className='card-title'>{product.productName}</h2>
@@ -60,8 +61,19 @@ export default function ProductsSold({ user }: { user: IUser | null }) {
                         </span>
                       </div>
                     </div>
-                    <div className='flex flex-col gap-2 pl-3 border-l'>
-                      <div className='flex gap-2'></div>
+                    <div className='h-full border-l border-l-primary'></div>
+                    <div className='flex flex-col gap-2 pl-3 my-auto'>
+                      <div className='flex gap-2'>
+                        <img
+                          src={product.buyer.profilePictureURL}
+                          alt='your buyer'
+                          className='w-10 h-10 rounded-full my-auto border border-accent'
+                        />
+                        <div className='flex flex-col gap-1'>
+                          <p className='flex text-lg font-bold'>{product.buyer.name}</p>
+                          <p className='flex'>{product.buyer.email}</p>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
