@@ -9,9 +9,10 @@ import Link from 'next/link';
 
 interface ProductProps {
   product: ListedProduct;
+  dontShowRight?: boolean;
 }
 
-const Product: React.FC<ProductProps> = ({ product }) => {
+const Product: React.FC<ProductProps> = ({ product, dontShowRight }) => {
   const productDetails = trpc.product.get.useQuery({ id: product.uuid }, { enabled: false, refetchOnMount: false });
   const [isModalOpened, setIsModalOpended] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
@@ -44,10 +45,12 @@ const Product: React.FC<ProductProps> = ({ product }) => {
       <div className='card-body mt-4 xl-max:mt-0'>
         <div className='flex justify-between'>
           <h2 className='card-title'>{product.name}</h2>
-          <span className='py-0.5 px-1.5 rounded pb-1 border border-base-content flex flex-col'>
-            <p className='text-[0.6rem] mx-auto leading-3'>Sold:</p>
-            <p className='text-[1.5rem] font-extrabold mx-auto leading-5 text-accent'>{product.amountSold}</p>
-          </span>
+          {!dontShowRight && (
+            <span className='py-0.5 px-1.5 rounded pb-1 border border-base-content flex flex-col'>
+              <p className='text-[0.6rem] mx-auto leading-3'>Sold:</p>
+              <p className='text-[1.5rem] font-extrabold mx-auto leading-5 text-accent'>{product.amountSold}</p>
+            </span>
+          )}
           {/* Тук се показва броя продадени единици */}
         </div>
         <p>{product.description}</p>
@@ -56,9 +59,11 @@ const Product: React.FC<ProductProps> = ({ product }) => {
             {product.price}€
           </span>
           <div className='flex flex-row gap-3 my-auto'>
-            <Link href={`/products/${product.uuid}`} className='btn btn-primary'>
-              Details
-            </Link>
+            {!dontShowRight && (
+              <Link href={`/products/${product.uuid}`} className='btn btn-primary'>
+                Details
+              </Link>
+            )}
             {/* <button className="btn btn-outline">Edit</button> */}
           </div>
         </div>
