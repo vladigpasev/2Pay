@@ -63,7 +63,7 @@ export const transactions = mysqlTable('transactions', {
   price: float('price').notNull(),
   date: timestamp('date').notNull(),
   buyerUuid: varchar('buyerUuid', { length: 256 }).notNull(),
-  companyUuid: varchar('companyUuid', { length: 256 }).notNull()
+  productUuid: varchar('productUuid', { length: 256 }).notNull()
 });
 
 export const transactionsRelations = relations(transactions, ({ one }) => ({
@@ -71,9 +71,9 @@ export const transactionsRelations = relations(transactions, ({ one }) => ({
     fields: [transactions.buyerUuid],
     references: [users.uuid]
   }),
-  company: one(companies, {
-    fields: [transactions.companyUuid],
-    references: [companies.uuid]
+  product: one(products, {
+    fields: [transactions.productUuid],
+    references: [products.uuid]
   })
 }));
 
@@ -95,13 +95,13 @@ export const companiesRelations = relations(companies, ({ one, many }) => ({
   creator: one(users, {
     fields: [companies.creatorUuid],
     references: [users.uuid]
-  }),
-  transactions: many(transactions)
+  })
 }));
 
 export const productsRelations = relations(products, ({ one, many }) => ({
   company: one(companies, {
     fields: [products.companyUuid],
     references: [companies.uuid]
-  })
+  }),
+  transactions: many(transactions)
 }));
