@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "db:push": "drizzle-kit push:mysql --config=drizzle.config.ts && ts-node-esm ./scripts/setupFullTextIndexes.ts",
+    "db:index": "ts-node-esm ./scripts/setupFullTextIndexes.ts",
     "db:studio": "npx drizzle-kit studio",
     "format": "npx prettier --write ./src"
   },
@@ -30,6 +31,8 @@
     "@types/nodemailer": "^6.4.13",
     "@uploadthing/react": "^5.7.0",
     "bcrypt": "^5.1.1",
+    "cloudinary": "^1.41.0",
+    "coinbase-commerce-node": "^1.0.4",
     "cookies-next": "^4.0.0",
     "dotenv": "^16.3.1",
     "drizzle-orm": "^0.28.6",
@@ -50,6 +53,7 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.1",
+    "@types/coinbase-commerce-node": "^1.0.8",
     "@types/jsonwebtoken": "^9.0.4",
     "@types/node": "^20",
     "@types/react": "^18",

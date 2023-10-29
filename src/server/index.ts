@@ -1,4 +1,5 @@
 import { authenticationRouter } from './routers/authenticationRouter';
+import { coinbaseRouter } from './routers/coinbaseRouter';
 import { productRouter } from './routers/productRouter';
 import { companyRouter } from './routers/companyRouter';
 import { stripeRouter } from './routers/stripeRouter';
@@ -12,6 +13,7 @@ export const appRouter = t.router({
   stripe: stripeRouter,
   product: productRouter,
   company: companyRouter,
+  coinbase: coinbaseRouter,
   transaction: transactionRouter
 });
 

@@ -28,7 +28,7 @@ export async function POST(req: Request) {
     case 'checkout.session.completed':
       const webhookData = event.data.object;
       const metadata = webhookData.metadata as { stripeId: string; userId: string };
-      const transactionInfo = await buyProduct(metadata.userId, metadata.stripeId);
+      const transactionInfo = await buyProduct(metadata.userId, metadata.stripeId, 'card');
 
       if (transactionInfo && transactionInfo.price && transactionInfo.stripeSellerId) {
         try {
@@ -45,8 +45,6 @@ export async function POST(req: Request) {
       } else {
         console.error('Transaction info or its properties are undefined or null');
       }
-      
-
     default:
       console.log(`Unhandled event type ${event.type}`);
   }
