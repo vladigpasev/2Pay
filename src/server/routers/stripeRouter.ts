@@ -128,5 +128,11 @@ export const stripeRouter = t.router({
       await db.update(users).set({ stripeSellerId: input.accountId }).where(eq(users.uuid, ctx.tokenData!.uuid));
 
       return accountLink.url;
-    })
+    }),
+  checkOnboardingStatus: protectedProcedure
+    .input(z.object({ accountId: z.string() }))
+    .query(async ({ input }) => {
+      const account = await stripe.accounts.retrieve(input.accountId);
+      return account.payouts_enabled;
+    }),
 });
