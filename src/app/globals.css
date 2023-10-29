@@ -16,3 +16,26 @@ html, body {
 [data-theme="paymentDark"] .canInvert {
   filter: invert(1);
 }
+/* Custom styles for image blur */
+.hover-blur img {
+  filter: blur(0); /* Initial blur amount */
+  transition: filter 0.5s;
+}
+
+.hover-blur:hover img {
+  filter: blur(5px); /* Amount of blur on hover */
+}
+
+/* Custom styles for text on hover */
+.hover-text {
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.hover-blur:hover .hover-text {
+  opacity: 1;
+}
+
+.dropdown.open label{
+  transform: rotate(90deg)
+}

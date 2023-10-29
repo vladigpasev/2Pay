@@ -33,23 +33,17 @@ export const Footer = () => (
       <Link href='/' className='link link-hover'>
         Crypto2Pay
       </Link>
-      <Link href='/' className='link link-hover'>
-        Others
-      </Link>
     </nav>
     <nav>
       <header className='footer-title'>2Pay</header>
-      <Link href='/' className='link link-hover'>
+      <Link href='/about' className='link link-hover'>
         About us
       </Link>
-      <Link href='/' className='link link-hover'>
+      <Link href='/contact' className='link link-hover'>
         Contact
       </Link>
-      <Link href='/' className='link link-hover'>
+      <Link href='/careers' className='link link-hover'>
         Careers
-      </Link>
-      <Link href='/' className='link link-hover'>
-        Press kit
       </Link>
     </nav>
     <nav>

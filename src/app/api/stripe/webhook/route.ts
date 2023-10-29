@@ -29,8 +29,22 @@ export async function POST(req: Request) {
       const webhookData = event.data.object;
       const metadata = webhookData.metadata as { stripeId: string; userId: string };
       const transactionInfo = await buyProduct(metadata.userId, metadata.stripeId, 'card');
-      // TODO: Transfer funds to seller
-      break;
+
+      if (transactionInfo && transactionInfo.price && transactionInfo.stripeSellerId) {
+        try {
+          const transfer = await stripe.transfers.create({
+            amount: transactionInfo.price*90,
+            currency: 'eur',
+            destination: transactionInfo.stripeSellerId,
+          });
+          console.log('Transfer created:', transfer);
+        } catch (err: any) {
+          console.error('Error creating transfer:', err);
+        }
+        
+      } else {
+        console.error('Transaction info or its properties are undefined or null');
+      }
     default:
       console.log(`Unhandled event type ${event.type}`);
   }

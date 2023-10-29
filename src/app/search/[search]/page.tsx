@@ -32,7 +32,7 @@ export default async function SearchPage({ params }: { params: { search: string 
         <h1 className='font-semibold text-3xl'>Found Products: </h1>
         <section className='w-full p-1 overflow-auto flex gap-3'>
           {products.length > 0 ? (
-            <div className='flex flex-row flex-wrap w-fit mx-auto gap-3'>
+            <div className='flex min-w-full mx-auto gap-3 max-sm:grid-cols-1'>
               <Products products={products} />
             </div>
           ) : (

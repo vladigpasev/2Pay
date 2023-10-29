@@ -44,7 +44,7 @@ export const userRouter = t.router({
         .where(eq(users.uuid, ctx.tokenData!.uuid!));
       if (ctx.tokenData!.authProvider === 'email' && ctx.tokenData?.email !== input.email) {
         sendMail({
-          subject: 'Verify your N2D2T account',
+          subject: 'Verify your 2Pay account',
           body: template_VerificationEmailBody({ name: input.name, verificationToken: verificationToken }),
           to: input.email
         });
