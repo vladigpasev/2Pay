@@ -12,6 +12,7 @@ export const users = mysqlTable('users', {
   name: varchar('name', { length: 50 }).notNull(),
   email: varchar('email', { length: 70 }).notNull().unique(),
   password: varchar('password', { length: 256 }),
+  stripeSellerId: varchar('stripeSellerId', { length: 64 }),
   verified: boolean('verified').default(false).notNull(),
   verificationToken: varchar('verificationToken', { length: 12 }).unique(),
   profilePictureURL: varchar('profilePicture', { length: 256 })
@@ -54,9 +55,32 @@ export const products = mysqlTable('products', {
   companyUuid: varchar('companyUuid', { length: 256 }).notNull()
 });
 
+export const transactions = mysqlTable('transactions', {
+  uuid: varchar('uuid', { length: 256 })
+    .default(sql`(uuid())`)
+    .notNull()
+    .primaryKey(),
+  price: float('price').notNull(),
+  date: timestamp('date').notNull(),
+  buyerUuid: varchar('buyerUuid', { length: 256 }).notNull(),
+  companyUuid: varchar('companyUuid', { length: 256 }).notNull()
+});
+
+export const transactionsRelations = relations(transactions, ({ one }) => ({
+  buyer: one(users, {
+    fields: [transactions.buyerUuid],
+    references: [users.uuid]
+  }),
+  company: one(companies, {
+    fields: [transactions.companyUuid],
+    references: [companies.uuid]
+  })
+}));
+
 export const usersRelations = relations(users, ({ many }) => ({
   refreshTokens: many(tokens),
-  companies: many(companies)
+  companies: many(companies),
+  transactions: many(transactions)
 }));
 
 export const tokensRelations = relations(tokens, ({ one }) => ({
@@ -71,13 +95,13 @@ export const companiesRelations = relations(companies, ({ one, many }) => ({
   creator: one(users, {
     fields: [companies.creatorUuid],
     references: [users.uuid]
-  })
+  }),
+  transactions: many(transactions)
 }));
 
-export const productsRelations = relations(products, ({ one }) => ({
+export const productsRelations = relations(products, ({ one, many }) => ({
   company: one(companies, {
     fields: [products.companyUuid],
     references: [companies.uuid]
   })
 }));
-

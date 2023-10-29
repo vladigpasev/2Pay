@@ -70,7 +70,8 @@ async function authGoogleUser(data: GoogleData) {
     email: user.email,
     profilePictureURL: user.profilePictureURL!,
     authProvider: user.authProvider,
-    verified: user.verified
+    verified: user.verified,
+    stripeSellerId: user.stripeSellerId
   });
 }
 
@@ -93,4 +94,3 @@ const handler = async (req: NextRequest) => {
 };
 
 export { handler as GET };
-

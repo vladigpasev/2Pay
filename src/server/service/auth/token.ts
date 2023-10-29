@@ -32,7 +32,8 @@ export const queryAndCreateUserData = async (uuid: string) => {
     profilePictureURL: user.profilePictureURL || '',
     name: user.name,
     uuid: user.uuid,
-    verified: user.verified
+    verified: user.verified,
+    stripeSellerId: user.stripeSellerId
   });
 };
 
@@ -43,7 +44,8 @@ async function createTokenForUser(user: IUser): Promise<Tokens> {
     name: user.name,
     profilePictureURL: user.profilePictureURL,
     authProvider: user.authProvider,
-    verified: user.verified
+    verified: user.verified,
+    stripeSellerId: user.stripeSellerId
   });
   const refreshToken = generateRefreshToken();
 
@@ -95,7 +97,8 @@ async function refreshToken(userData: IUser, oldRefreshToken: string, updateUser
     name: userData.name,
     profilePictureURL: userData.profilePictureURL,
     authProvider: userData.authProvider,
-    verified: userData.verified
+    verified: userData.verified,
+    stripeSellerId: userData.stripeSellerId
   });
   const refreshToken = generateRefreshToken();
 
@@ -114,4 +117,3 @@ async function deleteToken(userUuid: string) {
 }
 
 export { createTokenForUser, refreshToken, deleteToken };
-

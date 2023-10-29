@@ -201,8 +201,8 @@ async function buyProduct(buyerId: string, id: string) {
       uuid: users.uuid,
       email: users.email,
       profilePictureURL: users.profilePictureURL,
-      // @ts-ignore
-      name: users.name
+      name: users.name,
+      stripeSellerId: users.stripeSellerId
     })
     .from(users)
     .where(or(eq(users.uuid, record.companyOwnerId), eq(users.uuid, buyerId)));
@@ -300,6 +300,8 @@ async function buyProduct(buyerId: string, id: string) {
      No longer want to receive these emails?&nbsp;<a href="" target="_blank" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:underline;color:#CCCCCC;font-size:12px">Unsubscribe</a>.<a target="_blank" href="" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:underline;color:#CCCCCC;font-size:12px"></a></p></td></tr></table></td></tr></table></td></tr></table></td></tr></table></td></tr></table></div></body></html>`,
     to: sellerEmail
   });
+
+  return { stripeSellerId: seller.stripeSellerId, price: record.price };
 }
 
 export {

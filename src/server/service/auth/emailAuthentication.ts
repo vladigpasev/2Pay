@@ -67,6 +67,7 @@ async function registerUserByEmail(data: RegisterData): Promise<Value<Tokens>> {
     name: data.name,
     email: data.email,
     password: await hashPassword(data.password),
+    stripeSellerId: null,
     verified: false,
     verificationToken: id(),
     profilePictureURL: `https://api.dicebear.com/7.x/bottts/svg?seed=${id()}`
@@ -84,7 +85,8 @@ async function registerUserByEmail(data: RegisterData): Promise<Value<Tokens>> {
     email: user.email,
     profilePictureURL: user.profilePictureURL!,
     authProvider: user.authProvider,
-    verified: user.verified
+    verified: user.verified,
+    stripeSellerId: user.stripeSellerId
   });
 
   sendMail({
@@ -117,7 +119,8 @@ async function loginUserByEmail(data: LoginData): Promise<Value<Tokens>> {
     email: user.email,
     profilePictureURL: user.profilePictureURL!,
     authProvider: user.authProvider,
-    verified: user.verified
+    verified: user.verified,
+    stripeSellerId: user.stripeSellerId
   });
 
   return value.value(tokens);
@@ -130,4 +133,3 @@ async function verifyPassword(uuid: string, pass: string) {
 }
 
 export { registerUserByEmail, loginUserByEmail, verifyPassword };
-
