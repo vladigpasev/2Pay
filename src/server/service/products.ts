@@ -220,8 +220,6 @@ async function buyProduct(buyerId: string, id: string) {
     productUuid: record.productId
   });
 
-  console.log(transactionRecord);
-
   const currentDate = new Date().toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
