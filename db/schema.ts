@@ -55,9 +55,32 @@ export const products = mysqlTable('products', {
   companyUuid: varchar('companyUuid', { length: 256 }).notNull()
 });
 
+export const transactions = mysqlTable('transactions', {
+  uuid: varchar('uuid', { length: 256 })
+    .default(sql`(uuid())`)
+    .notNull()
+    .primaryKey(),
+  price: float('price').notNull(),
+  date: timestamp('date').notNull(),
+  buyerUuid: varchar('buyerUuid', { length: 256 }).notNull(),
+  productUuid: varchar('productUuid', { length: 256 }).notNull()
+});
+
+export const transactionsRelations = relations(transactions, ({ one }) => ({
+  buyer: one(users, {
+    fields: [transactions.buyerUuid],
+    references: [users.uuid]
+  }),
+  product: one(products, {
+    fields: [transactions.productUuid],
+    references: [products.uuid]
+  })
+}));
+
 export const usersRelations = relations(users, ({ many }) => ({
   refreshTokens: many(tokens),
-  companies: many(companies)
+  companies: many(companies),
+  transactions: many(transactions)
 }));
 
 export const tokensRelations = relations(tokens, ({ one }) => ({
@@ -75,9 +98,10 @@ export const companiesRelations = relations(companies, ({ one, many }) => ({
   })
 }));
 
-export const productsRelations = relations(products, ({ one }) => ({
+export const productsRelations = relations(products, ({ one, many }) => ({
   company: one(companies, {
     fields: [products.companyUuid],
     references: [companies.uuid]
-  })
+  }),
+  transactions: many(transactions)
 }));

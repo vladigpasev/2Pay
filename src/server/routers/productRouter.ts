@@ -9,6 +9,9 @@ import {
   updateProduct
 } from '../service/products';
 import { z } from 'zod';
+import db from '@/drizzle';
+import { products, users } from '../../../db/schema';
+import { eq } from 'drizzle-orm';
 
 const productInfoZod = z.object({
   name: z.string().min(1).max(128),
