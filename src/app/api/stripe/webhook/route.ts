@@ -31,11 +31,17 @@ export async function POST(req: Request) {
       const transactionInfo = await buyProduct(metadata.userId, metadata.stripeId);
 
       if (transactionInfo && transactionInfo.price && transactionInfo.stripeSellerId) {
-        const transfer = await stripe.transfers.create({
-          amount: transactionInfo.price * 100,
-          currency: 'eur',
-          destination: transactionInfo.stripeSellerId,
-        });
+        try {
+          const transfer = await stripe.transfers.create({
+            amount: transactionInfo.price*90,
+            currency: 'eur',
+            destination: transactionInfo.stripeSellerId,
+          });
+          console.log('Transfer created:', transfer);
+        } catch (err: any) {
+          console.error('Error creating transfer:', err);
+        }
+        
       } else {
         console.error('Transaction info or its properties are undefined or null');
       }
