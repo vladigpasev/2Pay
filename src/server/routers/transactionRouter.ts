@@ -1,7 +1,8 @@
 import db from '@/drizzle';
 import { protectedProcedure, t } from '../trpc';
 import { eq } from 'drizzle-orm';
-import { products, transactions } from '../../../db/schema';
+import { companies, products, transactions } from '../../../db/schema';
+import { ProductInfo } from '../service/products';
 
 export const transactionRouter = t.router({
   userBuyings: protectedProcedure.query(async ({ ctx }) => {
@@ -13,5 +14,21 @@ export const transactionRouter = t.router({
       }
     });
     return transactionsRes.map(transaction => transaction.product);
+  }),
+  userSellings: protectedProcedure.query(async ({ ctx }) => {
+    const myCompanies = await db.query.companies.findMany({
+      where: eq(companies.creatorUuid, ctx.tokenData?.uuid || ''),
+      with: {
+        products: true
+      }
+    });
+
+    let products: ProductInfo[] = [];
+
+    myCompanies.map(company => {
+      products.push(...company.products);
+    });
+
+    return products;
   })
 });
