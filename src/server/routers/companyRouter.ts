@@ -9,6 +9,8 @@ import {
   updateCompany
 } from '../service/company';
 import { z } from 'zod';
+import db from '@/drizzle';
+import { companies } from '../../../db/schema';
 
 const companyInfoZod = z.object({
   name: z.string().min(1).max(128),
@@ -43,6 +45,8 @@ export const companyRouter = t.router({
     .query(({ input }) => getCompaniesOfUser(input.uuid)),
   findCompanies: publicProcedure
     .input(z.object({ search: z.string() }))
-    .query(({ input }) => findCompanies(input.search))
+    .query(({ input }) => findCompanies(input.search)),
+  trendingCompanyies: publicProcedure.query(async ({ ctx }) => {
+    return (await db.select().from(companies).orderBy(companies.soldItems)).reverse();
+  })
 });
-
