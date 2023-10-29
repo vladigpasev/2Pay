@@ -83,3 +83,4 @@ async function CompanyInfo({ params }: { params: { id: string } }) {
 }
 
 export default CompanyInfo;
+
