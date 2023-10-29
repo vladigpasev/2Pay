@@ -23,7 +23,7 @@ export default async function TrendingPage() {
             <u className='my-auto'>Trending</u>
           </span>
         </h1>
-        <h1 className='font-semibold text-3xl'>Found Companies: </h1>
+        <h1 className='font-semibold text-3xl'>Trending Companies: </h1>
         <section className='w-full p-1 overflow-auto flex gap-3 pb-4'>
           {companies.length > 0 ? (
             <div className='grid w-fit mx-auto grid-cols-3 gap-3 max-md:grid-cols-2 max-sm:grid-cols-1'>
@@ -32,18 +32,18 @@ export default async function TrendingPage() {
               ))}
             </div>
           ) : (
-            <h3 className='text-error text-3xl flex mx-auto'>No Companies found!</h3>
+            <h3 className='text-error text-3xl flex mx-auto'>No Trending Companies!</h3>
           )}
         </section>
         <div className='divider'></div>
-        <h1 className='font-semibold text-3xl'>Found Products: </h1>
+        <h1 className='font-semibold text-3xl'>Trneding Products: </h1>
         <section className='w-full p-1 overflow-auto flex gap-3'>
           {products.length > 0 ? (
             <div className='flex min-w-full mx-auto gap-3 max-sm:grid-cols-1'>
               <Products products={products} />
             </div>
           ) : (
-            <h3 className='text-error text-3xl flex mx-auto'>No Products found!</h3>
+            <h3 className='text-error text-3xl flex mx-auto'>No Trending Products!</h3>
           )}
         </section>
       </div>
