@@ -31,7 +31,9 @@ export default function ProductsSold({ user }: { user: IUser | null }) {
       </h1>
       <div className='flex gap-3 p-5 max-sm:px-0 relative'>
         {getBoughtProducts.isLoading ? (
-          <PageLoading />
+          <div className='min-h-[200px]'>
+            <PageLoading />
+          </div>
         ) : getBoughtProducts.isError || (getBoughtProducts.data as ProductsSoldReturnType[]).length! < 1 ? (
           <h3 className='text-center font-semibold text-xl w-full'>
             You have not sold anything yet! <FontAwesomeIcon icon={faSackDollar} />
