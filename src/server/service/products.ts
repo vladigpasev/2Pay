@@ -169,7 +169,8 @@ async function buyProduct(buyerId: string, id: string) {
       productId: products.uuid,
       pictureURL: products.pictureURL,
       name: products.name,
-      price: products.price
+      price: products.price,
+      description: products.description
     })
     .from(products)
     .innerJoin(companies, eq(products.companyUuid, companies.uuid))
@@ -217,7 +218,10 @@ async function buyProduct(buyerId: string, id: string) {
     buyerUuid: buyer.uuid,
     date: new Date(),
     price: record.price,
-    productUuid: record.productId
+    productDescription: record.description,
+    productName: record.name,
+    productImageUrl: record.pictureURL,
+    sellerUuid: seller.uuid
   });
 
   const currentDate = new Date().toLocaleDateString('en-US', {

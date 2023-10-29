@@ -14,7 +14,7 @@ export default function ProductsSold({ user }: { user: IUser | null }) {
   return (
     <div className='flex flex-col gap-5 p-10 max-sm:px-3 rounded-2xl bg-neutral w-full flex-grow'>
       <h1 className='font-semibold text-[1.8rem]'>
-        <FontAwesomeIcon icon={faHandHoldingDollar} /> <u>Products Sold by You</u>
+        <FontAwesomeIcon icon={faHandHoldingDollar} /> <u>Your Sales</u>
       </h1>
       <div className='flex gap-3 p-5 max-sm:px-0 relative'>
         {getBoughtProducts.isLoading ? (

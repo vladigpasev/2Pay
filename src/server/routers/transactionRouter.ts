@@ -10,23 +10,14 @@ export const transactionRouter = t.router({
       where: eq(transactions.buyerUuid, ctx.tokenData?.uuid || ''),
       orderBy: transactions.date,
       with: {
-        product: true
+        buyer: true
       }
     });
-    return transactionsRes.map(transaction => transaction.product);
+    return transactionsRes;
   }),
   userSellings: protectedProcedure.query(async ({ ctx }) => {
-    const myCompanies = await db.query.companies.findMany({
-      where: eq(companies.creatorUuid, ctx.tokenData?.uuid || ''),
-      with: {
-        products: true
-      }
-    });
-
-    let products: ProductInfo[] = [];
-
-    myCompanies.map(company => {
-      products.push(...company.products);
+    const products = await db.query.transactions.findMany({
+      where: eq(transactions.sellerUuid, ctx.tokenData?.uuid || '')
     });
 
     return products;
