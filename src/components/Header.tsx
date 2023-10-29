@@ -75,7 +75,7 @@ export const Header = () => {
           <li>
             <Link href={'/trending'}>
               <strong className='font-extrabold'>
-                <FontAwesomeIcon icon={faFire} className='mr-0.5' /> Trending
+                <FontAwesomeIcon icon={faFire} className='mr-0.5 h-3.5' /> Trending
               </strong>
             </Link>
           </li>
@@ -83,7 +83,7 @@ export const Header = () => {
             <Link href={'/'}>
               <strong className='font-extrabold'>
                 {' '}
-                <FontAwesomeIcon icon={faHome} className='mr-0.5' /> Home
+                <FontAwesomeIcon icon={faHome} className='mr-0.5 h-3.5' /> Home
               </strong>
             </Link>
           </li>
