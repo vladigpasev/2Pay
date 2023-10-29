@@ -10,7 +10,7 @@ export function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     '/user/:path*',
-    '/verify/sent',
+    '/auth/verify/sent',
     '/companies/create',
     '/companies/update/:path*',
     '/product/create/:path*',

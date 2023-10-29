@@ -56,5 +56,10 @@ export const productRouter = t.router({
   getProductsOfCompany: publicProcedure
     .input(z.object({ uuid: z.string() }))
     .query(({ input }) => getProductsOfCompany(input.uuid)),
-  findProducts: publicProcedure.input(z.object({ search: z.string() })).query(({ input }) => findProducts(input.search))
+  findProducts: publicProcedure
+    .input(z.object({ search: z.string() }))
+    .query(({ input }) => findProducts(input.search)),
+  trendingProducts: publicProcedure.query(async ({ ctx }) => {
+    return (await db.select().from(products).orderBy(products.amountSold)).reverse();
+  })
 });
