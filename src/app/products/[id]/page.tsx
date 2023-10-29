@@ -59,9 +59,14 @@ export default async function ProductPage({ params }: { params: { id: string } }
               </div>
               <p className='text-xl text-gray-400'>{product.description}</p>
             </div>
-            <div className='flex flex-row gap-4 items-center max-md:justify-between mb-5 mt-5'>
-              <p className='text-3xl text-accent'>{product.price.toFixed(2)}€</p>
-              <BuyButtons enabled={company.creatorUuid !== user?.uuid} product={product} />
+            <div>
+              <Link href={`/embed/${product.uuid}`} className='btn w-full btn-accent'>
+                Embed
+              </Link>
+              <div className='flex flex-row gap-4 items-center max-md:justify-between mb-5 mt-5'>
+                <p className='text-3xl text-accent'>{product.price.toFixed(2)}€</p>
+                <BuyButtons enabled={company.creatorUuid !== user?.uuid} product={product} />
+              </div>
             </div>
           </div>
         </div>
@@ -69,4 +74,3 @@ export default async function ProductPage({ params }: { params: { id: string } }
     </section>
   );
 }
-
