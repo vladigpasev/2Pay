@@ -20,7 +20,6 @@ export default function CompaniesProfile({ user }: { user: IUser | null }) {
   });
 
   const { data: onboardingStatus } = checkOnboardingStatus({ accountId: currentUser?.stripeSellerId! });
-  console.log(onboardingStatus);
 
   // State variable for redirect/loading state
   const [isRedirecting, setIsRedirecting] = useState(false);
@@ -87,9 +86,7 @@ export default function CompaniesProfile({ user }: { user: IUser | null }) {
                         You have to set up a profile for receiving payments!
                       </h3>
                       {isRedirecting ? (
-                        <button className='btn btn-secondary mx-auto'>
-                        Loading...
-                      </button>
+                        <button className='btn btn-secondary mx-auto'>Loading...</button>
                       ) : (
                         <button onClick={handleRedirect} className='btn btn-secondary mx-auto'>
                           Start Onboarding

@@ -64,7 +64,10 @@ export default function Home() {
             </section>
           </section>
         </section>
-        <section className='for-businesses flex flex-col min-[883px]:flex-row mx-10 min-[883px]:ml-28 items-center justify-center gap-12 mb-28'>
+        <section
+          id='forBusiness'
+          className='for-businesses flex flex-col min-[883px]:flex-row mx-10 min-[883px]:ml-28 items-center justify-center gap-12 mb-28'
+        >
           <section className='text'>
             <p className='text-5xl mb-10'>Providing the solution for every business</p>
             <p className='text-xl mb-14'>
@@ -79,7 +82,10 @@ export default function Home() {
           </section>
           <Image src={bankingImg} alt='' className='rounded-xl w-96 min-[883px]:w-1/2 min-[883px]:-mr-40'></Image>
         </section>
-        <section className='for-clients flex flex-col min-[883px]:flex-row-reverse mx-10 min-[883px]:ml-28 items-center justify-center gap-12'>
+        <section
+          id='fairOurClients'
+          className='for-clients flex flex-col min-[883px]:flex-row-reverse mx-10 min-[883px]:ml-28 items-center justify-center gap-12'
+        >
           <section className='text'>
             <p className='text-5xl mb-10'>Fair to our clients</p>
             <p className='text-xl mb-14'>
@@ -94,7 +100,10 @@ export default function Home() {
           </section>
           <Image src={clientImg} alt='' className='rounded-xl  w-96 min-[883px]:w-1/3 '></Image>
         </section>
-        <section className='crypto-pay bg-gradient-to-b from-[#00a54c] to-[#006b32] flex flex-col justify-center items-center mt-10'>
+        <section
+          id='crypto2pay'
+          className='crypto-pay bg-gradient-to-b from-[#00a54c] to-[#006b32] flex flex-col justify-center items-center mt-10'
+        >
           <section className='text-neutral mx-10 md:mx-32'>
             <p className='text-3xl min-[450px]:text-6xl flex items-center justify-center py-8'>
               Crypto <Image src={logo} alt='' className='w-28 min-[450px]:w-44'></Image>
