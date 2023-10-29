@@ -213,12 +213,14 @@ async function buyProduct(buyerId: string, id: string) {
   const sellerEmail = seller.email;
   const buyerEmail = buyer.email;
 
-  await db.insert(transactions).values({
+  const transactionRecord = await db.insert(transactions).values({
     buyerUuid: buyer.uuid,
-    companyUuid: record.companyId,
     date: new Date(),
-    price: record.price
+    price: record.price,
+    productUuid: record.productId
   });
+
+  console.log(transactionRecord);
 
   const currentDate = new Date().toLocaleDateString('en-US', {
     year: 'numeric',
