@@ -35,7 +35,7 @@ export default function PasswordAskingModal({ onSubmit }: { onSubmit: (password:
   return (
     <div className='flex flex-col gap-3 p-5 w-fit items-center mx-auto'>
       <FontAwesomeIcon icon={faLock} className='w-32 h-32' size='2x' />
-      <h1 className='font-bold text-3xl text-center'>Let's verify its you!</h1>
+      <h1 className='font-bold text-3xl text-center'>Let&apos;s verify its you!</h1>
       <input
         type='password'
         placeholder='Enter your current password:'

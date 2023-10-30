@@ -37,7 +37,7 @@ export function useOpenModal() {
   );
 }
 
-export default function modalDialog() {
+export default function ModalDialog() {
   const [modal] = useAtom(modalAtom);
   const closeModal = useCloseModal();
 

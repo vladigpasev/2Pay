@@ -62,6 +62,7 @@ function renderFields(
 ) {
   return fields.map(field =>
     Array.isArray(field) ? (
+      // @ts-ignore
       <div className='grid grid-cols-2 gap-3'>{renderFields(field, rawFormData, setRawFormData, errors)}</div>
     ) : (
       <div className='flex align-top flex-col w-full items-start gap-1' key={field.id}>

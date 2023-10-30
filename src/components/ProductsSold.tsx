@@ -41,7 +41,7 @@ export default function ProductsSold({ user }: { user: IUser | null }) {
         ) : (
           <div className='w-full overflow-auto flex flex-wrap justify-between overflow-x-hidden'>
             {(getBoughtProducts.data as ProductsSoldReturnType[]).map(product => (
-              <div className='card card-normal min-[1200px]:card-side bg-base-100 shadow-xl mb-6 min-w-full'>
+              <div key={product.uuid} className='card card-normal min-[1200px]:card-side bg-base-100 shadow-xl mb-6 min-w-full'>
                 <figure className='w-full min-h-full bg-red-300 max-w-[185px] max-[1200px]:max-w-full'>
                   <img
                     src={product.productImageUrl || 'images/pngs/product.png'}
