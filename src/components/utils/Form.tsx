@@ -60,10 +60,9 @@ function renderFields(
   setRawFormData: (data: any) => void,
   errors: Record<string, string | null>
 ) {
-  return fields.map(field =>
+  return fields.map((field, index) =>
     Array.isArray(field) ? (
-      // @ts-ignore
-      <div className='grid grid-cols-2 gap-3'>{renderFields(field, rawFormData, setRawFormData, errors)}</div>
+      <div key={index} className='grid grid-cols-2 gap-3'>{renderFields(field, rawFormData, setRawFormData, errors)}</div>
     ) : (
       <div className='flex align-top flex-col w-full items-start gap-1' key={field.id}>
         <label htmlFor={field.id} className='mb-0 pb-1 leading-4 font-bold'>
@@ -71,9 +70,8 @@ function renderFields(
         </label>
         {field.type === 'longText' ? (
           <textarea
-            className={`w-full rounded-lg bg-base-100 border border-base-content p-2 text-base-content ${
-              errors[field.id] ? 'border-rose-600' : ''
-            } ${field.isDisabled ? 'brightness-50' : ''}`}
+            className={`w-full rounded-lg bg-base-100 border border-base-content p-2 text-base-content ${errors[field.id] ? 'border-rose-600' : ''
+              } ${field.isDisabled ? 'brightness-50' : ''}`}
             onInput={e => setRawFormData({ ...rawFormData, [field.id]: (e.target as any).value })}
             id={field.id}
             placeholder={field.placeholder}
@@ -82,9 +80,8 @@ function renderFields(
           />
         ) : (
           <input
-            className={`w-full rounded-lg bg-base-100 border border-base-content p-2 text-base-content ${
-              errors[field.id] ? 'border-rose-600' : ''
-            } ${field.isDisabled ? 'brightness-50' : ''}`}
+            className={`w-full rounded-lg bg-base-100 border border-base-content p-2 text-base-content ${errors[field.id] ? 'border-rose-600' : ''
+              } ${field.isDisabled ? 'brightness-50' : ''}`}
             onInput={e => setRawFormData({ ...rawFormData, [field.id]: (e.target as any).value })}
             id={field.id}
             type={field.type}
@@ -127,9 +124,8 @@ export function CustomForm({ buttonText, fields, canSubmit, error, onSubmit, chi
       {error && <p className='text-rose-600 text-lg text-center'>{error}</p>}
       <div className='flex flex-col w-full border-opacity-50'>
         <button
-          className={`w-full bg-primary rounded flex p-2 text-primary-content transition-all ${
-            canSubmit ? 'hover:brightness-125' : 'cursor-default opacity-50'
-          }`}
+          className={`w-full bg-primary rounded flex p-2 text-primary-content transition-all ${canSubmit ? 'hover:brightness-125' : 'cursor-default opacity-50'
+            }`}
         >
           {icon && <FontAwesomeIcon className='my-auto' icon={icon!} />}
           <span className='flex flex-grow justify-center'>{buttonText}</span>
