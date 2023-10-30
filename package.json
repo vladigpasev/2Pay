@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev --port 80",
     "build": "next build",
-    "start": "next start",
+    "start": "next start --port 80",
     "lint": "next lint",
     "db:push": "drizzle-kit push:mysql --config=drizzle.config.ts && ts-node-esm ./scripts/setupFullTextIndexes.ts",
     "db:index": "ts-node-esm ./scripts/setupFullTextIndexes.ts",
